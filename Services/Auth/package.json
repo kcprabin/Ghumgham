@@ -7,12 +7,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-nodemon src/index.ts",
+    "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "start": "nodemon dist/index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
@@ -22,7 +23,10 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
 }
