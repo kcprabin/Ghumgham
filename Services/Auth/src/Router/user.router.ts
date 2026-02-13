@@ -14,12 +14,12 @@ router.post("/register", registerUser);
 router.post("/logout", authMiddleware, logoutUser);
 router.post("/login", loginUser);
 router.get(
-  "/google",
+  "/auth/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
   }),
 );
-router.get(
+router.post(
   "/auth/google/callback",
   passport.authenticate("google", { session: false }),
   googleAuth
