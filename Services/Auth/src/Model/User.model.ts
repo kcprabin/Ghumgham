@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema<UserType, UserModel, UserMethods>(
   {
     email: { type: String, unique: true },
     Username: { type: String, required: true, unique: true, index: true },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     Name: { type: String, required: true },
     role: {
       type: String,
@@ -33,6 +33,12 @@ const UserSchema = new mongoose.Schema<UserType, UserModel, UserMethods>(
 
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return;
+
+  // Skip hashing for OAuth users
+  if (this.password === "oauth_google_user") {
+    return;
+  }
+
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -44,6 +50,10 @@ UserSchema.pre("save", async function (next) {
 UserSchema.methods.comparePassword = async function (
   candidatePassword: string,
 ) {
+  // OAuth users cannot login with password
+  if (this.password === "oauth_google_user") {
+    return false;
+  }
   return bcrypt.compare(candidatePassword, this.password);
 };
 

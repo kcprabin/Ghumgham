@@ -19,9 +19,9 @@ router.get(
     scope: ["profile", "email"],
   }),
 );
-router.post(
+router.get(
   "/auth/google/callback",
-  passport.authenticate("google", { session: false }),
+  passport.authenticate("google", { failureRedirect: "/login", session: false }),
   googleAuth
 );
 

@@ -2,8 +2,16 @@ import express, { Router } from "express";
 import dotenv from "dotenv";
 import cookie from "cookie-parser";
 import cors from "cors";
+import passport from "passport";
+
+dotenv.config({     
+    path: "./.env"
+});
+
+
 import UserRouter from "./Router/user.router.ts";
-import { passportGoogle } from "./services/passport.ts";
+import "./services/passport.ts"; 
+
 
 const app = express();
 
@@ -15,7 +23,7 @@ app.use(express.json({limit: "10mb"}));
 app.use(express.urlencoded({extended: true, limit: "10mb"}));   
 app.use(express.static("public"));
 app.use(cookie());
-app.use(passportGoogle.initialize());
+app.use(passport.initialize());
 
 // user routes
 app.use("/api/v1/users", UserRouter);

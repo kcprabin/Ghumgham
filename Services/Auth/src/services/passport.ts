@@ -1,12 +1,9 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { apiResponse } from "../Utils/api.response.ts";
 import { UserModel } from "../Model/User.model.ts";
 import dotenv from "dotenv";
 
-dotenv.config({
-    path: "./.env",
-});
+dotenv.config({ path: "./.env" });
 
 export const passportGoogle = passport.use(
     new GoogleStrategy(
@@ -26,6 +23,7 @@ export const passportGoogle = passport.use(
                 Username: profile.displayName,
                 email: profile.emails?.[0].value,
                 Name: profile.displayName,
+                password: "oauth_google_user", 
                 role: "user",
             };
             const user = await UserModel.findOne({ googleId: profile.id });
@@ -37,3 +35,16 @@ export const passportGoogle = passport.use(
         },
     ),
 );
+
+passport.serializeUser((user: any, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id: string, done) => {
+    try {
+        const user = await UserModel.findById(id);
+        done(null, user);
+    } catch (error) {
+        done(error, null);
+    }
+});
