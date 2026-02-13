@@ -55,14 +55,16 @@ const loginUser = asyncHandler(async (req: any, res: any) => {
     if (!isPasswordValid) {
       return apiError(res, 400, "Invalid username or password");
     }
-
-    const token = user.generateJWT();
-    res.cookie("token", token, {
+    const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
+    };
+    const token = user.generateJWT();
+    res.setHeader("Authorization", `Bearer ${token}`); 
+    res.cookie("token", token, options);
+
     const userResponse = {
       id: user._id,
       Username: user.Username,
@@ -86,4 +88,9 @@ const loginUser = asyncHandler(async (req: any, res: any) => {
   }
 });
 
-export { registerUser, loginUser };
+const logoutUser = asyncHandler(async (req: any, res: any) => { 
+    res.clearCookie("token");
+    return apiResponse(res, 200, true, "User logged out successfully");
+});
+
+export { registerUser, loginUser, logoutUser };
