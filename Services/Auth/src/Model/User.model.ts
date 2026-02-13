@@ -5,14 +5,12 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema<UserType>(
   {
-    email: { type: String, required: true },
-    Username: { type: String, required: true },
+    email: { type: String,  unique: true },
+    Username: { type: String, required: true, unique: true ,index: true},
     password: { type: String, required: true },
   },
   { timestamps: true },
 );
-
-UserSchema.index({ email: 1 }, { unique: true });
 
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return;
@@ -32,13 +30,13 @@ UserSchema.methods.comparePassword = async function (
 
 UserSchema.methods.generateJWT = function () {
   const payload = { id: this._id, email: this.email };
-  const secret : string = process.env.JWT_SECRET as string  
-  const data = process.env.JWT_EXPIRES_IN as string
- 
-    return jwt.sign(payload, secret, { expiresIn: "1D" });
-};  
+  const secret: string = process.env.JWT_SECRET as string;
+  const data = process.env.JWT_EXPIRES_IN as string;
+
+  return jwt.sign(payload, secret, { expiresIn: "1D" });
+};
 
 // problem of ts cannnolt give expires in as process.env.JWT_EXPIRES_IN as string so we have to hardcode it here
-// 
+//
 
 export const UserModel = mongoose.model<UserType>("User", UserSchema);
