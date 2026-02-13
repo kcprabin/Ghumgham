@@ -11,14 +11,22 @@ interface UserMethods {
 // Create model type
 type UserModel = mongoose.Model<UserType, {}, UserMethods>;
 
-const UserSchema = new mongoose.Schema<UserType, UserModel, UserMethods>(   
+const UserSchema = new mongoose.Schema<UserType, UserModel, UserMethods>(
   {
-    email: { type: String,  unique: true },
-    Username: { type: String, required: true, unique: true ,index: true},
+    email: { type: String, unique: true },
+    Username: { type: String, required: true, unique: true, index: true },
     password: { type: String, required: true },
     Name: { type: String, required: true },
-    role: { type: String, default: "user" , enum: ["user", "admin", "superadmin", "moderator", "editor"]},
-
+    role: {
+      type: String,
+      default: "user",
+      enum: ["user", "admin", "superadmin", "moderator", "editor"],
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
   },
   { timestamps: true },
 );
@@ -49,5 +57,7 @@ UserSchema.methods.generateJWT = function () {
 
 // problem of ts cannnolt give expires in as process.env.JWT_EXPIRES_IN as string so we have to hardcode it here
 
-
-export const UserModel = mongoose.model<UserType, UserModel>("User", UserSchema);
+export const UserModel = mongoose.model<UserType, UserModel>(
+  "User",
+  UserSchema,
+);

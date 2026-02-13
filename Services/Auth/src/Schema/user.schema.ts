@@ -11,6 +11,8 @@ export const UserType = zod.object({
     createdAt: zod.date(),
     updatedAt: zod.date(),
     role: zod.string().optional(),
+    googleId: zod.string().optional(),
+
 })  
 
 
