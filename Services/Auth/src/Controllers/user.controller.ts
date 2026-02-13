@@ -4,6 +4,9 @@ import { apiError } from "../Utils/api.error.ts";
 import { apiResponse } from "../Utils/api.response.ts";
 import { loginSchema, registerSchema } from "../Schema/user.schema.ts";
 import { z } from "zod";
+import passport from "passport";
+import googleStrategy from "passport-google-oauth20";
+
 
 const registerUser = asyncHandler(async (req: any, res: any) => {
   try {
@@ -94,5 +97,7 @@ const logoutUser = asyncHandler(async (req: any, res: any) => {
     res.clearCookie("token");
     return apiResponse(res, 200, true, "User logged out successfully");
 });
+
+
 
 export { registerUser, loginUser, logoutUser };
