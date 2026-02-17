@@ -1,4 +1,4 @@
-import { UserModel } from "../Model/User.model.ts";
+import { UserModel } from "../../../Packages/Model/User.model.ts";
 import { asyncHandler } from "../Utils/asynchandler.ts";
 import { apiError } from "../Utils/api.error.ts";
 import { apiResponse } from "../Utils/api.response.ts";
