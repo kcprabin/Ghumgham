@@ -1,5 +1,5 @@
 
-import { apiError, asyncHandler, apiResponse , UserModel } from "@packages/index.js";
+import { apiError, asyncHandler, apiResponse , UserModel } from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
 

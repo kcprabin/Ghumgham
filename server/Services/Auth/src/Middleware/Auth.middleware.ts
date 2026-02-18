@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { apiError, asyncHandler, apiResponse , UserModel } from "@packages/index.js";
+import { apiError, asyncHandler, apiResponse , UserModel } from "@packages";
 
 export const authMiddleware = (req: any, res: any, next: any) => {
   const token = req.cookies.token || req.headers.authorization?.split(" ")[1];

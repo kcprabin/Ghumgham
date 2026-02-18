@@ -4,9 +4,9 @@
     // File Layout
     // "rootDir": "./src",
     // "outDir": "./dist",
-    "baseUrl": ".",
+   
     "paths": {
-      "@packages/*": ["../../Packages/*"]
+      "@packages": ["../../Packages/index.ts"]
     },
 
     // Environment Settings
