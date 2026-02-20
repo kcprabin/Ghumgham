@@ -73,13 +73,6 @@ const deleteUser = asyncHandler(async (req:any, res:any) => {
     return apiResponse(res, 200, true, "User deleted successfully");
 })
 
-const edituserdetails = asyncHandler(async (req:any, res:any) => {
-    const { id } = req.params;
-    if (!id) {
-        return apiError(res, 400, "User ID is required");
-    }
-
-})
 
 
-export default { addSuperadmin, addAdmin, deleteAdmin, deleteSuperadmin, deleteUser, edituserdetails };   
+export default { addSuperadmin, addAdmin, deleteAdmin, deleteSuperadmin, deleteUser, };   

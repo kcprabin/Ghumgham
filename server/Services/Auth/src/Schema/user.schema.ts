@@ -12,7 +12,7 @@ export const UserType = zod.object({
     updatedAt: zod.date(),
     role: zod.string().optional(),
     googleId: zod.string().optional(),
-
+    isVerified: zod.boolean().optional(),
 })  
 
 
