@@ -16,7 +16,7 @@ router.post("/login", loginUser);
 router.get(
   "/auth/google",
   passport.authenticate("google", {
-    scope: ["profile", "email"],
+    scope: ["profile", "email" ],
   }),
 );
 router.get(

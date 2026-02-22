@@ -12,7 +12,7 @@ export const authMiddleware = (req: any, res: any, next: any) => {
     req.user = decoded;
     console.log("Decoded token:", decoded);
     next();
-  } catch (err) {
+  } catch (err : any) {
     return apiError(res, 401, "Invalid token");
   }
 };  
@@ -33,12 +33,5 @@ export const superAdminMiddleware = (req: any, res: any, next: any) => {
   }
 } 
 
-export const moderatorMiddleware = (req: any, res: any, next: any) => {
-  if (req.user && req.user.role === "moderator") {
-    next();
-  } else {
-    return apiError(res, 403, "Forbidden: Moderators only");
-  }
-}
 
-export default { authMiddleware, adminMiddleware, superAdminMiddleware, moderatorMiddleware };
+export default { authMiddleware, adminMiddleware, superAdminMiddleware, };

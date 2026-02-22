@@ -3,8 +3,6 @@ import { apiError, asyncHandler, apiResponse , UserModel } from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
 
-
-
 const registerUser = asyncHandler(async (req: any, res: any) => {
   try {
     const validate = registerSchema.parse(req.body);
@@ -50,11 +48,11 @@ const loginUser = asyncHandler(async (req: any, res: any) => {
       Username: validate.Username,
     });
     if (!user) {
-      return apiError(res, 400, "Invalid username or password");
+      return apiError(res, 400, "Invalid username");
     }
     const isPasswordValid = await user.comparePassword(validate.password);
     if (!isPasswordValid) {
-      return apiError(res, 400, "Invalid username or password");
+      return apiError(res, 400, "Invalid password");
     }
     const options = {
       httpOnly: true,
@@ -92,12 +90,12 @@ const loginUser = asyncHandler(async (req: any, res: any) => {
 
 const logoutUser = asyncHandler(async (req: any, res: any) => { 
     res.clearCookie("token");
+    res.setHeader("Authorization", "");
     return apiResponse(res, 200, true, "User logged out successfully");
 });
 
 const googleAuth = asyncHandler(async (req: any, res: any) => {
     const userProfile = req.user;
-    console.log("Google user profile:", userProfile);
     const token = userProfile.generateJWT();
     const options = {
         httpOnly: true,
