@@ -3,8 +3,8 @@ import app from "./app.js";
 
 const startServer = async () => {
     try {
-        await connectDB();
-        console.log("Database connection established. Starting Hotel service...");
+        await connectDB(process.env.MONGO_URI as string, process.env.MONGO_DB_NAME as string);
+        console.log("Database connection established and established successfully. Starting Hotel service...");
         
         app.listen(process.env.PORT, () => {
             console.log(`Hotel service is running on port ${process.env.PORT}`);
