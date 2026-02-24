@@ -2,7 +2,7 @@
 import { apiError, asyncHandler, apiResponse , UserModel , uploadVideoToCloudinary , sendEmail} from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
-import { tr } from "zod/locales";
+
 
 const registerUser = asyncHandler(async (req: any, res: any) => {
   try {
