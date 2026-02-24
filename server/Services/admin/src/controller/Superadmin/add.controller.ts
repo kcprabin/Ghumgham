@@ -63,20 +63,8 @@ const deleteSuperadmin = asyncHandler(async (req:any, res:any) => {
     return apiResponse(res, 200, true, "Superadmin deleted successfully");
 })  
 
-const deleteUser = asyncHandler(async (req:any, res:any) => {
-    const { id } = req.body;
-    
-    const user = await UserModel.findById(id);
-
-    if (!user) {
-        return apiError(res, 404, "User not found");
-    }
-
-    await UserModel.findByIdAndDelete(id);
-
-    return apiResponse(res, 200, true, "User deleted successfully");
-})
 
 
 
-export default { addSuperadmin, addAdmin, deleteAdmin, deleteSuperadmin, deleteUser, };   
+
+export default { addSuperadmin, addAdmin, deleteAdmin, deleteSuperadmin, };   
