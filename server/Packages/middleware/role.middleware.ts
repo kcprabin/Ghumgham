@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { apiError } from "Utils/api.error.js";
+import { apiError } from "../Utils/api.error.js";
 
 const roleMiddleware = async (req: any, res: any, next: any) => {
   const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
