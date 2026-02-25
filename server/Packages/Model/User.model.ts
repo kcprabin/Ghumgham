@@ -28,6 +28,12 @@ const UserSchema = new mongoose.Schema<UserType, UserModel, UserMethods>(
       sparse: true,
     },
     isVerified: { type: Boolean, default: false },
+    profileimage: { type: String, default: "" },
+    otp: { type: Number , default: null },
+    otpExpiry: { type: Date, default: null },
+    number: { type: String, default: "" },
+    refreshToken: { type: String, default: "" },
+    
   },
   { timestamps: true },
 );

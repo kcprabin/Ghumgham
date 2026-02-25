@@ -1,8 +1,10 @@
-import { apiError, asyncHandler, apiResponse , UserModel } from "@packages";
+import { apiError, asyncHandler, apiResponse , UserModel, sendEmail} from "@packages";
 
 
 const addSuperadmin = asyncHandler(async (req:any, res:any) => {
-    const { email, password } = req.body;
+    const { email, name  } = req.body;
+
+    const generatedPassword = Math.random().toString(36).slice(-8);
 
     const existingUser = await UserModel.findOne({ email });
 
@@ -10,9 +12,11 @@ const addSuperadmin = asyncHandler(async (req:any, res:any) => {
         return apiError(res, 400, "User with this email already exists");
     }
 
-    const superadmin = new UserModel({ email, password, role: "superadmin" });
+    const superadmin = new UserModel({ email, name, password: generatedPassword, role: "superadmin" });
     await superadmin.save();
+    const message = `Hello ${name},\n\nYour account has been created successfully. Your temporary password is: ${generatedPassword}`;
 
+        await sendEmail(email, "Welcome to Ghumgham!", message as string);
     return apiResponse(res, 201, true, "Superadmin created successfully", { id: superadmin._id });
 })
 
@@ -59,20 +63,8 @@ const deleteSuperadmin = asyncHandler(async (req:any, res:any) => {
     return apiResponse(res, 200, true, "Superadmin deleted successfully");
 })  
 
-const deleteUser = asyncHandler(async (req:any, res:any) => {
-    const { id } = req.body;
-    
-    const user = await UserModel.findById(id);
-
-    if (!user) {
-        return apiError(res, 404, "User not found");
-    }
-
-    await UserModel.findByIdAndDelete(id);
-
-    return apiResponse(res, 200, true, "User deleted successfully");
-})
 
 
 
-export default { addSuperadmin, addAdmin, deleteAdmin, deleteSuperadmin, deleteUser, };   
+
+export default { addSuperadmin, addAdmin, deleteAdmin, deleteSuperadmin, };   

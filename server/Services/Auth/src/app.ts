@@ -6,7 +6,7 @@ import cors from "cors";
 import passport from "passport";
 
 dotenv.config({     
-    path: "./.env"
+    path: "../../.env"
 });
 
 

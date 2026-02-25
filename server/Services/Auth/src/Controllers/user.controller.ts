@@ -1,5 +1,5 @@
 
-import { apiError, asyncHandler, apiResponse , UserModel } from "@packages";
+import { apiError, asyncHandler, apiResponse , UserModel , uploadVideoToCloudinary , sendEmail} from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
 
@@ -108,5 +108,89 @@ const googleAuth = asyncHandler(async (req: any, res: any) => {
     return apiResponse(res, 200, true, "Google authentication successful", userProfile);
 });
 
+const getUserProfile = asyncHandler(async (req: any, res: any) => {
+    const userId = req.user.id;
+    const user = await UserModel.findById(userId).select("-password");
+    if (!user) {
+        return apiError(res, 404, "User not found");
+    }
+    return apiResponse(res, 200, true, "User profile retrieved successfully", user);
+});
 
-export { registerUser, loginUser, logoutUser, googleAuth };
+const updateUserProfile = asyncHandler(async (req: any, res: any) => {
+    const userId = req.user.id;
+    const { Name, email, number , Prevpassword ,newpassword } = req.body;
+    if (!Name && !email && !number && !newpassword) {
+        return apiError(res, 400, "At least one field (Name, email, number, password) must be provided for update");
+    }
+    const user = await UserModel.findById(userId).select("-password refreshToken");
+    if (!user) {
+        return apiError(res, 404, "User not found");
+    }
+
+    const file = req.file;
+    if (!file ) {
+        return apiError(res, 400, "No video file uploaded. Please upload a video file to update the profile video.");
+    }
+    try {
+      if (file) {
+          const videoUrl = await uploadVideoToCloudinary({ filePath: file.path });
+          user.profileVideo = videoUrl;
+      }
+    } catch (error: any) {
+      return apiError(res, 500, "Failed to upload video", error);
+    }
+
+    const isCorrect = await user.comparePassword(Prevpassword);
+    if (!isCorrect) {
+        return apiError(res, 400, "Invalid previous password");
+    }
+    user.password = newpassword;
+    if (Name) user.Name = Name;
+    if (email) user.email = email;
+    if (number) user.number = number;
+    
+    await user.save();
+    return apiResponse(res, 200, true, "User profile updated successfully", user);
+});
+
+const deleteUserProfile = asyncHandler(async (req: any, res: any) => {
+  const {otp} = req.body;
+  const userId = req.user.id;
+  const user = await UserModel.findById(userId);
+  if (!user) {
+      return apiError(res, 404, "User not found");
+  }
+  if ( user.otp !== otp) {
+      return apiError(res, 400, "Invalid OTP. Please provide the correct OTP to delete your profile.");
+  }
+  if (user.otpExpiry && user.otpExpiry < new Date()) {
+      return apiError(res, 400, "OTP has expired. Please request a new OTP to delete your profile.");
+  }
+  await UserModel.findByIdAndDelete(userId);
+  return apiResponse(res, 200, true, "User profile deleted successfully");
+});
+
+const sendOTP = asyncHandler(async (req: any, res: any) => {
+    const { email } = req.body; 
+    if (!email) {
+        return apiError(res, 400, "Email is required to send OTP");
+    }
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+        return apiError(res, 404, "User with the provided email not found");
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000); 
+    user.otp = otp;
+    await user.save();
+    try {
+        await sendEmail(email, "Your OTP Code", `Your OTP code is: ${otp}`);
+        return apiResponse(res, 200, true, "OTP sent successfully to email");
+    } catch (error: any) {
+        return apiError(res, 500, "Failed to send OTP email", error);
+    }
+}
+);
+
+
+export { registerUser, loginUser, logoutUser, googleAuth, getUserProfile, updateUserProfile, deleteUserProfile };
