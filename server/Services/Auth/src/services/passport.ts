@@ -3,7 +3,13 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { apiError, asyncHandler, apiResponse , UserModel } from "@packages";
 import dotenv from "dotenv";
 
-dotenv.config({ path: "./.env" });
+dotenv.config(
+    {
+        path:"../../.env"
+    }
+);
+
+
 
 export const passportGoogle = passport.use(
     new GoogleStrategy(
@@ -12,6 +18,7 @@ export const passportGoogle = passport.use(
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
             callbackURL: process.env.GOOGLE_CALLBACK_URL as string,
         },
+        
         async function (
             accessToken: string,
             refreshToken: string,
@@ -35,6 +42,7 @@ export const passportGoogle = passport.use(
         },
     ),
 );
+
 
 passport.serializeUser((user: any, done) => {
     done(null, user.id);

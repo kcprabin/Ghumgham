@@ -3,7 +3,6 @@ import { apiError, asyncHandler, apiResponse , UserModel , uploadVideoToCloudina
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
 
-
 const registerUser = asyncHandler(async (req: any, res: any) => {
   try {
     const validate = registerSchema.parse(req.body);

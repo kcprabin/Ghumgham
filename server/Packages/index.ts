@@ -9,6 +9,11 @@ import {passwordCheck} from "./middleware/password.middleware.js";
 import {connectDB} from "./Utils/connect.db.js"
 import { sendEmail } from "./Utils/resendmail.js";
 import { uploadVideoToCloudinary } from "./Utils/cloudinary.js";
+import dotenv from "dotenv";
+
+dotenv.config({
+    path: "../../.env"
+});
 
 
 
