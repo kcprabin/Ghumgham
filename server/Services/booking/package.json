@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "mongoose": "^9.2.1"
+    "mongoose": "^9.2.1",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@types/node": "^25.3.0",
