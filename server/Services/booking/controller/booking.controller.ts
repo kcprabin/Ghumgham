@@ -8,6 +8,10 @@ import { hotelModel } from "../../../Packages/Model/Hotel.model.js"
 import * as crypto from "crypto";
 
 
+// use this for import 
+import {sendEmail} from "@packages"
+// definitation of packages is in tsconfig.json file
+
 
 const createBooking = asyncHandler(async (req: any, res: any) => {
 
