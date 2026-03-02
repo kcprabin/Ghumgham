@@ -1,10 +1,5 @@
-import { asyncHandler } from "../../../Packages/Utils/asynchandler.js"
+import { asyncHandler,apiError,apiResponse,roomModel,hotelModel,bookingModel } from "@packages"
 import mongoose from "mongoose";
-import { roomModel } from "../../../Packages/Model/Room.model.js"
-import { bookingModel } from "../../../Packages/Model/Booking.model.js"
-import { apiError } from "../../../Packages/Utils/api.error.js"
-import { apiResponse } from "../../../Packages/Utils/api.response.js"
-import { hotelModel } from "../../../Packages/Model/Hotel.model.js"
 import * as crypto from "crypto";
 import axios from "axios"
 
@@ -26,7 +21,7 @@ const createBooking = asyncHandler(async (req: any, res: any) => {
         const start = new Date(checkIn);
         const end = new Date(checkOut);
 
-        if (start > end) {
+        if (start >= end) {
             return apiError({}, 400, "Invalid entry of dates")
         }
 
@@ -65,10 +60,10 @@ const createBooking = asyncHandler(async (req: any, res: any) => {
             checkIn: start,
             checkOut: end,
             status: "PENDING",
-            bookingPayment: "UNPAID",
+            bookingPayment: "NOTPAID",
             totalPrice,
             paymentMethod
-        }, { session });
+        });
 
         await createBooking.save({ session });
 
@@ -137,33 +132,45 @@ const createBooking = asyncHandler(async (req: any, res: any) => {
 
 const esewaSuccess=asyncHandler(async(req:any,res:any)=>{
 
-    const {data}=req.query;
-     const decoded = JSON.parse(
-        Buffer.from(data, "base64").toString("utf8")
-    );
+   try {
+     const {data}=req.query;
+ 
+     if(!data){
+        return res.redirect(`${process.env.FRONTEND_URL}/payment-failure`);
+     }
+     
+      const decoded = JSON.parse(
+         Buffer.from(data, "base64").toString("utf8")
+     );
+ 
+     const bookingId=decoded.transaction_uuid;
+ 
+     const verifyResponse= await axios.post("https://rc-epay.esewa.com.np/api/epay/transaction/status/",{
+             product_code: decoded.product_code,
+             total_amount: decoded.total_amount,
+             transaction_uuid: bookingId
+     })
+ 
+     if(verifyResponse.data.status=="COMPLETE"){
+         await bookingModel.findByIdAndUpdate(bookingId,{
+             status:"CONFIRMED",
+             bookingPayment:"PAID"
+         });
+ 
+        return  res.redirect(`${process.env.FRONTEND_URL}/payment-sucess`);
+     }
+ 
+     await bookingModel.findByIdAndUpdate(bookingId,{
+         status:"CANCELLED"
+     })
+ 
+     return res.redirect(`${process.env.FRONTEND_URL}/payment-failure`);
+   } catch (error) {
 
-    const bookingId=decoded.transaction_uuid;
+    return  res.redirect(`${process.env.FRONTEND_URL}/payment-failure`);
 
-    const verifyResponse= await axios.post("https://rc-epay.esewa.com.np/api/epay/transaction/status/",{
-            product_code: decoded.product_code,
-            total_amount: decoded.total_amount,
-            transaction_uuid: bookingId
-    })
-
-    if(verifyResponse.data.status=="COMPLETE"){
-        await bookingModel.findByIdAndUpdate(bookingId,{
-            status:"CONFIRMED",
-            bookingPayment:"PAID"
-        });
-
-        res.redirect(`${process.env.FRONTEND_URL}/payment-sucess`);
-    }
-
-    await bookingModel.findByIdAndUpdate(bookingId,{
-        status:"CANCELLED"
-    })
-
-    res.redirect(`${process.env.FRONTEND_URL}/payment-failure`);
+    
+   }
 })
 
 

@@ -1,0 +1,22 @@
+import express, { urlencoded } from "express"
+import cors from "cors"
+import cookieParser from "cookie-parser";
+
+const app=express();
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json({
+    limit: '10mb' 
+}));
+app.use(urlencoded({extended:true}));
+app.use(cookieParser())
+
+import Bookingrouter from "./routes/booking.router.js"
+app.use("/api/v1/booking",Bookingrouter)
+
+export default app

@@ -4,9 +4,6 @@
     // File Layout
     // "rootDir": "./src",
     // "outDir": "./dist",
-     "paths": {
-      "@packages": ["../../Packages/index.ts"]
-    },
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
@@ -17,6 +14,11 @@
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
+
+//paths
+ "paths": {
+      "@packages": ["../../Packages/index.ts"]
+    },
 
     // Other Outputs
     "sourceMap": true,
