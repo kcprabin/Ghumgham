@@ -17,7 +17,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Welcome to Classroom!</Text>
+        <Text style={styles.title}>Welcome to GhumGham!</Text>
         <Text style={styles.subtitle}>You have successfully created your account.</Text>
 
         <View style={styles.card}>

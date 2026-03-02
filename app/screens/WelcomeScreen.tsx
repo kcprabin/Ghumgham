@@ -8,10 +8,23 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { Colors } from '../constants/colors';
 import { PrimaryButton, SecondaryButton, SocialButton } from '../components/ui/Button';
 import { Divider } from '../components/ui/Divider';
+import { API_URL_AUTH } from '../constants/api';
+
+const googleLogin = async () => {
+  try {
+    const result = await WebBrowser.openBrowserAsync(
+      `${API_URL_AUTH}/api/v1/users/auth/google`
+    );
+    console.log('Google OAuth result:', result);
+  } catch (error) {
+    console.error('Google login error:', error);
+  }
+};
 
 interface WelcomeScreenProps {
   navigation: any;
@@ -19,20 +32,18 @@ interface WelcomeScreenProps {
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   const handleContinueWithEmail = () => {
-    navigation.navigate('CreateAccount');
+    navigation.navigate('Register');
   };
 
   const handleCreateAccount = () => {
-    navigation.navigate('CreateAccount');
+    navigation.navigate('Register');
   };
 
   const handleLogin = () => {
-    // Navigate to login screen (to be created)
-    console.log('Navigate to login');
+    navigation.navigate('Login');
   };
 
   const handleSocialLogin = (provider: string) => {
-    console.log(`Login with ${provider}`);
   };
 
   return (
@@ -46,9 +57,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>Welcome to{'\n'}Classroom</Text>
+          <Text style={styles.title}>Welcome to{'\n'}GhumGham</Text>
           <Text style={styles.subtitle}>
-            Join over 10,000 learners over the World and enjoy unlimited education
+            Join over 10,000 Hotels and 500,000 travelers who are using GhumGham to manage their bookings and explore new destinations.
           </Text>
         </View>
 
@@ -66,13 +77,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
             icon={<Ionicons name="logo-apple" size={20} color={Colors.black} />}
           />
           <SocialButton
-            title="Continue with Facebook"
-            onPress={() => handleSocialLogin('Facebook')}
-            icon={<Ionicons name="logo-facebook" size={20} color="#1877F2" />}
-          />
-          <SocialButton
             title="Continue with Google"
-            onPress={() => handleSocialLogin('Google')}
+            onPress={
+                () => googleLogin()
+            }
             icon={<FontAwesome name="google" size={18} color="#EA4335" />}
           />
 

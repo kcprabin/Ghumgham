@@ -1,0 +1,258 @@
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  SafeAreaView,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '../constants/colors';
+import { PrimaryButton } from '../components/ui/Button';
+import { CustomInput } from '../components/ui/Input';
+import { Divider } from '../components/ui/Divider';
+import axios from 'axios';
+import { API_URL_AUTH } from '../constants/api';
+
+interface RegisterScreenProps {
+  navigation: any;
+}
+
+export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const validateForm = () => {
+    if (!name || !username || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return false;
+    }
+    if (!email.includes('@')) {
+      Alert.alert('Error', 'Please enter a valid email');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return false;
+    }
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return false;
+    }
+    return true;
+  };
+
+  const handleRegister = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${API_URL_AUTH}/api/v1/users/register`,
+        {
+          Name: name,
+          Username: username,
+          email: email,
+          password: password,
+        }
+      );
+
+      if (response.data.success) {
+        Alert.alert('Success', 'Registration successful. Please login now.');
+        navigation.replace('Login');
+      } else {
+        Alert.alert('Error', response.data.message || 'Registration failed');
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        'Registration failed. Please try again.';
+      Alert.alert('Registration Error', errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <Ionicons name="arrow-back" size={24} color={Colors.black} />
+          </TouchableOpacity>
+
+          <View style={styles.headerContent}>
+            <Text style={styles.title}>Create Account</Text>
+            <Text style={styles.subtitle}>
+              Sign up to get started. It only takes a minute.
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.content}>
+          <CustomInput
+            placeholder="Full Name"
+            value={name}
+            onChangeText={setName}
+            containerStyle={styles.inputContainer}
+            editable={!loading}
+          />
+
+          <CustomInput
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            containerStyle={styles.inputContainer}
+            editable={!loading}
+          />
+
+          <CustomInput
+            placeholder="Email address"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            containerStyle={styles.inputContainer}
+            editable={!loading}
+          />
+
+          <View style={styles.passwordContainer}>
+            <CustomInput
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              containerStyle={styles.inputContainer}
+              editable={!loading}
+            />
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              style={styles.eyeIcon}
+            >
+              <Ionicons
+                name={showPassword ? 'eye' : 'eye-off'}
+                size={20}
+                color={Colors.gray}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.passwordContainer}>
+            <CustomInput
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry={!showConfirmPassword}
+              containerStyle={styles.inputContainer}
+              editable={!loading}
+            />
+            <TouchableOpacity
+              onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+              style={styles.eyeIcon}
+            >
+              <Ionicons
+                name={showConfirmPassword ? 'eye' : 'eye-off'}
+                size={20}
+                color={Colors.gray}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <PrimaryButton
+            title={loading ? 'Creating account...' : 'Create Account'}
+            onPress={handleRegister}
+            disabled={loading || !name || !username || !email || !password || !confirmPassword}
+          />
+
+          <Divider />
+
+          <View style={styles.loginContainer}>
+            <Text style={styles.loginText}>Already have an account? </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
+              disabled={loading}
+            >
+              <Text style={styles.loginLink}>Sign in</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
+  },
+  backButton: {
+    marginBottom: 16,
+  },
+  headerContent: {
+    gap: 8,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: Colors.black,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: Colors.gray,
+    lineHeight: 20,
+  },
+  content: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+    gap: 20,
+  },
+  inputContainer: {
+    marginBottom: 0,
+  },
+  passwordContainer: {
+    position: 'relative',
+    marginBottom: 0,
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 12,
+    top: 14,
+  },
+  loginContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginText: {
+    fontSize: 14,
+    color: Colors.gray,
+  },
+  loginLink: {
+    fontSize: 14,
+    color: Colors.primary,
+    fontWeight: '600',
+  },
+});

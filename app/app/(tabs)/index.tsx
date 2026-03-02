@@ -1,23 +1,13 @@
-export default function HomeScreen() {
-  return (
-    <>
-      <text className="lol">Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-      <text>Hello from HomeScreen!</text>
-    </>
-  );
-}
+import React from 'react';
+import { View, Text } from 'react-native';
 
-const style = {
-  lol: {
-    color: 'red',
-    position: 'absolute',
-  },
+// This file exists for expo-router compatibility
+// The actual routing is handled by AuthNavigator in navigation/AuthNavigator.tsx
+
+export default function TabsIndex() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Loading...</Text>
+    </View>
+  );
 }

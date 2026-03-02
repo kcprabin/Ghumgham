@@ -12,9 +12,20 @@ import { Colors } from '../constants/colors';
 import { PrimaryButton, SocialButton } from '../components/ui/Button';
 import { CustomInput } from '../components/ui/Input';
 import { Divider } from '../components/ui/Divider';
+import axios from 'axios';
+import { API_URL_AUTH } from '../constants/api';
 
 interface CreateAccountScreenProps {
   navigation: any;
+}
+
+const register = async (email: string) => {
+  try {
+    const response = await axios.post(`${API_URL_AUTH}/api/v1/users/register`, { email });
+    console.log('Registration response:', response.data);
+  } catch (error) {
+    console.error('Registration error:', error);
+  }
 }
 
 export const CreateAccountScreen: React.FC<CreateAccountScreenProps> = ({ navigation }) => {
@@ -42,7 +53,7 @@ export const CreateAccountScreen: React.FC<CreateAccountScreenProps> = ({ naviga
           <View style={styles.headerContent}>
             <Text style={styles.title}>Create new account</Text>
             <Text style={styles.subtitle}>
-              Begin with creating new free account. This helps you keep your learning may easier.
+              Begin with creating new free account. Don't worry, it's just a few steps.
             </Text>
           </View>
         </View>
@@ -68,11 +79,6 @@ export const CreateAccountScreen: React.FC<CreateAccountScreenProps> = ({ naviga
             title="Continue with Apple"
             onPress={() => handleSocialLogin('Apple')}
             icon={<Ionicons name="logo-apple" size={20} color={Colors.black} />}
-          />
-          <SocialButton
-            title="Continue with Facebook"
-            onPress={() => handleSocialLogin('Facebook')}
-            icon={<Ionicons name="logo-facebook" size={20} color="#1877F2" />}
           />
           <SocialButton
             title="Continue with Google"
