@@ -14,8 +14,7 @@ import { Colors } from '../constants/colors';
 import { PrimaryButton } from '../components/ui/Button';
 import { CustomInput } from '../components/ui/Input';
 import { Divider } from '../components/ui/Divider';
-import axios from 'axios';
-import { API_URL_AUTH } from '../constants/api';
+import { authService } from '../services/authService';
 
 interface LoginScreenProps {
   navigation: any;
@@ -35,27 +34,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        `${API_URL_AUTH}/api/v1/users/login`,
-        {
-          Username: username,
-          password: password,
-        }
-      );
+      const response = await authService.login({
+        Username: username,
+        password: password,
+      });
 
-      if (response.data.success) {
+      if (response.success) {
         Alert.alert('Success', 'Login successful');
-        // Navigate to home or dashboard
         navigation.replace('Home');
       } else {
-        Alert.alert('Error', response.data.message || 'Login failed');
+        Alert.alert('Error', response.message || 'Login failed');
       }
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        'Login failed. Please try again.';
-      Alert.alert('Login Error', errorMessage);
+      Alert.alert('Login Error', error.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }

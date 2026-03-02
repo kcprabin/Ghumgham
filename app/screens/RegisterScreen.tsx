@@ -14,8 +14,7 @@ import { Colors } from '../constants/colors';
 import { PrimaryButton } from '../components/ui/Button';
 import { CustomInput } from '../components/ui/Input';
 import { Divider } from '../components/ui/Divider';
-import axios from 'axios';
-import { API_URL_AUTH } from '../constants/api';
+import { authService } from '../services/authService';
 
 interface RegisterScreenProps {
   navigation: any;
@@ -58,28 +57,21 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) =>
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        `${API_URL_AUTH}/api/v1/users/register`,
-        {
-          Name: name,
-          Username: username,
-          email: email,
-          password: password,
-        }
-      );
+      const response = await authService.register({
+        Name: name,
+        Username: username,
+        email: email,
+        password: password,
+      });
 
-      if (response.data.success) {
+      if (response.success) {
         Alert.alert('Success', 'Registration successful. Please login now.');
         navigation.replace('Login');
       } else {
-        Alert.alert('Error', response.data.message || 'Registration failed');
+        Alert.alert('Error', response.message || 'Registration failed');
       }
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        'Registration failed. Please try again.';
-      Alert.alert('Registration Error', errorMessage);
+      Alert.alert('Registration Error', error.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }

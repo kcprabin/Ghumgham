@@ -11,4 +11,5 @@ export const Colors = {
   error: '#F44336',
   disabled: '#BDBDBD',
   overlay: 'rgba(0, 0, 0, 0.5)',
+  gray: '#888888',
 };

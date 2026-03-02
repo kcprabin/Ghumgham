@@ -9,6 +9,8 @@ import { AddEmailScreen } from '../screens/AddEmailScreen';
 import { VerifyEmailScreen } from '../screens/VerifyEmailScreen';
 import { CreatePasswordScreen } from '../screens/CreatePasswordScreen';
 import { HomeScreen } from '../screens/HomeScreen';
+import { CreateHotelScreen } from '../screens/CreateHotelScreen';
+import { CreateBookingScreen } from '../screens/CreateBookingScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -20,6 +22,8 @@ export type RootStackParamList = {
   VerifyEmail: { email: string };
   CreatePassword: undefined;
   Home: undefined;
+  CreateHotel: undefined;
+  CreateBooking: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -68,6 +72,16 @@ export const AuthNavigator: React.FC = () => {
         name="Home"
         component={HomeScreen}
       />
+      <Stack.Screen
+        name="CreateHotel"
+        component={CreateHotelScreen}
+      />
+      <Stack.Screen
+        name="CreateBooking"
+        component={CreateBookingScreen}
+      />
     </Stack.Navigator>
   );
 };
+
+export default AuthNavigator;
