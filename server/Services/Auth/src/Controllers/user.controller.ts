@@ -180,17 +180,36 @@ const sendOTP = asyncHandler(async (req: any, res: any) => {
     if (!user) {
         return apiError(res, 404, "User with the provided email not found");
     }
-    const otp = Math.floor(100000 + Math.random() * 900000); 
+    const otp = Math.floor(1000 + Math.random() * 9000); 
     user.otp = otp;
     await user.save();
-    try {
-        await sendEmail(email, "Your OTP Code", `Your OTP code is: ${otp}`);
+        await sendEmail(email, "Your OTP Code", `Your OTP code is: ${otp}` , process.env.RESEND_API);
         return apiResponse(res, 200, true, "OTP sent successfully to email");
-    } catch (error: any) {
-        return apiError(res, 500, "Failed to send OTP email", error);
-    }
+    
 }
 );
 
+const verifyOTP = asyncHandler(async (req: any, res: any) => {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+        return apiError(res, 400, "Email and OTP are required for verification");
+    }
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+        return apiError(res, 404, "User with the provided email not found");
+    }
+    if (user.otp !== otp) {
+        return apiError(res, 400, "Invalid OTP. Please provide the correct OTP for verification.");
+    }
+    if (user.otpExpiry && user.otpExpiry < new Date()) {
+        return apiError(res, 400, "OTP has expired. Please request a new OTP for verification.");
+    }
+    user.otp = null;
+    user.isVerified = true;
+    await user.save();
+    
+    return apiResponse(res, 200, true, "OTP verified successfully");
+});
 
-export { registerUser, loginUser, logoutUser, googleAuth, getUserProfile, updateUserProfile, deleteUserProfile };
+
+export { registerUser, loginUser, logoutUser, googleAuth, getUserProfile, updateUserProfile, deleteUserProfile,sendOTP, verifyOTP };
