@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { Colors } from '@/src/constants/color';
 
-export default function OnboardingLayout() {
+export default function AuthLayout() {
   return (
     <Stack
       screenOptions={{
@@ -10,9 +10,12 @@ export default function OnboardingLayout() {
         animation: 'slide_from_right',
       }}
     >
-      <Stack.Screen name="onboarding1" />
-      <Stack.Screen name="onboarding2" />
-      <Stack.Screen name="onboarding3" />
+      <Stack.Screen name="signin" />
+      <Stack.Screen name="signin-phone" />
+      <Stack.Screen name="signup" />
+      <Stack.Screen name="signup-phone" />
+      <Stack.Screen name="verify-code" />
+      <Stack.Screen name="success" />
     </Stack>
   );
 }
