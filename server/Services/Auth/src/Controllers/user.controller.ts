@@ -183,8 +183,12 @@ const sendOTP = asyncHandler(async (req: any, res: any) => {
     const otp = Math.floor(1000 + Math.random() * 9000); 
     user.otp = otp;
     await user.save();
-        await sendEmail(email, "Your OTP Code", `Your OTP code is: ${otp}` , process.env.RESEND_API);
-        return apiResponse(res, 200, true, "OTP sent successfully to email");
+        try {
+          await sendEmail( "Your OTP Code", `Your OTP code is: ${otp}` , process.env.RESEND_API);
+          return apiResponse(res, 200, true, "OTP sent successfully to email");
+        } catch (error) {
+          return apiError(res, 500, "Failed to send OTP email", error);
+        }
     
 }
 );

@@ -5,11 +5,11 @@ import { fileURLToPath } from 'url';
 
 
 
-const sendEmail = async (to :string, subject?: string , html?: string , env ?: string) => {
+const sendEmail = async ( subject?: string , html?: string , env ?: string) => {
     const resend = new Resend(env);
     const { data, error } = await resend.emails.send({
         from: 'onboarding@resend.dev',
-        to: to,
+        to: 'kcprabin2063@gmail.com',
         subject: subject || 'Welcome to Ghumgham!',
         html: html || '<p>Thank you for joining Ghumgham. We are excited to have you on board!</p>'
     });
