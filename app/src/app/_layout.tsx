@@ -1,21 +1,38 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/src/hooks/use-color-scheme';
-import { AuthProvider } from '@/src/context/AuthContext';
-
+// app/_layout.tsx
+import { useEffect, useState } from 'react'
+import { Slot, useRouter, useSegments } from 'expo-router'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [isLoading, setIsLoading] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [hasOnboarded, setHasOnboarded] = useState(false)
+  const router = useRouter()
 
-  return (
-    <AuthProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </AuthProvider>
-  );
+  useEffect(() => {
+    checkState()
+  }, [])
+
+  async function checkState() {
+    const token = await AsyncStorage.getItem('token')
+    const onboarded = await AsyncStorage.getItem('hasOnboarded')
+
+    setIsLoggedIn(!!token)
+    setHasOnboarded(!!onboarded)
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    if (isLoading) return
+
+    if (isLoggedIn) {
+      router.replace('/(app)/home')        // already logged in → skip everything
+    } else if (hasOnboarded) {
+      router.replace('/(auth)/login')      // seen onboarding → go to login
+    } else {
+      router.replace('/(onboarding)/slide1') // fresh install → onboarding
+    }
+  }, [isLoading, isLoggedIn, hasOnboarded])
+
+  return <Slot />
 }
