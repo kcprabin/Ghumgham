@@ -10,11 +10,11 @@ import {connectDB} from "./Utils/connect.db.js"
 import { sendEmail } from "./Utils/resendmail.js";
 import { uploadVideoToCloudinary } from "./Utils/cloudinary.js";
 import { roomModel } from "./Model/Room.model.js";
-import { bookingModel } from "Model/Booking.model.js";
+import { bookingModel } from "./Model/Booking.model.js";
 import dotenv from "dotenv";
 
 dotenv.config({
-    path: "../../.env"
+    path: "./.env"
 });
 
 

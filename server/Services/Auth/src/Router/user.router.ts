@@ -3,7 +3,12 @@ import {
   loginUser,
   logoutUser,
   registerUser,
-  googleAuth
+  googleAuth,
+  deleteUserProfile,
+  updateUserProfile,
+  getUserProfile,
+  sendOTP,
+  verifyOTP
 } from "../Controllers/user.controller.js";
 
 import passport from "passport";
@@ -24,5 +29,11 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/login", session: false }),
   googleAuth
 );
+router.get("/profile", getUserProfile);
+router.put("/update-profile", updateUserProfile);
+router.delete("/delete-profile", deleteUserProfile);
+router.post("/send-otp", sendOTP);
+router.post("/verify-otp", verifyOTP);
+
 
 export default router;

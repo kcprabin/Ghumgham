@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,54 +8,95 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider, Checkbox } from '@/src/components/ui';
-import { Colors } from '@/src/constants/color';
-import { Typography } from '@/src/constants/typography';
-import { Spacing } from '@/src/constants/spacing';
+} from "react-native";
+import { useRouter } from "expo-router";
+import {
+  Button,
+  Input,
+  SocialButton,
+  Divider,
+  Checkbox,
+} from "@/src/components/ui";
+import { Colors } from "@/src/constants/color";
+import { Typography } from "@/src/constants/typography";
+import { Spacing } from "@/src/constants/spacing";
+
+import registerSchema from "@/src/schema/registerschema";
+import { API_ENDPOINTS_AUTH } from "@/src/constants/api";
+import axios from "axios";
 
 export default function SignUp() {
+  const API_SIGNUP = API_ENDPOINTS_AUTH.REGISTER;
+  const API_SEND_OTP= API_ENDPOINTS_AUTH.SEND_OTP;
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSignUp = async () => {
-    if (!agreeToTerms) return;
-    
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      router.push('/(auth)/verify-code' as any);
-    }, 1500);
+    try {
+      if (!agreeToTerms) return;
+      setLoading(true);
+      await axios
+        .post(API_SIGNUP, {
+          Name: name,
+          Username: username,
+          email: email,
+          password: password,
+        } as registerSchema)
+        .then((response) => {
+          proceedToVerification(email);
+          axios
+            .post(API_SEND_OTP, {
+              email,
+            }).catch((error) => {
+              console.error("OTP sending error:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Signup error:", error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (error) {
+      console.error("Signup error:", error);
+    }
+  };
+
+  const proceedToVerification = (email: string) => {
+    router.push({
+      pathname: "/(auth)/verify-code",
+      params: { email },
+    } as any);
   };
 
   const handleSignIn = () => {
-    router.push('/(auth)/signin' as any);
+    router.push("/(auth)/signin" as any);
   };
 
   const handlePhoneTab = () => {
-    router.replace('/(auth)/signup-phone' as any);
+    router.replace("/(auth)/signup-phone" as any);
   };
 
   const handleGoogleSignUp = () => {
-    console.log('Google Sign Up');
+    console.log("Google Sign Up");
   };
 
   const handleFacebookSignUp = () => {
-    console.log('Facebook Sign Up');
+    console.log("Facebook Sign Up");
   };
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
-      
+
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -75,7 +116,9 @@ export default function SignUp() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Sign Up</Text>
-          <Text style={styles.subtitle}>Create your account to get started</Text>
+          <Text style={styles.subtitle}>
+            Create your account to get started
+          </Text>
         </View>
 
         {/* Form */}
@@ -87,7 +130,16 @@ export default function SignUp() {
             autoCapitalize="words"
             containerStyle={styles.inputContainer}
           />
-          
+
+          <Input
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            autoCapitalize="none"
+            autoCorrect={false}
+            containerStyle={styles.inputContainer}
+          />
+
           <Input
             placeholder="Email address"
             value={email}
@@ -97,7 +149,7 @@ export default function SignUp() {
             autoCorrect={false}
             containerStyle={styles.inputContainer}
           />
-          
+
           <Input
             placeholder="Password"
             value={password}
@@ -112,9 +164,8 @@ export default function SignUp() {
             onToggle={() => setAgreeToTerms(!agreeToTerms)}
             labelComponent={
               <Text style={styles.termsText}>
-                I agree to{' '}
-                <Text style={styles.termsLink}>Terms of Service</Text>
-                {' '}and{' '}
+                I agree to{" "}
+                <Text style={styles.termsLink}>Terms of Service</Text> and{" "}
                 <Text style={styles.termsLink}>Privacy Policy</Text>
               </Text>
             }
@@ -132,16 +183,10 @@ export default function SignUp() {
 
         {/* Social SignUp */}
         <Divider text="Or Sign Up with" style={styles.divider} />
-        
+
         <View style={styles.socialButtons}>
-          <SocialButton
-            provider="google"
-            onPress={handleGoogleSignUp}
-          />
-          <SocialButton
-            provider="facebook"
-            onPress={handleFacebookSignUp}
-          />
+          <SocialButton provider="google" onPress={handleGoogleSignUp} />
+          <SocialButton provider="facebook" onPress={handleFacebookSignUp} />
         </View>
 
         {/* Sign In Link */}
@@ -171,7 +216,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xl,
   },
   tabContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: Colors.cardBackground,
     borderRadius: Spacing.borderRadius.md,
     padding: 4,
@@ -180,7 +225,7 @@ const styles = StyleSheet.create({
   tab: {
     flex: 1,
     paddingVertical: Spacing.md,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: Spacing.borderRadius.sm,
   },
   tabActive: {
@@ -229,13 +274,13 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.lg,
   },
   socialButtons: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: Spacing.md,
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 'auto',
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: "auto",
     paddingTop: Spacing.xl,
   },
   footerText: {
@@ -245,6 +290,6 @@ const styles = StyleSheet.create({
   footerLink: {
     ...Typography.body,
     color: Colors.primary,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

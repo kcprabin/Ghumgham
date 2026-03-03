@@ -17,6 +17,8 @@ const API_ENDPOINTS_AUTH: ApiEndpoints = {
   CREATE_POST: `${API_URL}/api/posts/create`,
   UPDATE_POST: `${API_URL}/api/posts/update`,
   DELETE_POST: `${API_URL}/api/posts/delete`,
+  VERIFY_OTP: `${API_AUTH}/verify-otp`,
+  SEND_OTP: `${API_AUTH}/send-otp`,
 };
 
 
