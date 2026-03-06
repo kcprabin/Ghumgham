@@ -8,126 +8,135 @@ import axios from "axios"
 import {sendEmail} from "@packages"
 // definitation of packages is in tsconfig.json file
 
-
 const createBooking = asyncHandler(async (req: any, res: any) => {
 
     const session = await mongoose.startSession();
-    session.startTransaction();
-
 
     try {
-        const { roomId, guests, checkIn, checkOut, paymentMethod } = req.body;
 
-        const start = new Date(checkIn);
-        const end = new Date(checkOut);
+        await session.withTransaction(async () => {
 
-        if (start >= end) {
-            return apiError({}, 400, "Invalid entry of dates")
-        }
+            const { roomId, guests, checkIn, checkOut, paymentMethod } = req.body;
 
-        const room = await roomModel.findById(roomId);
+            const start = new Date(checkIn);
+            const end = new Date(checkOut);
 
-        if (!room) {
-            return apiError({}, 400, "room not found");
-        }
+            if (start >= end) {
+                throw new Error("Invalid entry of dates");
+            }
 
-        if (room.capacity < guests) {
-            return apiError({}, 400, "room capacity exceeded");
-        }
+            const room = await roomModel
+                .findById(roomId)
+                .session(session);
 
-        const bookingalreadyexist = await bookingModel.findOne({
-            hotel: room.hotel,
-            room: roomId,
-            checkIn: { $lt: end },
-            checkOut: { $gt: start },
-            status: { $in: ["PENDING", "CONFIRMED"] }
-        }).session(session);
+            if (!room) {
+                throw new Error("Room not found");
+            }
 
-        if (bookingalreadyexist) {
-            return apiError({}, 400, "Room not avaialble for entered dates");
-        }
+            if (room.capacity < guests) {
+                throw new Error("Room capacity exceeded");
+            }
 
-        const totalnights = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+            const existingBooking = await bookingModel
+                .findOne({
+                    room: roomId,
+                    checkIn: { $lt: end },
+                    checkOut: { $gt: start },
+                    status: { $in: ["PENDING", "CONFIRMED"] }
+                })
+                .session(session);
 
-        const totalPrice = totalnights * room.pricePerNights;
+            if (existingBooking) {
+                throw new Error("Room not available for entered dates");
+            }
 
+            const nights =
+                (end.getTime() - start.getTime()) /
+                (1000 * 60 * 60 * 24);
 
-        const createBooking = new bookingModel({
-            user: req.user._id,
-            hotel: room.hotel,
-            room: roomId,
-            guests,
-            checkIn: start,
-            checkOut: end,
-            status: "PENDING",
-            bookingPayment: "NOTPAID",
-            totalPrice,
-            paymentMethod
+            const totalPrice = nights * room.pricePerNights;
+
+            const booking = new bookingModel({
+                user: req.user._id,
+                hotel: room.hotel,
+                room: roomId,
+                guests,
+                checkIn: start,
+                checkOut: end,
+                status: "PENDING",
+                bookingPayment: "NOTPAID",
+                totalPrice,
+                paymentMethod
+            });
+
+            await booking.save({ session });
+
+            const hotel = await hotelModel
+                .findById(room.hotel)
+                .session(session);
+
+            if (paymentMethod === "ESEWA") {
+
+                if (!hotel?.esewa_Merchantid) {
+                    throw new Error("Hotel Esewa merchant id missing");
+                }
+
+                const transaction_uuid = booking._id.toString();
+                const product_code = hotel.esewa_Merchantid;
+                const total_amount = totalPrice.toString();
+
+                const signed_field_names =
+                    "total_amount,transaction_uuid,product_code";
+
+                const message =
+                    `total_amount=${total_amount},transaction_uuid=${transaction_uuid},product_code=${product_code}`;
+
+                const signature = crypto
+                    .createHmac("sha256", process.env.ESEWA_HASH_SECRET!)
+                    .update(message)
+                    .digest("base64");
+
+                const esewaPayload = {
+                    amount: total_amount,
+                    tax_amount: "0",
+                    total_amount,
+                    transaction_uuid,
+                    product_code,
+                    product_service_charge: "0",
+                    product_delivery_charge: "0",
+                    success_url: `${process.env.BASE_URL}/api/esewa/success`,
+                    failure_url: `${process.env.BASE_URL}/api/esewa/failure`,
+                    signed_field_names,
+                    signature
+                };
+
+                return res.json({
+                    success: true,
+                    bookingId: booking._id,
+                    esewaFormData: esewaPayload,
+                    esewaUrl:
+                        "https://rc-epay.esewa.com.np/api/epay/main/v2/form"
+                });
+            }
+
+            return res.json({
+                success: true,
+                booking
+            });
+
         });
 
-        await createBooking.save({ session });
-
-        await session.commitTransaction();
-        session.endSession();
-
-
-
-        const hotel = await hotelModel.findById(room.hotel);
-
-        if (paymentMethod == "ESEWA") {
-
-            if (!hotel?.esewa_Merchantid) {
-                return apiError({}, 500, "Can't get hotel esewa Merchant Id")
-            }
-
-            if (!process.env.ESEWA_HASH_SECRET) {
-                return apiError({}, 500, "ESEWA_HASH_SECRET is not configured")
-            }
-
-            const transaction_uuid = createBooking._id.toString();
-            const product_code = hotel.esewa_Merchantid;
-            const total_amount = totalPrice.toString();
-
-            const signed_field_names = "total_amount,transaction_uuid,product_code";
-
-             const message = `total_amount=${total_amount},transaction_uuid=${transaction_uuid},product_code=${product_code}`;
-                const signature = crypto.createHmac('sha256', process.env.ESEWA_HASH_SECRET).update(message).digest('base64');
-
-
-                    const esewaPayload = {
-                        amount: total_amount,
-                        tax_amount: "0",
-                        total_amount,
-                        transaction_uuid,
-                        product_code,
-                        product_service_charge: "0",
-                        product_delivery_charge: "0",
-                        success_url: `${process.env.BASE_URL}/api/esewa/success`,
-                        failure_url: `${process.env.BASE_URL}/api/esewa/failure`,
-                        signed_field_names,
-                        signature
-                    };
-
-
-                     return apiResponse({
-            bookingId:createBooking._id,
-            esewaFormData:esewaPayload,
-            esewaUrl:"https://rc-epay.esewa.com.np/api/epay/main/v2/form"
-        }, 200, true, "Booking created");
-
-        }
-
-
-
     } catch (error: any) {
-        await session.abortTransaction();
+
+        return apiError({}, 400, error.message);
+
+    } finally {
+
         session.endSession();
 
-        return apiError({}, 400, error.message)
     }
 
-
-})
+});
 
 
 const esewaSuccess=asyncHandler(async(req:any,res:any)=>{
