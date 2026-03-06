@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const InitialNav = () => {
   const linkClasses = ({ isActive }:{isActive:boolean}) =>
-    `font-medium px-2 py-1 cursor-pointer ${
+    `font-medium px-2 py-1 cursor-pointer transition ${
       isActive ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-700 hover:text-blue-600"
     }`;
 

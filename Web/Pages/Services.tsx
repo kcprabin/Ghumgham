@@ -104,7 +104,7 @@ const Services = () => {
           mobile hotel booking application.
         </p>
 
-        <button className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow hover:bg-gray-200 transition">
+        <button className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow hover:bg-gray-200 transition cursor-pointer">
           Register Your Hotel
         </button>
 
