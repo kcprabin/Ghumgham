@@ -2,7 +2,8 @@ import { Typewriter } from "react-simple-typewriter"
 
 const Herosection = () => {
   return (
-    <div className="relative min-h-[71.75vh] flex items-center justify-center">
+    
+    <div className="relative min-h-screen flex items-center justify-center">
 
       {/* Background Image */}
       <img
