@@ -1,8 +1,22 @@
 import { Typewriter } from "react-simple-typewriter"
+
 const Herosection = () => {
   return (
- <main className="grow flex flex-col justify-center items-center text-center px-6">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+    <div className="relative min-h-[71.75vh] flex items-center justify-center">
+
+      {/* Background Image */}
+      <img
+        src="https://images.unsplash.com/photo-1566073771259-6a8506099945"
+        alt="Hotel"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/50"></div>
+
+      {/* Content */}
+      <main className="relative z-10 flex flex-col justify-center items-center text-center px-6 text-white">
+        <h1 className="text-4xl md:text-5xl font-bold mb-6">
           <Typewriter
             words={[
               "Manage Your Hotel on Ghumgham",
@@ -19,7 +33,7 @@ const Herosection = () => {
           />
         </h1>
 
-        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-xl">
+        <p className="text-lg md:text-xl mb-8 max-w-xl text-gray-200">
           Login to access your hotel dashboard, update availability, manage bookings, and get your hotel listed for travelers to discover and book easily.
         </p>
 
@@ -32,6 +46,8 @@ const Herosection = () => {
           </button>
         </div>
       </main>
+
+    </div>
   )
 }
 
