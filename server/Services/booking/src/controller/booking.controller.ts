@@ -9,15 +9,11 @@ import { sendEmail } from "@packages"
 // definitation of packages is in tsconfig.json file
 
 const createBooking = asyncHandler(async (req: any, res: any) => {
-
+    
     const session = await mongoose.startSession();
-
     try {
-
         await session.withTransaction(async () => {
-
             const { roomId, guests, checkIn, checkOut, paymentMethod } = req.body;
-
             const start = new Date(checkIn);
             const end = new Date(checkOut);
 
@@ -111,7 +107,11 @@ const createBooking = asyncHandler(async (req: any, res: any) => {
                   `;
 
 
-                  return apiResponse({ bookingId: booking._id, htmlForm }, 200, true, "Booking created via eSewa");
+                return apiResponse({ bookingId: booking._id, htmlForm }, 200, true, "Booking created via eSewa");
+            }
+
+            if (paymentMethod === "KHALTI") {
+                return apiResponse({ bookingId: booking._id, totalPrice }, 200, true, "Booking created via Khalti");
             }
 
             return res.json({
@@ -122,23 +122,16 @@ const createBooking = asyncHandler(async (req: any, res: any) => {
         });
 
     } catch (error: any) {
-
         return apiError({}, 400, error.message);
-
     } finally {
-
         session.endSession();
-
     }
-
 });
 
 
 const esewaSuccess = asyncHandler(async (req: any, res: any) => {
-
     try {
         const { data } = req.query;
-
         if (!data) {
             return res.redirect(`${process.env.FRONTEND_URL}/payment-failure`);
         }
@@ -148,7 +141,6 @@ const esewaSuccess = asyncHandler(async (req: any, res: any) => {
         );
 
         const bookingId = decoded.transaction_uuid;
-
         const verifyResponse = await axios.post("https://rc-epay.esewa.com.np/api/epay/transaction/status/", {
             product_code: decoded.product_code,
             total_amount: decoded.total_amount,
@@ -170,12 +162,13 @@ const esewaSuccess = asyncHandler(async (req: any, res: any) => {
 
         return res.redirect(`${process.env.FRONTEND_URL}/payment-failure`);
     } catch (error) {
-
         return res.redirect(`${process.env.FRONTEND_URL}/payment-failure`);
-
-
     }
 })
 
+const khaltiVerify=asyncHandler(async(req:any,res:any)=>{
+    
 
-export { createBooking, esewaSuccess }
+})
+
+export { khaltiVerify ,createBooking, esewaSuccess }
