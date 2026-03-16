@@ -14,7 +14,8 @@ const isValidSlide = (slide: any): slide is OnboardingSlide => {
     typeof slide.id === "string" &&
     typeof slide.title === "string" &&
     typeof slide.subtitle === "string" &&
-    typeof slide.imageUrl === "string"
+    typeof slide.imageUrl === "string" &&
+    typeof slide.status === "boolean"
   );
 };
 
