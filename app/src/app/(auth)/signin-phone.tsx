@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider } from '@/src/components/ui';
+import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/ui';
 import { Colors } from '@/src/constants/color';
 import { Typography } from '@/src/constants/typography';
 import { Spacing } from '@/src/constants/spacing';
@@ -20,12 +20,17 @@ export default function SignInPhone() {
   const [countryCode, setCountryCode] = useState('+977');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignIn = async () => {
     const trimmedPhone = phoneNumber.trim();
-    if (!trimmedPhone) return;
+    if (!trimmedPhone) {
+      setErrorMessage('Please enter your phone number.');
+      return;
+    }
 
     setLoading(true);
+    setErrorMessage('');
     setTimeout(() => {
       setLoading(false);
       router.push({
@@ -82,6 +87,13 @@ export default function SignInPhone() {
 
         {/* Form */}
         <View style={styles.form}>
+          <FormFeedback
+            message={errorMessage}
+            type="error"
+            style={styles.feedback}
+            onDismiss={() => setErrorMessage('')}
+          />
+
           <View style={styles.phoneRow}>
             <TouchableOpacity style={styles.countryCodeButton}>
               <Text style={styles.countryCodeText}>{countryCode}</Text>
@@ -90,7 +102,10 @@ export default function SignInPhone() {
               <Input
                 placeholder="Phone number"
                 value={phoneNumber}
-                onChangeText={setPhoneNumber}
+                onChangeText={(value) => {
+                  setPhoneNumber(value);
+                  if (errorMessage) setErrorMessage('');
+                }}
                 keyboardType="phone-pad"
               />
             </View>
@@ -201,6 +216,9 @@ const styles = StyleSheet.create({
   },
   phoneInputContainer: {
     flex: 1,
+  },
+  feedback: {
+    marginBottom: Spacing.sm,
   },
   signInButton: {
     marginTop: Spacing.md,

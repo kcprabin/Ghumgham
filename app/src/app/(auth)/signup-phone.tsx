@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider, Checkbox } from '@/src/components/ui';
+import { Button, Input, SocialButton, Divider, Checkbox, FormFeedback } from '@/src/components/ui';
 import { Colors } from '@/src/constants/color';
 import { Typography } from '@/src/constants/typography';
 import { Spacing } from '@/src/constants/spacing';
@@ -23,15 +23,25 @@ export default function SignUpPhone() {
   const [password, setPassword] = useState('');
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignUp = async () => {
     const trimmedName = name.trim();
     const trimmedPhone = phoneNumber.trim();
     const trimmedPassword = password.trim();
 
-    if (!agreeToTerms || !trimmedName || !trimmedPhone || !trimmedPassword) return;
+    if (!trimmedName || !trimmedPhone || !trimmedPassword) {
+      setErrorMessage('Please fill out all required fields.');
+      return;
+    }
+
+    if (!agreeToTerms) {
+      setErrorMessage('Please accept Terms of Service and Privacy Policy.');
+      return;
+    }
 
     setLoading(true);
+    setErrorMessage('');
     setTimeout(() => {
       setLoading(false);
       router.push({
@@ -88,10 +98,20 @@ export default function SignUpPhone() {
 
         {/* Form */}
         <View style={styles.form}>
+          <FormFeedback
+            message={errorMessage}
+            type="error"
+            style={styles.feedback}
+            onDismiss={() => setErrorMessage('')}
+          />
+
           <Input
             placeholder="Name"
             value={name}
-            onChangeText={setName}
+            onChangeText={(value) => {
+              setName(value);
+              if (errorMessage) setErrorMessage('');
+            }}
             autoCapitalize="words"
             containerStyle={styles.inputContainer}
           />
@@ -104,7 +124,10 @@ export default function SignUpPhone() {
               <Input
                 placeholder="Phone number"
                 value={phoneNumber}
-                onChangeText={setPhoneNumber}
+                onChangeText={(value) => {
+                  setPhoneNumber(value);
+                  if (errorMessage) setErrorMessage('');
+                }}
                 keyboardType="phone-pad"
               />
             </View>
@@ -113,7 +136,10 @@ export default function SignUpPhone() {
           <Input
             placeholder="Password"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(value) => {
+              setPassword(value);
+              if (errorMessage) setErrorMessage('');
+            }}
             isPassword
             containerStyle={styles.inputContainer}
           />
@@ -121,7 +147,10 @@ export default function SignUpPhone() {
           {/* Terms Checkbox */}
           <Checkbox
             checked={agreeToTerms}
-            onToggle={() => setAgreeToTerms(!agreeToTerms)}
+            onToggle={() => {
+              setAgreeToTerms(!agreeToTerms);
+              if (errorMessage) setErrorMessage('');
+            }}
             labelComponent={
               <Text style={styles.termsText}>
                 I agree to{' '}
@@ -222,6 +251,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: Spacing.xs,
+  },
+  feedback: {
+    marginBottom: Spacing.sm,
   },
   phoneRow: {
     flexDirection: 'row',

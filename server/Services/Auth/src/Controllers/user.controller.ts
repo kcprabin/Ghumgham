@@ -9,6 +9,12 @@ const registerUser = asyncHandler(async (req: any, res: any) => {
     const existingUser = await UserModel.findOne({
       Username: validate.Username,
     });
+    const existingEmail = await UserModel.findOne({
+      email: validate.email,
+    });
+    if (existingEmail) {
+      return apiError(res, 400, "Email already exists");
+    }
 
     if (existingUser) {
       return apiError(res, 400, "Username already exists");
@@ -187,7 +193,7 @@ const sendOTP = asyncHandler(async (req: any, res: any) => {
           await sendEmail(email, "Your OTP Code", `Your OTP code is: ${otp}` , process.env.RESEND_API);
           return apiResponse(res, 200, true, "OTP sent successfully to email");
         } catch (error) {
-          return apiError(res, 500, "Failed to send OTP email", error);
+          return apiError(res, 500, "Failed too send OTP email", error);
         }
     
 }
@@ -202,7 +208,7 @@ const verifyOTP = asyncHandler(async (req: any, res: any) => {
     if (!user) {
         return apiError(res, 404, "User with the provided email not found");
     }
-    if (user.otp !== otp) {
+    if (user.otp !== Number(otp)) {
         return apiError(res, 400, "Invalid OTP. Please provide the correct OTP for verification.");
     }
     if (user.otpExpiry && user.otpExpiry < new Date()) {

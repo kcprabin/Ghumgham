@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider } from '@/src/components/ui';
+import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/ui';
 import { Colors } from '@/src/constants/color';
 import { Typography } from '@/src/constants/typography';
 import { Spacing } from '@/src/constants/spacing';
@@ -20,13 +20,18 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignIn = async () => {
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
-    if (!trimmedEmail || !trimmedPassword) return;
+    if (!trimmedEmail || !trimmedPassword) {
+      setErrorMessage('Please enter email and password.');
+      return;
+    }
 
     setLoading(true);
+    setErrorMessage('');
     // Add your sign in logic here
     setTimeout(() => {
       setLoading(false);
@@ -85,10 +90,20 @@ export default function SignIn() {
 
         {/* Form */}
         <View style={styles.form}>
+          <FormFeedback
+            message={errorMessage}
+            type="error"
+            style={styles.feedback}
+            onDismiss={() => setErrorMessage('')}
+          />
+
           <Input
             placeholder="Email address"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(value) => {
+              setEmail(value);
+              if (errorMessage) setErrorMessage('');
+            }}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
@@ -98,7 +113,10 @@ export default function SignIn() {
           <Input
             placeholder="Password"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(value) => {
+              setPassword(value);
+              if (errorMessage) setErrorMessage('');
+            }}
             isPassword
             containerStyle={styles.inputContainer}
           />
@@ -191,6 +209,9 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   inputContainer: {
+    marginBottom: Spacing.sm,
+  },
+  feedback: {
     marginBottom: Spacing.sm,
   },
   signInButton: {
