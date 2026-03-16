@@ -74,6 +74,7 @@ const loginUser = asyncHandler(async (req: any, res: any) => {
       id: user._id,
       Username: user.Username,
       role: user.role,
+      token: token,
     };
     return apiResponse(
       res,

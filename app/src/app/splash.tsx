@@ -30,9 +30,7 @@ export default function SplashScreen() {
 
     const bootstrap = async () => {
       if (isLoading) return;
-
       const hasOnboarded = await AsyncStorage.getItem("hasOnboarded");
-
       if (!isMounted) return;
 
       const targetRoute = !hasOnboarded

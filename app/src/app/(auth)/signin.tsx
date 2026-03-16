@@ -33,12 +33,16 @@ export default function SignIn() {
     if (user) {
       router.replace('/(tabs)' as any);
     }
-  }, [user]);
+  }, [user, router]);
   const [errorMessage, setErrorMessage] = useState('');
 
   const getApiErrorMessage = (error: unknown) => {
     if (axios.isAxiosError(error)) {
       const responseData = error.response?.data;
+
+      if (!error.response) {
+        return 'Cannot reach auth server. Start backend and verify API_BASE_URL.';
+      }
 
       if (typeof responseData?.message === 'string' && responseData.message.trim()) {
         return responseData.message;
@@ -66,6 +70,9 @@ export default function SignIn() {
       setErrorMessage('Please enter username and password.');
       return;
     }
+
+  
+
     setLoading(true);
     setErrorMessage('');
 
@@ -77,17 +84,15 @@ export default function SignIn() {
       });
 
       if (response.status === 200) {
-        const authHeader = response.headers['authorization'];
-        if (authHeader) {
-          const token = authHeader.replace('Bearer ', '');
-          await SecureStore.setItemAsync('userToken', token);
-          await AsyncStorage.setItem('token', token);
-        }
-        const userData = response.data?.data;
+        const token :  string = response.data?.data?.token;
+        await SecureStore.setItemAsync('userToken', token);
+        await AsyncStorage.setItem('token', token);
+
+        const userData = response.data?.data?.data;
         if (userData) {
           await SecureStore.setItemAsync('userData', JSON.stringify(userData));
         }
-        await checkAuth();
+        router.replace('/(tabs)' as any);
       }
     } catch (error) {
       setErrorMessage(getApiErrorMessage(error));

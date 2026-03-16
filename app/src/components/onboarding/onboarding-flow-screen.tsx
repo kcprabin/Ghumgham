@@ -40,7 +40,8 @@ export default function OnboardingFlowScreen() {
   const currentSlide = slides[currentIndex] || ONBOARDING_SLIDES[currentIndex] || ONBOARDING_SLIDES[0];
   const isLast = currentIndex >= slides.length - 1;
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
+    await AsyncStorage.setItem("hasOnboarded", "true");
     router.replace("/(auth)/signin" as any);
   };
 

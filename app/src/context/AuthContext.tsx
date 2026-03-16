@@ -34,8 +34,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsSignOut(true);
         return;
       }
-
-  
       const response = await axios.get(API_ENDPOINTS_AUTH.USER_PROFILE, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
@@ -48,11 +46,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsSignOut(false);
       }
     } catch (error: any) {
-      await SecureStore.deleteItemAsync('userToken');
-      await SecureStore.deleteItemAsync('userData');
-      await AsyncStorage.removeItem('token');
-      setUser(null);
-      setIsSignOut(true);
+      const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+
+      // Only clear session for real auth failures (expired/invalid token).
+      if (status === 401 || status === 403) {
+        await SecureStore.deleteItemAsync('userToken');
+        await SecureStore.deleteItemAsync('userData');
+        await AsyncStorage.removeItem('token');
+        setUser(null);
+        setIsSignOut(true);
+      } else {
+        const cachedUser = await SecureStore.getItemAsync('userData');
+        if (cachedUser) {
+          setUser(JSON.parse(cachedUser));
+          setIsSignOut(false);
+        } else {
+          setUser(null);
+          setIsSignOut(true);
+        }
+      }
     } finally {
       setIsLoading(false);
     }
