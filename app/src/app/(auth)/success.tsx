@@ -7,22 +7,17 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/src/components/ui';
-import { Colors } from '@/src/constants/color';
-import { Typography } from '@/src/constants/typography';
-import { Spacing } from '@/src/constants/spacing';
+import { Colors } from '@/src/constants/app/color';
+import { Typography } from '@/src/constants/app/typography';
+import { Spacing } from '@/src/constants/app/spacing';
 
 export default function Success() {
   const router = useRouter();
 
   const handleGoCreate = async () => {
-    // Store auth token (in real app, this would come from your auth service)
-    await AsyncStorage.setItem('token', 'user-auth-token');
-    
-    // Navigate to the main app
-    router.replace('/(tabs)' as any);
+    router.replace('/(auth)/signin' as any);
   };
 
   return (
@@ -38,15 +33,17 @@ export default function Success() {
         </View>
 
         {/* Success Message */}
+        <Text style={styles.title}>Thank You for Joining Ghumgham</Text>
         <Text style={styles.message}>
-          Your profile has been successfully created.
+          Your profile is ready. Discover great stays, compare prices, and book
+          your next trip with confidence. Please login to continue.
         </Text>
       </View>
 
       {/* Bottom Button */}
       <View style={styles.bottomContainer}>
         <Button
-          title="Go Create"
+          title="Login"
           onPress={handleGoCreate}
           style={styles.button}
         />
@@ -82,6 +79,13 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     textAlign: 'center',
     lineHeight: 24,
+    opacity: 0.9,
+  },
+  title: {
+    ...Typography.h2,
+    color: Colors.textPrimary,
+    textAlign: 'center',
+    marginBottom: Spacing.md,
   },
   bottomContainer: {
     paddingHorizontal: Spacing.screenHorizontal,

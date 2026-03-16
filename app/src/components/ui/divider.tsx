@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
-import { Colors } from '../../constants/color';
-import { Typography } from '../../constants/typography';
-import { Spacing } from '../../constants/spacing';
+import { Colors } from '../../constants/app/color';
+import { Typography } from '../../constants/app/typography';
+import { Spacing } from '../../constants/app/spacing';
 
 interface DividerProps {
   text?: string;

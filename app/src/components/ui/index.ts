@@ -8,3 +8,4 @@ export { NumberPad } from './number-pad';
 export { PaginationDots } from './pagination-dots';
 export { Checkbox } from './checkbox';
 export { HexagonLogo } from './hexagon-logo';
+export { FormFeedback } from './form-feedback';

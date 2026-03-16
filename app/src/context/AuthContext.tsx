@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { API_ENDPOINTS_AUTH } from '@/src/constants/api';
 
 interface User {
   id: string;
@@ -11,10 +14,8 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
-  isSignOut: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  isSignOut: boolean; 
   logout: () => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
   checkAuth: () => Promise<void>;
 }
 
@@ -28,18 +29,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const checkAuth = async () => {
     try {
       const token = await SecureStore.getItemAsync('userToken');
-      if (token) {
-        const userData = await SecureStore.getItemAsync('userData');
-        if (userData) {
-          setUser(JSON.parse(userData));
-          setIsSignOut(false);
-        }
-      } else {
+      if (!token) {
+        setUser(null);
         setIsSignOut(true);
+        return;
+      }
+      const response = await axios.get(API_ENDPOINTS_AUTH.USER_PROFILE, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        const userData = response.data?.data;
+        setUser(userData);
+        await SecureStore.setItemAsync('userData', JSON.stringify(userData));
+        setIsSignOut(false);
       }
     } catch (error: any) {
-      console.error('Auth check error:', error);
-      setIsSignOut(true);
+      const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+
+      // Only clear session for real auth failures (expired/invalid token).
+      if (status === 401 || status === 403) {
+        await SecureStore.deleteItemAsync('userToken');
+        await SecureStore.deleteItemAsync('userData');
+        await AsyncStorage.removeItem('token');
+        setUser(null);
+        setIsSignOut(true);
+      } else {
+        const cachedUser = await SecureStore.getItemAsync('userData');
+        if (cachedUser) {
+          setUser(JSON.parse(cachedUser));
+          setIsSignOut(false);
+        } else {
+          setUser(null);
+          setIsSignOut(true);
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -49,37 +74,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('YOUR_API_URL/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        await SecureStore.setItemAsync('userToken', data.token);
-        await SecureStore.setItemAsync('userData', JSON.stringify(data.user));
-        setUser(data.user);
-        setIsSignOut(false);
-      } else {
-        throw new Error('Login failed');
-      }
-    } catch (error: any) {
-      console.error('Login error:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ 
 
   const logout = async () => {
     setIsLoading(true);
     try {
       await SecureStore.deleteItemAsync('userToken');
       await SecureStore.deleteItemAsync('userData');
+      await AsyncStorage.removeItem('token');
       setUser(null);
       setIsSignOut(true);
     } catch (error: any) {
@@ -89,31 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (name: string, email: string, password: string) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('YOUR_API_URL/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        await SecureStore.setItemAsync('userToken', data.token);
-        await SecureStore.setItemAsync('userData', JSON.stringify(data.user));
-        setUser(data.user);
-        setIsSignOut(false);
-      } else {
-        throw new Error('Registration failed');
-      }
-    } catch (error: any) {
-      console.error('Registration error:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ 
 
   return (
     <AuthContext.Provider
@@ -121,9 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         isLoading,
         isSignOut,
-        login,
         logout,
-        register,
         checkAuth,
       }}
     >

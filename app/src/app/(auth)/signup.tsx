@@ -16,10 +16,11 @@ import {
   SocialButton,
   Divider,
   Checkbox,
+  FormFeedback,
 } from "@/src/components/ui";
-import { Colors } from "@/src/constants/color";
-import { Typography } from "@/src/constants/typography";
-import { Spacing } from "@/src/constants/spacing";
+import { Colors } from "@/src/constants/app/color";
+import { Typography } from "@/src/constants/app/typography";
+import { Spacing } from "@/src/constants/app/spacing";
 
 import registerSchema from "@/src/schema/registerschema";
 import { API_ENDPOINTS_AUTH } from "@/src/constants/api";
@@ -27,7 +28,7 @@ import axios from "axios";
 
 export default function SignUp() {
   const API_SIGNUP = API_ENDPOINTS_AUTH.REGISTER;
-  const API_SEND_OTP= API_ENDPOINTS_AUTH.SEND_OTP;
+  const API_SEND_VERIFICATION = API_ENDPOINTS_AUTH.SEND_OTP;
   const router = useRouter();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -35,44 +36,61 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   const handleSignUp = async () => {
+    if (!agreeToTerms) {
+      setErrorMessage("Please accept Terms of Service and Privacy Policy.");
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage("");
+
     try {
-      if (!agreeToTerms) return;
-      setLoading(true);
-      await axios
-        .post(API_SIGNUP, {
-          Name: name,
-          Username: username,
-          email: email,
-          password: password,
-        } as registerSchema)
-        .then((response) => {
-          proceedToVerification(email);
-          axios
-            .post(API_SEND_OTP, {
-              email,
-            }).catch((error) => {
-              console.error("OTP sending error:", error);
-            });
-        })
-        .catch((error) => {
-          console.error("Signup error:", error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } catch (error) {
-      console.error("Signup error:", error);
+      const data: registerSchema = {
+        Name: name.trim(),
+        Username: username.trim(),
+        email: email.trim(),
+        password: password.trim(),
+      };
+
+      if (!data.Name || !data.Username || !data.email || !data.password) {
+        setErrorMessage("Please fill out all required fields.");
+        setLoading(false);
+        return;
+      }
+
+      const response = await axios.post(API_SIGNUP, data, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.status === 201) {
+        await axios.post(
+          API_SEND_VERIFICATION,
+          { email: data.email },
+          { withCredentials: true, headers: { "Content-Type": "application/json" } }
+        );
+        proceedToVerification();
+      } else {
+        setErrorMessage(response.data?.message || "Registration failed. Please try again.");
+      }
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || error?.message || "Signup failed";
+      setErrorMessage(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const proceedToVerification = (email: string) => {
+  const proceedToVerification = () => {
     router.push({
       pathname: "/(auth)/verify-code",
-      params: { email },
+      params: { email: email.trim() },
     } as any);
-  };
+    };
 
   const handleSignIn = () => {
     router.push("/(auth)/signin" as any);
@@ -88,6 +106,7 @@ export default function SignUp() {
 
   const handleFacebookSignUp = () => {
     console.log("Facebook Sign Up");
+
   };
 
   return (
@@ -123,10 +142,20 @@ export default function SignUp() {
 
         {/* Form */}
         <View style={styles.form}>
+          <FormFeedback
+            message={errorMessage}
+            type="error"
+            style={styles.feedback}
+            onDismiss={() => setErrorMessage("")}
+          />
+
           <Input
             placeholder="Name"
             value={name}
-            onChangeText={setName}
+            onChangeText={(value) => {
+              setName(value);
+              if (errorMessage) setErrorMessage("");
+            }}
             autoCapitalize="words"
             containerStyle={styles.inputContainer}
           />
@@ -134,7 +163,10 @@ export default function SignUp() {
           <Input
             placeholder="Username"
             value={username}
-            onChangeText={setUsername}
+            onChangeText={(value) => {
+              setUsername(value);
+              if (errorMessage) setErrorMessage("");
+            }}
             autoCapitalize="none"
             autoCorrect={false}
             containerStyle={styles.inputContainer}
@@ -143,7 +175,10 @@ export default function SignUp() {
           <Input
             placeholder="Email address"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(value) => {
+              setEmail(value);
+              if (errorMessage) setErrorMessage("");
+            }}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
@@ -153,7 +188,10 @@ export default function SignUp() {
           <Input
             placeholder="Password"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(value) => {
+              setPassword(value);
+              if (errorMessage) setErrorMessage("");
+            }}
             isPassword
             containerStyle={styles.inputContainer}
           />
@@ -161,7 +199,10 @@ export default function SignUp() {
           {/* Terms Checkbox */}
           <Checkbox
             checked={agreeToTerms}
-            onToggle={() => setAgreeToTerms(!agreeToTerms)}
+            onToggle={() => {
+              setAgreeToTerms(!agreeToTerms);
+              if (errorMessage) setErrorMessage("");
+            }}
             labelComponent={
               <Text style={styles.termsText}>
                 I agree to{" "}
@@ -176,7 +217,7 @@ export default function SignUp() {
             title="Continue"
             onPress={handleSignUp}
             loading={loading}
-            disabled={!name || !email || !password || !agreeToTerms}
+            disabled={!name || !email || !password}
             style={styles.continueButton}
           />
         </View>
@@ -255,6 +296,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: Spacing.xs,
+  },
+  feedback: {
+    marginBottom: Spacing.sm,
   },
   checkbox: {
     marginTop: Spacing.sm,

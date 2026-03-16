@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { Colors } from '@/src/constants/color';
+import { Colors } from '@/src/constants/app/color';
 
 export default function OnboardingLayout() {
   return (
@@ -10,9 +10,7 @@ export default function OnboardingLayout() {
         animation: 'slide_from_right',
       }}
     >
-      <Stack.Screen name="onboarding1" />
-      <Stack.Screen name="onboarding2" />
-      <Stack.Screen name="onboarding3" />
+      <Stack.Screen name="index" />
     </Stack>
   );
 }

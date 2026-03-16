@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,26 +10,97 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider } from '@/src/components/ui';
-import { Colors } from '@/src/constants/color';
-import { Typography } from '@/src/constants/typography';
-import { Spacing } from '@/src/constants/spacing';
+import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/ui';
+import { Colors } from '@/src/constants/app/color';
+import { Typography } from '@/src/constants/app/typography';
+import { Spacing } from '@/src/constants/app/spacing';
+import { API_ENDPOINTS_AUTH } from '@/src/constants/api';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+import { useAuth } from '@/src/context/AuthContext';
+
 
 export default function SignIn() {
+  const API_SIGNIN = API_ENDPOINTS_AUTH.LOGIN;
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const { checkAuth, user } = useAuth();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSignIn = async () => {
-    setLoading(true);
-    // Add your sign in logic here
-    setTimeout(() => {
-      setLoading(false);
-      // Navigate to home or verify code
-      router.push('/(auth)/verify-code' as any);
-    }, 1500);
+  useEffect(() => {
+    if (user) {
+      router.replace('/(tabs)' as any);
+    }
+  }, [user, router]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const getApiErrorMessage = (error: unknown) => {
+    if (axios.isAxiosError(error)) {
+      const responseData = error.response?.data;
+
+      if (!error.response) {
+        return 'Cannot reach auth server. Start backend and verify API_BASE_URL.';
+      }
+
+      if (typeof responseData?.message === 'string' && responseData.message.trim()) {
+        return responseData.message;
+      }
+
+      if (Array.isArray(responseData?.errors) && responseData.errors.length > 0) {
+        const firstError = responseData.errors[0];
+        if (typeof firstError?.message === 'string' && firstError.message.trim()) {
+          return firstError.message;
+        }
+      }
+
+      if (typeof error.message === 'string' && error.message.trim()) {
+        return error.message;
+      }
+    }
+
+    return 'An error occurred during sign in. Please try again.';
   };
+
+  const handleSignIn = async () => {
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+    if (!trimmedUsername || !trimmedPassword) {
+      setErrorMessage('Please enter username and password.');
+      return;
+    }
+
+  
+
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
+      const payload = { Username: trimmedUsername, password: trimmedPassword };
+      const response = await axios.post(API_SIGNIN, payload, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (response.status === 200) {
+        const token :  string = response.data?.data?.token;
+        await SecureStore.setItemAsync('userToken', token);
+        await AsyncStorage.setItem('token', token);
+
+        const userData = response.data?.data?.data;
+        if (userData) {
+          await SecureStore.setItemAsync('userData', JSON.stringify(userData));
+        }
+        router.replace('/(tabs)' as any);
+      }
+    } catch (error) {
+      setErrorMessage(getApiErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   const handleSignUp = () => {
     router.push('/(auth)/signup' as any);
@@ -78,10 +149,20 @@ export default function SignIn() {
 
         {/* Form */}
         <View style={styles.form}>
+          <FormFeedback
+            message={errorMessage}
+            type="error"
+            style={styles.feedback}
+            onDismiss={() => setErrorMessage('')}
+          />
+
           <Input
-            placeholder="Email address"
-            value={email}
-            onChangeText={setEmail}
+            placeholder="Username"
+            value={username }
+            onChangeText={(value) => {
+              setUsername (value);
+              if (errorMessage) setErrorMessage('');
+            }}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
@@ -91,16 +172,19 @@ export default function SignIn() {
           <Input
             placeholder="Password"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(value) => {
+              setPassword(value);
+              if (errorMessage) setErrorMessage('');
+            }}
             isPassword
             containerStyle={styles.inputContainer}
           />
 
           <Button
-            title="Sign In"
+            title="Continue"
             onPress={handleSignIn}
             loading={loading}
-            disabled={!email || !password}
+            disabled={!username.trim() || !password.trim()}
             style={styles.signInButton}
           />
         </View>
@@ -184,6 +268,9 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   inputContainer: {
+    marginBottom: Spacing.sm,
+  },
+  feedback: {
     marginBottom: Spacing.sm,
   },
   signInButton: {

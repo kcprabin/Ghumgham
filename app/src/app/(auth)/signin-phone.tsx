@@ -10,23 +10,34 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider } from '@/src/components/ui';
-import { Colors } from '@/src/constants/color';
-import { Typography } from '@/src/constants/typography';
-import { Spacing } from '@/src/constants/spacing';
+import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/ui';
+import { Colors } from '@/src/constants/app/color';
+import { Typography } from '@/src/constants/app/typography';
+import { Spacing } from '@/src/constants/app/spacing';
 
 export default function SignInPhone() {
   const router = useRouter();
-  const [countryCode, setCountryCode] = useState('+1');
+  const [countryCode, setCountryCode] = useState('+977');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignIn = async () => {
+    const trimmedPhone = phoneNumber.trim();
+    if (!trimmedPhone) {
+      setErrorMessage('Please enter your phone number.');
+      return;
+    }
+
     setLoading(true);
+    setErrorMessage('');
     setTimeout(() => {
       setLoading(false);
-      router.push('/(auth)/verify-code' as any);
-    }, 1500);
+      router.push({
+        pathname: '/(auth)/verify-code',
+        params: { phone: `${countryCode}${trimmedPhone}` },
+      } as any);
+    }, 600);
   };
 
   const handleSignUp = () => {
@@ -76,6 +87,13 @@ export default function SignInPhone() {
 
         {/* Form */}
         <View style={styles.form}>
+          <FormFeedback
+            message={errorMessage}
+            type="error"
+            style={styles.feedback}
+            onDismiss={() => setErrorMessage('')}
+          />
+
           <View style={styles.phoneRow}>
             <TouchableOpacity style={styles.countryCodeButton}>
               <Text style={styles.countryCodeText}>{countryCode}</Text>
@@ -84,17 +102,20 @@ export default function SignInPhone() {
               <Input
                 placeholder="Phone number"
                 value={phoneNumber}
-                onChangeText={setPhoneNumber}
+                onChangeText={(value) => {
+                  setPhoneNumber(value);
+                  if (errorMessage) setErrorMessage('');
+                }}
                 keyboardType="phone-pad"
               />
             </View>
           </View>
 
           <Button
-            title="Sign In"
+            title="Continue"
             onPress={handleSignIn}
             loading={loading}
-            disabled={!phoneNumber}
+            disabled={!phoneNumber.trim()}
             style={styles.signInButton}
           />
         </View>
@@ -195,6 +216,9 @@ const styles = StyleSheet.create({
   },
   phoneInputContainer: {
     flex: 1,
+  },
+  feedback: {
+    marginBottom: Spacing.sm,
   },
   signInButton: {
     marginTop: Spacing.md,

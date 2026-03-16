@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
-import { Colors } from '../../constants/color';
-import { Spacing } from '../../constants/spacing';
+import { Colors } from '../../constants/app/color';
+import { Spacing } from '../../constants/app/spacing';
 
 interface PaginationDotsProps {
   total: number;

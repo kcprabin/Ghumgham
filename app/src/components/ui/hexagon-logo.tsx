@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Colors } from '../../constants/color';
+import { Colors } from '../../constants/app/color';
 
 interface HexagonLogoProps {
   size?: number;

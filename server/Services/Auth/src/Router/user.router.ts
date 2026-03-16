@@ -12,11 +12,12 @@ import {
 } from "../Controllers/user.controller.js";
 
 import passport from "passport";
+import { roleMiddleware } from "../../../../Packages/middleware/role.middleware.js";
 
 const router = Router();
 
 router.post("/register", registerUser);
-router.post("/logout",  logoutUser);
+router.post("/logout", roleMiddleware, logoutUser);
 router.post("/login", loginUser);
 router.get(
   "/auth/google",
@@ -29,9 +30,9 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/login", session: false }),
   googleAuth
 );
-router.get("/profile", getUserProfile);
-router.put("/update-profile", updateUserProfile);
-router.delete("/delete-profile", deleteUserProfile);
+router.get("/profile", roleMiddleware, getUserProfile);
+router.put("/update-profile", roleMiddleware, updateUserProfile);
+router.delete("/delete-profile", roleMiddleware, deleteUserProfile);
 router.post("/send-otp", sendOTP);
 router.post("/verify-otp", verifyOTP);
 
