@@ -11,11 +11,15 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/ui';
-import { Colors } from '@/src/constants/color';
-import { Typography } from '@/src/constants/typography';
-import { Spacing } from '@/src/constants/spacing';
+import { Colors } from '@/src/constants/app/color';
+import { Typography } from '@/src/constants/app/typography';
+import { Spacing } from '@/src/constants/app/spacing';
+import { API_ENDPOINTS_AUTH } from '@/src/constants/api';
+import axios from 'axios';
+
 
 export default function SignIn() {
+  const API_SIGNIN = API_ENDPOINTS_AUTH.LOGIN;
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,6 +37,17 @@ export default function SignIn() {
     setLoading(true);
     setErrorMessage('');
     // Add your sign in logic here
+    try {
+      const response = await axios.post(API_SIGNIN, {
+        email: trimmedEmail,
+        password: trimmedPassword,
+      });
+      setLoading(false);
+      // Handle successful sign in
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage('Invalid email or password.');
+    }
     setTimeout(() => {
       setLoading(false);
       // Navigate to verification with contact info.

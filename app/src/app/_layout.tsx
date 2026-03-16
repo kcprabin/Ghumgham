@@ -1,7 +1,7 @@
 // app/_layout.tsx
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Colors } from '@/src/constants/color';
+import { Colors } from '@/src/constants/app/color';
 
 export default function RootLayout() {
   return (

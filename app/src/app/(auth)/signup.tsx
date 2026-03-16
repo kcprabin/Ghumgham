@@ -18,9 +18,9 @@ import {
   Checkbox,
   FormFeedback,
 } from "@/src/components/ui";
-import { Colors } from "@/src/constants/color";
-import { Typography } from "@/src/constants/typography";
-import { Spacing } from "@/src/constants/spacing";
+import { Colors } from "@/src/constants/app/color";
+import { Typography } from "@/src/constants/app/typography";
+import { Spacing } from "@/src/constants/app/spacing";
 
 import registerSchema from "@/src/schema/registerschema";
 import { API_ENDPOINTS_AUTH } from "@/src/constants/api";

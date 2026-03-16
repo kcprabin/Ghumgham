@@ -1,4 +1,4 @@
-import { API_URL } from "./env";
+import { API_URL } from "../constants/env";
 
 interface ApiEndpoints {
   [key: string]: string;
@@ -71,9 +71,15 @@ const API_ENDPOINTS_NOTIFICATIONS: ApiEndpoints = {
   DELETE_NOTIFICATION: `${API_NOTIFICATIONS}/delete/:id`,
 };
 
+const API_CONTENT = `${API_URL}:3000/api/v1/content`;
+
+const API_ENDPOINTS_CONTENT: ApiEndpoints = {
+  ONBOARDING: `${API_CONTENT}/onboarding`,
+};
 export {
   API_ENDPOINTS_AUTH,
   API_ENDPOINTS_BOOKING,
   API_ENDPOINTS_PAYMENT,
   API_ENDPOINTS_NOTIFICATIONS,
+  API_ENDPOINTS_CONTENT,
 };

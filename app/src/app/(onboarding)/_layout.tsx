@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { Colors } from '@/src/constants/color';
+import { Colors } from '@/src/constants/app/color';
 
 export default function OnboardingLayout() {
   return (

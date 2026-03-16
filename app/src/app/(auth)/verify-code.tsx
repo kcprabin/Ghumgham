@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, StatusBar, SafeAreaView } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Button, NumberPad, FormFeedback } from "@/src/components/ui";
-import { Colors } from "@/src/constants/color";
-import { Typography } from "@/src/constants/typography";
-import { Spacing } from "@/src/constants/spacing";
+import { Colors } from "@/src/constants/app/color";
+import { Typography } from "@/src/constants/app/typography";
+import { Spacing } from "@/src/constants/app/spacing";
 
 import { API_ENDPOINTS_AUTH } from "@/src/constants/api";
 import axios from "axios";

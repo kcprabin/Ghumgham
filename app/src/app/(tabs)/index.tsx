@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
-import { Colors } from '@/src/constants/color';
-import { Typography } from '@/src/constants/typography';
-import { Spacing } from '@/src/constants/spacing';
+import { Colors } from '@/src/constants/app/color';
+import { Typography } from '@/src/constants/app/typography';
+import { Spacing } from '@/src/constants/app/spacing';
 
 export default function HomeScreen() {
   return (

@@ -1,17 +1,30 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, StatusBar, Image, Animated, Easing } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  StatusBar,
+  Image,
+  Animated,
+  Easing,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { useRouter } from "expo-router";
-import { Colors } from "@/src/constants/color";
-import { Typography } from "@/src/constants/typography";
+import { Colors } from "@/src/constants/app/color";
+import { Typography } from "@/src/constants/app/typography";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { resetAppData } from "@/src/utils/storage-reset";
 export default function SplashScreen() {
   const router = useRouter();
   const logoWipe = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(1)).current;
+  
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let isMounted = true;
+  
 
     const bootstrap = async () => {
       const [token, hasOnboarded] = await Promise.all([
@@ -65,6 +78,20 @@ export default function SplashScreen() {
     outputRange: [160, 0],
   });
 
+  const handleResetData = () => {
+    Alert.alert("Reset App Data", "This will clear local app data on this device.", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Reset",
+        style: "destructive",
+        onPress: async () => {
+          await resetAppData();
+          router.replace("/splash" as any);
+        },
+      },
+    ]);
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
@@ -83,6 +110,12 @@ export default function SplashScreen() {
         </View>
         <Text style={styles.appName}>Ghumgham</Text>
       </Animated.View>
+
+      <View style={styles.resetContainer}>
+        <TouchableOpacity onPress={handleResetData} style={styles.resetButton}>
+          <Text style={styles.resetText}>Reset App Data</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -123,5 +156,24 @@ const styles = StyleSheet.create({
     marginTop: 16,
     letterSpacing: 0.4,
     fontWeight: "500",
+  },
+  resetContainer: {
+    position: "absolute",
+    bottom: 48,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+  },
+  resetButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: Colors.cardBackground,
+  },
+  resetText: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
   },
 });
