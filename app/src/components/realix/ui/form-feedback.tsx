@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
-import { Colors } from "../../constants/app/color";
-import { Spacing } from "../../constants/app/spacing";
-import { Typography } from "../../constants/app/typography";
+import { Colors } from "../../../constants/app/color";
+import { Spacing } from "../../../constants/app/spacing";
+import { Typography } from "../../../constants/app/typography";
 
 interface FormFeedbackProps {
   message: string;

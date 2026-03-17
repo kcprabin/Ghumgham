@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     borderBottomColor: RealixColors.border,
   },
   rowPressed: {
-    backgroundColor: '#fafafa',
+    backgroundColor: RealixColors.rowBackground,
   },
   rowLeft: {
     flex: 1,

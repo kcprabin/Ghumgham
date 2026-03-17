@@ -17,7 +17,7 @@ import {
   Divider,
   Checkbox,
   FormFeedback,
-} from "@/src/components/ui";
+} from "@/src/components/realix/ui";
 import { Colors } from "@/src/constants/app/color";
 import { Typography } from "@/src/constants/app/typography";
 import { Spacing } from "@/src/constants/app/spacing";

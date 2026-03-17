@@ -1,28 +1,52 @@
 export const RealixColors = {
-  pageBackground: '#ebebeb',
-  screenBackground: '#ffffff',
-  sectionBackground: '#f7f7f7',
-  inputBackground: '#f5f5f5',
-  textPrimary: '#1a1a1a',
-  textSecondary: '#555555',
-  textMuted: '#999999',
-  textCaption: '#bbbbbb',
-  border: '#eeeeee',
-  inputBorder: '#e8e8e8',
+  pageBackground: '#1a1a1a',
+  screenBackground: '#111111',
+  sectionBackground: '#1a1a1a',
+  cardBackground: '#1e1e1e',
+  rowBackground: '#1c1c1c',
+  inputBackground: '#2a2a2a',
+  textPrimary: '#f0f0f0',
+  textSecondary: '#aaaaaa',
+  textMuted: '#666666',
+  textCaption: '#555555',
+  border: '#2a2a2a',
+  inputBorder: '#333333',
   accent: '#7ED321',
+  accentBright: '#8EE52A',
   accentDark: '#6abc18',
   accentToggle: '#4CAF50',
-  shadow: 'rgba(0, 0, 0, 0.09)',
+  orange: '#f39c12',
+  blue: '#3a7bd5',
+  shadow: 'rgba(0, 0, 0, 0.6)',
   danger: '#ef4444',
 } as const;
 
 export const realixDestinations = [
-  { id: 'romania', label: 'Romania', emoji: '🏰', color: '#f8b500' },
-  { id: 'italy', label: 'Italy', emoji: '🗼', color: '#81c784' },
-  { id: 'greece', label: 'Greece', emoji: '🏛️', color: '#64b5f6' },
-  { id: 'norway', label: 'Norway', emoji: '🏔️', color: '#7e57c2' },
-  { id: 'russia', label: 'Russia', emoji: '🏯', color: '#e91e63' },
+  { id: 'romania', label: 'Romania', emoji: '🏰', color: '#44206b' },
+  { id: 'italy', label: 'Italy', emoji: '🗼', color: '#1f5c39' },
+  { id: 'greece', label: 'Greece', emoji: '🏛️', color: '#1f4d72' },
+  { id: 'norway', label: 'Norway', emoji: '🏔️', color: '#6b4a18' },
+  { id: 'russia', label: 'Russia', emoji: '🏯', color: '#5d2020' },
 ] as const;
+
+export const realixSearchResults = [
+  { id: 'sr1', name: 'Mighty Cinco Family', address: '25 Argent St., Santa Monica', emoji: '🏠' },
+  { id: 'sr2', name: 'Mighty Cinco Family', address: '25 Argent St., Santa Monica', emoji: '🏘️' },
+  { id: 'sr3', name: 'Mighty Cinco Family', address: '25 Argent St., Santa Monica', emoji: '🏡' },
+] as const;
+
+export const realixMapPins = [
+  { id: 'pin1', label: '$250', top: 100, left: 38, active: false },
+  { id: 'pin2', label: '$180', top: 168, left: 42, active: true },
+  { id: 'pin3', label: '$320', top: 170, right: 20, active: false },
+  { id: 'pin4', label: '$145', top: 240, left: 36, active: false },
+  { id: 'pin5', label: '$290', top: 300, right: 18, active: false },
+  { id: 'pin6', label: '$175', top: 370, left: 40, active: false },
+] as const;
+
+export const realixPropertyTypes = ['Breakfast combo', 'Townhouse', 'Condo', 'Penthouse'] as const;
+
+export const realixFilterSortOptions = ['Best Match', 'Most Popular'] as const;
 
 export const realixLanguages = [
   'Indonesian',
@@ -97,6 +121,11 @@ export const realixNotificationFeed = [
   },
 ] as const;
 
+export const realixEmptyNotificationsCopy = {
+  title: 'No Notifications Yet',
+  body: 'No notification right now, notifications about your activity will show up here.',
+} as const;
+
 export const realixNotificationSections = [
   {
     id: 'special',
@@ -133,9 +162,9 @@ export const realixAmenityList = [
 ] as const;
 
 export const realixGallery = [
-  { id: 'g1', title: 'Living Room', tone: '#f3e8da' },
-  { id: 'g2', title: 'Bathroom', tone: '#dde9f2' },
-  { id: 'g3', title: 'Bedroom', tone: '#dcc8b4' },
+  { id: 'g1', title: 'Living Room', tone: '#1a2a3a' },
+  { id: 'g2', title: 'Bathroom', tone: '#2a1a1a' },
+  { id: 'g3', title: 'Bedroom', tone: '#1a2a1a' },
 ] as const;
 
 export const realixRatingBars = [
@@ -148,10 +177,10 @@ export const realixRatingBars = [
 
 export const realixDiscoverProperty = {
   id: 'mighty-cinco-family',
-  name: 'Mighty Cinco Family',
+  name: 'Primary Apartment',
   location: '701 Ocean avenue, Unit 103, Santa Monica',
   about:
-    'Cassablanca Ground is located in Malang City which is not far from the city center. This house was made in 2012 with a minimalist and modern architecture suitable for families.',
+    'A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence.',
   nightlyPrice: 150,
   discountedPrice: 146.9,
   discountValue: 38,
@@ -162,6 +191,109 @@ export const realixDiscoverProperty = {
 } as const;
 
 export const realixPaymentMethods = [
-  { id: 'mastercard', label: 'Master Card', shortCode: 'MC' },
-  { id: 'paypal', label: 'Paypal', shortCode: 'PP' },
+  { id: 'mastercard', label: '•••• •••• •••• 4242', shortCode: 'MC' },
+  { id: 'paypal', label: 'PayPal', shortCode: 'PP' },
 ] as const;
+
+export const realixInboxThreads = [
+  {
+    id: 'daria',
+    name: 'Daria',
+    avatar: '👩',
+    message: 'Oh hello Wiliam...',
+    time: '20:16',
+    unreadCount: 1,
+    online: true,
+  },
+  {
+    id: 'silvain-sastre',
+    name: 'Silvain Sastre',
+    avatar: '👨',
+    message: 'Hey my friend, how are you?',
+    time: '20:16',
+    unreadCount: 0,
+    online: true,
+  },
+  {
+    id: 'michael-huss',
+    name: 'Michael Huss',
+    avatar: '🧔',
+    message: 'Can I meet you today?',
+    time: '21:00',
+    unreadCount: 0,
+    online: true,
+  },
+  {
+    id: 'alexandria',
+    name: 'Alexandria',
+    avatar: '👧',
+    message: 'Can I meet you today?',
+    time: 'Yesterday',
+    unreadCount: 0,
+    online: false,
+  },
+  {
+    id: 'lee-chang',
+    name: 'Lee Chang',
+    avatar: '🧑',
+    message: 'Can I meet you today?',
+    time: 'Nov 15',
+    unreadCount: 0,
+    online: false,
+  },
+] as const;
+
+export const realixChatMessages = [
+  {
+    id: 't0',
+    type: 'time',
+    value: 'Today, 11:20',
+  },
+  {
+    id: 'm1',
+    type: 'incoming',
+    value: 'I\'m looking for information about your house. Can I visit to see your house?',
+  },
+  {
+    id: 'm2',
+    type: 'outgoing',
+    value: 'Ok, Bob!',
+  },
+  {
+    id: 'm3',
+    type: 'incoming',
+    value: 'Hi, Band Of Course, the door is always open.',
+  },
+  {
+    id: 'm4',
+    type: 'outgoing',
+    value: 'That\'s great, thank you! Sunday at 12 PM does that work for you?',
+  },
+  {
+    id: 'm5',
+    type: 'incoming',
+    value: 'Of course, see you on Sunday!',
+  },
+] as const;
+
+export const realixHistoryBookings = [
+  {
+    id: 'h1',
+    name: 'Pullman Legian Bali',
+    detail: '1 room, 2 Adults',
+    dates: 'Thu, 23 Feb 22 – Sat, 26 Feb 22',
+    emoji: '🏖️',
+  },
+  {
+    id: 'h2',
+    name: 'Pullman Legian Bali',
+    detail: '1 room, 2 Adults',
+    dates: 'Thu, 23 Feb 22 – Sat, 26 Feb 22',
+    emoji: '🌴',
+  },
+] as const;
+
+export const realixReviewCopy = {
+  title: 'Thank you for review',
+  body: 'Your review has been submitted successfully. Thank you!',
+} as const;

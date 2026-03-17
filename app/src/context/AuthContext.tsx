@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { API_ENDPOINTS_AUTH } from '@/src/constants/api';
 
 interface User {
@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsSignOut(false);
       }
     } catch (error: any) {
-      const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+      const status = isAxiosError(error) ? error.response?.status : undefined;
 
       // Only clear session for real auth failures (expired/invalid token).
       if (status === 401 || status === 403) {

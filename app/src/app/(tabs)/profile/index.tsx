@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
-import { Alert, StyleSheet, Switch, Text } from 'react-native';
+import { Alert, StyleSheet, Switch, Text, View } from 'react-native';
 import { useAuth } from '@/src/context/AuthContext';
 import {
   RealixCard,
@@ -25,8 +25,18 @@ export default function ProfileScreen() {
 
   return (
     <RealixScreen contentContainerStyle={styles.content}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <RealixHeader title="Profile" />
+
+      <RealixCard style={styles.profileCard}>
+        <View style={styles.profileTop}>
+          <View style={styles.profileAvatar}><Text style={styles.profileAvatarText}>KP</Text></View>
+          <View style={styles.profileTextWrap}>
+            <Text style={styles.profileName}>Kc Prabin</Text>
+            <Text style={styles.profileEmail}>prabin@example.com</Text>
+          </View>
+        </View>
+      </RealixCard>
 
       <RealixSectionLabel>General</RealixSectionLabel>
       <RealixCard>
@@ -41,6 +51,11 @@ export default function ProfileScreen() {
           onPress={() => router.push('/(tabs)/profile/language')}
         />
         <RealixListRow
+          label="Notifications"
+          leading={<Ionicons name="mail-outline" size={18} color={RealixColors.textSecondary} />}
+          onPress={() => router.push('/(tabs)/profile/notifications')}
+        />
+        <RealixListRow
           label="Notification Settings"
           leading={<Ionicons name="notifications-outline" size={18} color={RealixColors.textSecondary} />}
           onPress={() => router.push('/(tabs)/profile/notification-settings')}
@@ -51,13 +66,18 @@ export default function ProfileScreen() {
           onPress={() => router.push('/(tabs)/profile/history')}
         />
         <RealixListRow
+          label="Reviews"
+          leading={<Ionicons name="star-outline" size={18} color={RealixColors.textSecondary} />}
+          onPress={() => router.push('/(tabs)/profile/review')}
+        />
+        <RealixListRow
           label="Location"
           leading={<Ionicons name="location-outline" size={18} color={RealixColors.textSecondary} />}
           trailing={
             <Switch
               value={locationEnabled}
               onValueChange={setLocationEnabled}
-              trackColor={{ false: '#d6d6d6', true: RealixColors.accentToggle }}
+              trackColor={{ false: '#3a3a3a', true: RealixColors.accentToggle }}
               thumbColor="#ffffff"
             />
           }
@@ -98,7 +118,7 @@ export default function ProfileScreen() {
         />
       </RealixCard>
 
-      <Text style={styles.meta}>Profile UI is wired to the current app shell. Data entry remains local until those APIs are connected.</Text>
+      <Text style={styles.meta}>These screens use local sample data so backend endpoints can be connected later without changing the route flow.</Text>
 
       <RealixCard>
         <RealixListRow
@@ -121,6 +141,39 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   content: {
     paddingTop: 0,
+  },
+  profileCard: {
+    padding: 18,
+  },
+  profileTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  profileAvatar: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: RealixColors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profileAvatarText: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#000000',
+  },
+  profileTextWrap: {
+    gap: 4,
+  },
+  profileName: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: RealixColors.textPrimary,
+  },
+  profileEmail: {
+    fontSize: 13,
+    color: RealixColors.textMuted,
   },
   meta: {
     fontSize: 12,

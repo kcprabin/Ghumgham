@@ -61,7 +61,7 @@ export default function SelectDateScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
 
       <View style={styles.header}>
         <View style={styles.headerLeft}>
@@ -71,8 +71,8 @@ export default function SelectDateScreen() {
           <Text style={styles.headerTitle}>Select Date</Text>
         </View>
         <View style={styles.headerRight}>
-          <Pressable style={styles.headerIcon}><Ionicons name="heart-outline" size={16} color={RealixColors.textMuted} /></Pressable>
-          <Pressable style={styles.headerIcon}><Ionicons name="ellipsis-horizontal" size={16} color={RealixColors.textMuted} /></Pressable>
+          <Pressable style={styles.headerIcon}><Ionicons name="heart-outline" size={16} color={RealixColors.textSecondary} /></Pressable>
+          <Pressable style={styles.headerIcon}><Ionicons name="ellipsis-horizontal" size={16} color={RealixColors.textSecondary} /></Pressable>
         </View>
       </View>
 
@@ -176,9 +176,9 @@ export default function SelectDateScreen() {
 
             {showPaymentMethods ? (
               <View style={styles.paymentOptionsWrap}>
-                <View style={styles.paymentRow}><View style={styles.mcIcon}><Text style={styles.mcText}>MC</Text></View><Text style={styles.payMethodText}>Master Card</Text></View>
-                <View style={styles.paymentRow}><View style={styles.ppIcon}><Text style={styles.ppText}>PP</Text></View><Text style={styles.payMethodText}>Paypal</Text></View>
-                <Pressable style={styles.addPaymentRow}><Ionicons name="add" size={14} color={RealixColors.textMuted} /><Text style={styles.addPaymentText}>Add Payment</Text></Pressable>
+                <View style={styles.paymentRow}><View style={styles.mcIcon}><Text style={styles.mcText}>MC</Text></View><Text style={styles.payMethodText}>•••• •••• •••• 4242</Text></View>
+                <View style={styles.paymentRow}><View style={styles.ppIcon}><Text style={styles.ppText}>PP</Text></View><Text style={styles.payMethodText}>PayPal</Text></View>
+                <Pressable style={styles.addPaymentRow} onPress={() => router.push('/(tabs)/explore/add-card')}><Ionicons name="add" size={14} color={RealixColors.textMuted} /><Text style={styles.addPaymentText}>Add Payment</Text></Pressable>
                 <Text style={styles.termsText}>
                   By selecting buy it from below you agree to the House Rules, Cancellation Regulations, Privacy and Policy, and accept extra hotel terms.
                 </Text>
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     borderRadius: 17,
     borderWidth: 1,
     borderColor: RealixColors.border,
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   dateInputRow: { flexDirection: 'row', gap: 8 },
   dateInput: {
     flex: 1,
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.inputBackground,
     borderWidth: 1,
     borderColor: RealixColors.inputBorder,
     borderRadius: 8,
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   dateValue: { marginTop: 2, fontSize: 12, color: RealixColors.textPrimary, fontWeight: '600' },
   placeholder: { color: RealixColors.textCaption, fontWeight: '400' },
   guestRow: {
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.inputBorder,
     borderRadius: 8,
@@ -294,11 +294,11 @@ const styles = StyleSheet.create({
   },
   dayText: { fontSize: 11, color: RealixColors.textPrimary },
   dayOther: { color: RealixColors.textCaption },
-  dayRange: { backgroundColor: '#f0f0f0', borderRadius: 0 },
-  daySelected: { backgroundColor: '#1a1a1a', borderRadius: 18 },
-  dayTextSelected: { color: '#ffffff', fontWeight: '700' },
+  dayRange: { backgroundColor: '#2a2a2a', borderRadius: 0 },
+  daySelected: { backgroundColor: RealixColors.textPrimary, borderRadius: 18 },
+  dayTextSelected: { color: RealixColors.screenBackground, fontWeight: '700' },
   bookingPanel: {
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.border,
     borderRadius: 12,
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 8,
-    backgroundColor: '#87CEEB',
+    backgroundColor: '#1a2a3a',
   },
   bookingInfo: { flex: 1, justifyContent: 'center' },
   bookingName: { fontSize: 12, fontWeight: '700', color: RealixColors.textPrimary },
@@ -391,6 +391,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  confirmDisabled: { backgroundColor: '#cccccc' },
-  confirmText: { color: '#ffffff', fontSize: 13, fontWeight: '700' },
+  confirmDisabled: { backgroundColor: '#3a3a3a' },
+  confirmText: { color: '#000000', fontSize: 13, fontWeight: '700' },
 });

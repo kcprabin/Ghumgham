@@ -7,9 +7,9 @@ import {
   ViewStyle,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/app/color';
-import { Spacing } from '../../constants/app/spacing';
-import { Typography } from '../../constants/app/typography';
+import { Colors } from '../../../constants/app/color';
+import { Spacing } from '../../../constants/app/spacing';
+import { Typography } from '../../../constants/app/typography';
 
 type SocialProvider = 'google' | 'facebook' | 'apple';
 

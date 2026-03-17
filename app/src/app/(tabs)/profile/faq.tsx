@@ -30,7 +30,7 @@ export default function FaqScreen() {
 
   return (
     <RealixScreen contentContainerStyle={styles.content}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <RealixHeader title="FAQs" showBack />
 
       <View style={styles.searchWrap}>

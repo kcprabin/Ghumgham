@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { Button, PaginationDots } from "@/src/components/ui";
+import { Button, PaginationDots } from "@/src/components/realix/ui";
 import { Colors } from "@/src/constants/app/color";
 import { Typography } from "@/src/constants/app/typography";
 import { Spacing } from "@/src/constants/app/spacing";

@@ -48,7 +48,7 @@ export default function ProfilePlaceholderPage() {
 
   return (
     <RealixScreen contentContainerStyle={styles.content}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <RealixHeader title={content.title} showBack />
 
       <RealixCard style={styles.card}>

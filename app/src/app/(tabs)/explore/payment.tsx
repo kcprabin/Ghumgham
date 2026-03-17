@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   RealixColors,
@@ -21,18 +21,18 @@ export default function PaymentScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
 
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Pressable style={styles.headerIcon} onPress={() => router.back()}>
             <Ionicons name="chevron-back" size={18} color={RealixColors.textPrimary} />
           </Pressable>
-          <Text style={styles.headerTitle}>Select Date</Text>
+          <Text style={styles.headerTitle}>Payment</Text>
         </View>
         <View style={styles.headerRight}>
-          <Pressable style={styles.headerIcon}><Ionicons name="heart-outline" size={16} color={RealixColors.textMuted} /></Pressable>
-          <Pressable style={styles.headerIcon}><Ionicons name="ellipsis-horizontal" size={16} color={RealixColors.textMuted} /></Pressable>
+          <Pressable style={styles.headerIcon}><Ionicons name="heart-outline" size={16} color={RealixColors.textSecondary} /></Pressable>
+          <Pressable style={styles.headerIcon}><Ionicons name="ellipsis-horizontal" size={16} color={RealixColors.textSecondary} /></Pressable>
         </View>
       </View>
 
@@ -76,7 +76,7 @@ export default function PaymentScreen() {
           );
         })}
 
-        <Pressable style={styles.addPaymentRow}>
+        <Pressable style={styles.addPaymentRow} onPress={() => router.push('/(tabs)/explore/add-card')}>
           <Ionicons name="add" size={14} color={RealixColors.textMuted} />
           <Text style={styles.addPaymentText}>Add Payment</Text>
         </Pressable>
@@ -89,7 +89,7 @@ export default function PaymentScreen() {
       <View style={styles.bottomBar}>
         <Pressable
           style={styles.payNowButton}
-          onPress={() => Alert.alert('Payment', 'Sample payment flow complete.')}
+          onPress={() => router.push('/(tabs)/explore/passcode')}
         >
           <Text style={styles.payNowText}>Pay Now</Text>
         </Pressable>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   content: { paddingHorizontal: 20, paddingBottom: 20, gap: 10 },
   bookingPanel: {
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.border,
     borderRadius: 12,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 8,
-    backgroundColor: '#87CEEB',
+    backgroundColor: '#1a2a3a',
   },
   bookingInfo: { flex: 1, justifyContent: 'center' },
   bookingName: { fontSize: 12, fontWeight: '700', color: RealixColors.textPrimary },
@@ -168,14 +168,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
   },
   paymentHeaderText: { fontSize: 12, color: RealixColors.textSecondary },
   methodRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.border,
     borderRadius: 8,
@@ -211,5 +211,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  payNowText: { color: '#ffffff', fontWeight: '700', fontSize: 13 },
+  payNowText: { color: '#000000', fontWeight: '700', fontSize: 13 },
 });

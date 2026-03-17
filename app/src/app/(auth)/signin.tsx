@@ -10,12 +10,12 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/ui';
+import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/realix/ui';
 import { Colors } from '@/src/constants/app/color';
 import { Typography } from '@/src/constants/app/typography';
 import { Spacing } from '@/src/constants/app/spacing';
 import { API_ENDPOINTS_AUTH } from '@/src/constants/api';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '@/src/context/AuthContext';
@@ -24,7 +24,7 @@ import { useAuth } from '@/src/context/AuthContext';
 export default function SignIn() {
   const API_SIGNIN = API_ENDPOINTS_AUTH.LOGIN;
   const router = useRouter();
-  const { checkAuth, user } = useAuth();
+  const { user } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const getApiErrorMessage = (error: unknown) => {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       const responseData = error.response?.data;
 
       if (!error.response) {
@@ -205,7 +205,7 @@ export default function SignIn() {
 
         {/* Sign Up Link */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have account? </Text>
+          <Text style={styles.footerText}>Don&apos;t have account? </Text>
           <TouchableOpacity onPress={handleSignUp}>
             <Text style={styles.footerLink}>Sign Up</Text>
           </TouchableOpacity>

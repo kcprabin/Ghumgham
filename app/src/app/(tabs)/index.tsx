@@ -27,7 +27,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Pressable
@@ -47,15 +47,15 @@ export default function HomeScreen() {
           </View>
 
           <Pressable
-            onPress={() => router.push('/(tabs)/notifications')}
+            onPress={() => router.push('/(tabs)/profile/notifications')}
             style={({ pressed }) => [styles.headerIconButton, pressed && styles.pressed]}
           >
-            <Ionicons name="notifications-outline" size={20} color={RealixColors.textPrimary} />
+            <Ionicons name="notifications-outline" size={20} color={RealixColors.textSecondary} />
           </Pressable>
         </View>
 
         <Pressable style={({ pressed }) => [styles.aiBar, pressed && styles.pressed]}>
-          <Ionicons name="sparkles" size={16} color="#f5a623" />
+          <Ionicons name="sparkles" size={16} color={RealixColors.orange} />
           <Text style={styles.aiText}>Try our new AI mode</Text>
         </Pressable>
 
@@ -76,12 +76,12 @@ export default function HomeScreen() {
         <View style={styles.sectionBlock}>
           <View style={styles.sectionHeadingRow}>
             <Text style={styles.sectionTitle}>Featured property</Text>
-            <Pressable onPress={() => router.push('/(tabs)/explore')}>
+            <Pressable onPress={() => router.push('/(tabs)/explore/detail')}>
               <Text style={styles.sectionLink}>See all</Text>
             </Pressable>
           </View>
 
-          <Pressable style={({ pressed }) => [styles.propertyCard, pressed && styles.pressed]}>
+          <Pressable style={({ pressed }) => [styles.propertyCard, pressed && styles.pressed]} onPress={() => router.push('/(tabs)/explore/detail')}>
             <View style={styles.propertyImage}>
               <View style={styles.sky} />
               <View style={styles.grass} />
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     borderRadius: 21,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8b5cf6',
+    backgroundColor: '#6d4cc2',
   },
   avatarText: {
     color: '#ffffff',
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: 21,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.border,
   },
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderRadius: 24,
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.inputBorder,
   },
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
-    borderColor: '#ffffff',
+    borderColor: '#1f1f1f',
   },
   destinationEmoji: {
     fontSize: 24,
@@ -247,11 +247,11 @@ const styles = StyleSheet.create({
   propertyCard: {
     borderRadius: 24,
     backgroundColor: RealixColors.screenBackground,
-    borderWidth: 1,
     borderColor: RealixColors.border,
+    borderWidth: 1,
     overflow: 'hidden',
     shadowColor: '#000000',
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 10 },
     shadowRadius: 18,
     elevation: 3,
@@ -260,11 +260,11 @@ const styles = StyleSheet.create({
     height: 180,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: '#b8dff5',
+    backgroundColor: '#0d1a2e',
   },
   sky: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#b8dff5',
+    backgroundColor: '#0d1a2e',
   },
   grass: {
     position: 'absolute',
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     height: 56,
-    backgroundColor: '#4a8c43',
+    backgroundColor: '#172b0f',
   },
   houseRoof: {
     position: 'absolute',
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 60,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: '#8b6e5a',
+    borderBottomColor: '#181818',
   },
   houseBody: {
     position: 'absolute',
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 200,
     height: 78,
-    backgroundColor: '#e8ddd0',
+    backgroundColor: '#222222',
     borderRadius: 6,
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -305,13 +305,13 @@ const styles = StyleSheet.create({
     width: 36,
     height: 26,
     borderRadius: 4,
-    backgroundColor: '#a8d4f5',
+    backgroundColor: '#1e3a5c',
   },
   door: {
     width: 30,
     height: 38,
     borderRadius: 4,
-    backgroundColor: '#8b6e5a',
+    backgroundColor: '#141414',
   },
   favoriteButton: {
     position: 'absolute',
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: 'rgba(255,255,255,0.92)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
   },
   promoCard: {
     borderRadius: 24,
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.border,
     padding: 20,
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
   promoButtonText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#ffffff',
+    color: '#000000',
   },
   pressed: {
     opacity: 0.78,

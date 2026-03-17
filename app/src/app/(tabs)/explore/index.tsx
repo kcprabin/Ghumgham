@@ -17,22 +17,22 @@ export default function ExploreScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <View>
             <Text style={styles.title}>Discover</Text>
             <Text style={styles.subtitle}>Find your next stay and jump into booking in one flow.</Text>
           </View>
-          <Pressable style={styles.searchButton}>
+          <Pressable style={styles.searchButton} onPress={() => router.push('/(tabs)/explore/search')}>
             <Ionicons name="options-outline" size={18} color={RealixColors.textPrimary} />
           </Pressable>
         </View>
 
-        <View style={styles.searchBar}>
+        <Pressable style={styles.searchBar} onPress={() => router.push('/(tabs)/explore/search')}>
           <Ionicons name="search" size={18} color={RealixColors.textMuted} />
           <Text style={styles.searchText}>Search by city, country, or property</Text>
-        </View>
+        </Pressable>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
           {filterChips.map((chip, index) => (
@@ -67,6 +67,19 @@ export default function ExploreScreen() {
             </Text>
           </View>
         </Pressable>
+
+        <View style={styles.quickActions}>
+          <Pressable style={styles.quickCard} onPress={() => router.push('/(tabs)/explore/map')}>
+            <Ionicons name="map-outline" size={20} color={RealixColors.accent} />
+            <Text style={styles.quickTitle}>Map View</Text>
+            <Text style={styles.quickText}>Preview listing pins and price hotspots.</Text>
+          </Pressable>
+          <Pressable style={styles.quickCard} onPress={() => router.push('/(tabs)/explore/filter-price')}>
+            <Ionicons name="options-outline" size={20} color={RealixColors.accent} />
+            <Text style={styles.quickTitle}>Filters</Text>
+            <Text style={styles.quickText}>Try pricing, language, and search filter states.</Text>
+          </Pressable>
+        </View>
 
         <View style={styles.grid}>
           {realixDestinations.map((destination) => (
@@ -118,7 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 21,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.border,
   },
@@ -127,9 +140,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     borderRadius: 18,
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.inputBackground,
     borderWidth: 1,
-    borderColor: RealixColors.border,
+    borderColor: RealixColors.inputBorder,
     paddingHorizontal: 16,
     paddingVertical: 14,
   },
@@ -145,7 +158,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 999,
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
     borderColor: RealixColors.border,
   },
@@ -164,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: RealixColors.border,
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     overflow: 'hidden',
   },
   heroImage: {
@@ -174,7 +187,7 @@ const styles = StyleSheet.create({
   },
   heroSky: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#9ecfea',
+    backgroundColor: '#0d1a2e',
   },
   heroGrass: {
     position: 'absolute',
@@ -182,7 +195,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     height: 46,
-    backgroundColor: '#5aa54b',
+    backgroundColor: '#16280f',
   },
   heroRoof: {
     position: 'absolute',
@@ -195,7 +208,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 50,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: '#8b7060',
+    borderBottomColor: '#161616',
   },
   heroBody: {
     position: 'absolute',
@@ -203,7 +216,7 @@ const styles = StyleSheet.create({
     bottom: 24,
     width: 170,
     height: 58,
-    backgroundColor: '#e8ddd0',
+    backgroundColor: '#222222',
     borderRadius: 4,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -215,13 +228,13 @@ const styles = StyleSheet.create({
     width: 30,
     height: 22,
     borderRadius: 3,
-    backgroundColor: '#b8d8f0',
+    backgroundColor: '#1e3a5c',
   },
   heroDoor: {
     width: 20,
     height: 30,
     borderRadius: 2,
-    backgroundColor: '#8b7060',
+    backgroundColor: '#111111',
   },
   heartDot: {
     position: 'absolute',
@@ -232,7 +245,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    backgroundColor: 'rgba(0,0,0,0.55)',
   },
   heroContent: {
     paddingHorizontal: 14,
@@ -263,6 +276,29 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: RealixColors.textPrimary,
   },
+  quickActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  quickCard: {
+    flex: 1,
+    backgroundColor: RealixColors.cardBackground,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: RealixColors.border,
+    padding: 14,
+    gap: 8,
+  },
+  quickTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: RealixColors.textPrimary,
+  },
+  quickText: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: RealixColors.textSecondary,
+  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -270,7 +306,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '47.8%',
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderRadius: 22,
     borderWidth: 1,
     borderColor: RealixColors.border,

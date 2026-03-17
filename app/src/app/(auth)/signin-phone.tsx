@@ -10,14 +10,14 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/ui';
+import { Button, Input, SocialButton, Divider, FormFeedback } from '@/src/components/realix/ui';
 import { Colors } from '@/src/constants/app/color';
 import { Typography } from '@/src/constants/app/typography';
 import { Spacing } from '@/src/constants/app/spacing';
 
 export default function SignInPhone() {
   const router = useRouter();
-  const [countryCode, setCountryCode] = useState('+977');
+  const [countryCode] = useState('+977');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -136,7 +136,7 @@ export default function SignInPhone() {
 
         {/* Sign Up Link */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have account? </Text>
+          <Text style={styles.footerText}>Don&apos;t have account? </Text>
           <TouchableOpacity onPress={handleSignUp}>
             <Text style={styles.footerLink}>Sign Up</Text>
           </TouchableOpacity>

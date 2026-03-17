@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, StatusBar, SafeAreaView } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { Button, NumberPad, FormFeedback } from "@/src/components/ui";
+import { Button, NumberPad, FormFeedback } from "@/src/components/realix/ui";
 import { Colors } from "@/src/constants/app/color";
 import { Typography } from "@/src/constants/app/typography";
 import { Spacing } from "@/src/constants/app/spacing";

@@ -25,7 +25,7 @@ export default function NotificationSettingsScreen() {
 
   return (
     <RealixScreen contentContainerStyle={styles.content}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <RealixHeader title="Notification Settings" showBack />
 
       {realixNotificationSections.map((section) => (
@@ -43,7 +43,7 @@ export default function NotificationSettingsScreen() {
                   onValueChange={(nextValue) =>
                     setValues((current) => ({ ...current, [option.id]: nextValue }))
                   }
-                  trackColor={{ false: '#d6d6d6', true: RealixColors.accentToggle }}
+                  trackColor={{ false: '#3a3a3a', true: RealixColors.accentToggle }}
                   thumbColor="#ffffff"
                 />
               </View>

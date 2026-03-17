@@ -17,15 +17,15 @@ export default function DiscoverDetailScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
 
       <View style={styles.header}>
         <Pressable style={styles.headerIcon} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={18} color={RealixColors.textPrimary} />
         </Pressable>
         <View style={styles.headerRight}>
-          <Pressable style={styles.headerIcon}><Ionicons name="heart-outline" size={16} color={RealixColors.textMuted} /></Pressable>
-          <Pressable style={styles.headerIcon}><Ionicons name="ellipsis-horizontal" size={16} color={RealixColors.textMuted} /></Pressable>
+          <Pressable style={styles.headerIcon}><Ionicons name="heart-outline" size={16} color={RealixColors.textSecondary} /></Pressable>
+          <Pressable style={styles.headerIcon}><Ionicons name="ellipsis-horizontal" size={16} color={RealixColors.textSecondary} /></Pressable>
         </View>
       </View>
 
@@ -111,7 +111,9 @@ export default function DiscoverDetailScreen() {
                 <Text style={styles.ratingCount}>{realixDiscoverProperty.reviewCount} ratings</Text>
               </View>
             </View>
-            <Text style={styles.viewAll}>View all Reviews</Text>
+            <Pressable onPress={() => router.push('/(tabs)/profile/review')}>
+              <Text style={styles.viewAll}>View all Reviews</Text>
+            </Pressable>
           </View>
 
           <View style={styles.barsWrap}>
@@ -136,7 +138,7 @@ export default function DiscoverDetailScreen() {
         </View>
         <View style={styles.bottomActions}>
           <Pressable style={styles.circleButton}>
-            <Ionicons name="heart-outline" size={16} color={RealixColors.textMuted} />
+            <Ionicons name="heart-outline" size={16} color={RealixColors.textSecondary} />
           </Pressable>
           <Pressable style={styles.bookButton} onPress={() => router.push('/(tabs)/explore/select-date')}>
             <Text style={styles.bookText}>Book</Text>
@@ -169,8 +171,8 @@ const styles = StyleSheet.create({
   },
   content: { paddingHorizontal: 20, paddingBottom: 20, gap: 14 },
   heroImage: { height: 190, borderRadius: 16, overflow: 'hidden' },
-  heroSky: { ...StyleSheet.absoluteFillObject, backgroundColor: '#9ecfea' },
-  heroGrass: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 62, backgroundColor: '#5aa54b' },
+  heroSky: { ...StyleSheet.absoluteFillObject, backgroundColor: '#0d1a2e' },
+  heroGrass: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 62, backgroundColor: '#16280f' },
   heroRoof: {
     position: 'absolute',
     alignSelf: 'center',
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 56,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: '#8b7060',
+    borderBottomColor: '#111111',
   },
   heroBody: {
     position: 'absolute',
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
     bottom: 30,
     width: 188,
     height: 66,
-    backgroundColor: '#e8ddd0',
+    backgroundColor: '#1a1a1a',
     borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -198,10 +200,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 10,
   },
-  heroWindow: { width: 32, height: 22, borderRadius: 3, backgroundColor: '#b8d8f0' },
-  heroDoor: { width: 20, height: 34, borderRadius: 2, backgroundColor: '#8b7060' },
+  heroWindow: { width: 32, height: 22, borderRadius: 3, backgroundColor: '#1e3a5c' },
+  heroDoor: { width: 20, height: 34, borderRadius: 2, backgroundColor: '#111111' },
   section: {
-    backgroundColor: RealixColors.screenBackground,
+    backgroundColor: RealixColors.cardBackground,
     borderRadius: 14,
     borderWidth: 1,
     borderColor: RealixColors.border,
@@ -247,7 +249,7 @@ const styles = StyleSheet.create({
   mapCard: {
     height: 82,
     borderRadius: 10,
-    backgroundColor: '#e8edf0',
+    backgroundColor: '#1a1a1e',
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
@@ -261,13 +263,13 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: RealixColors.cardBackground,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: RealixColors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  mapPinInner: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#1a1a1a' },
+  mapPinInner: { width: 10, height: 10, borderRadius: 5, backgroundColor: RealixColors.accent },
   ratingHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   ratingLeft: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   ratingScore: { fontSize: 22, fontWeight: '700', color: RealixColors.textPrimary },
@@ -281,7 +283,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#2a2a2a',
     overflow: 'hidden',
   },
   barFill: { height: '100%', borderRadius: 3, backgroundColor: '#F5A623' },
@@ -315,5 +317,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  bookText: { color: '#ffffff', fontWeight: '700', fontSize: 13 },
+  bookText: { color: '#000000', fontWeight: '700', fontSize: 13 },
 });

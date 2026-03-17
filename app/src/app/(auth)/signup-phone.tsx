@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Input, SocialButton, Divider, Checkbox, FormFeedback } from '@/src/components/ui';
+import { Button, Input, SocialButton, Divider, Checkbox, FormFeedback } from '@/src/components/realix/ui';
 import { Colors } from '@/src/constants/app/color';
 import { Typography } from '@/src/constants/app/typography';
 import { Spacing } from '@/src/constants/app/spacing';
@@ -18,7 +18,7 @@ import { Spacing } from '@/src/constants/app/spacing';
 export default function SignUpPhone() {
   const router = useRouter();
   const [name, setName] = useState('');
-  const [countryCode, setCountryCode] = useState('+977');
+  const [countryCode] = useState('+977');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [agreeToTerms, setAgreeToTerms] = useState(false);

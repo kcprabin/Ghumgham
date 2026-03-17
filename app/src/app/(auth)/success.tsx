@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Button } from '@/src/components/ui';
+import { Button } from '@/src/components/realix/ui';
 import { Colors } from '@/src/constants/app/color';
 import { Typography } from '@/src/constants/app/typography';
 import { Spacing } from '@/src/constants/app/spacing';
