@@ -1,16 +1,23 @@
 import app from "./app.js";
-import connectDB from "./database/connect.db.js";
 import dotenv from 'dotenv';
+import { connectDB } from "@packages"
 
 dotenv.config({
-    path: '../../.env'
+    path: './.env'
 })
 
-
-
-connectDB().then(() => {
-    console.log("Database connected, starting server...");
-}).catch((error) => {
+try {
+    const db = await connectDB(process.env.MONGO_URI as string, process.env.MONGO_DB_NAME as string);
+    console.log("Connected to database starting  admin server");
+    const PORT = process.env.PORT ;
+    app.listen(PORT, () => {
+        console.log(`Admin server is running on port ${PORT}`);
+    });
+} catch (error) {
     console.error("Failed to connect to database:", error);
-    process.exit(1); // Exit the process with failure
-});
+    process.exit(1);    
+}
+
+
+
+
