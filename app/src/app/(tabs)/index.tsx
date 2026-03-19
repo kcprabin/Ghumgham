@@ -14,7 +14,7 @@ import { API_ENDPOINTS_HOTEL } from "@/src/constants/api";
 import { API_ENDPOINTS_AUTH } from "@/src/constants/api";
 
 export default function HomeScreen() {
-  const API_PROFILE_IMAGE = API_ENDPOINTS_AUTH.GET_PROFILE_IMAGE;
+  const API_PROFILE_IMAGE = API_ENDPOINTS_AUTH.USER_PROFILE;
   const FEATURED_HOTEL = API_ENDPOINTS_HOTEL.FEATURED_HOTELS;
 
   const profileimage = axios
@@ -52,12 +52,12 @@ export default function HomeScreen() {
   const router = useRouter();
 
   const displayName = getName as string
-  const initials = displayName
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((item) => item[0]?.toUpperCase())
-    .join("");
+  // const initials = displayName
+  //   .split(" ")
+  //   .filter(Boolean)
+  //   .slice(0, 2)
+  //   .map((item) => item[0]?.toUpperCase())
+  //   .join("");
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -71,7 +71,7 @@ export default function HomeScreen() {
             onPress={() => router.push("/(tabs)/profile")}
             style={({ pressed }) => [styles.avatar, pressed && styles.pressed]}
           >
-            <Text style={styles.avatarText}>{initials || "AP"}</Text>
+            {/* <Text style={styles.avatarText}>{initials || "AP"}</Text> */}
           </Pressable>
 
           <View style={styles.locationWrap}>

@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  auth:
+    build:
+      context: .
+      dockerfile: ./server/Services/auth/Dockerfile
+    container_name: auth_service
+    ports:
+      - "4001:4001"
+    environment:
+      - MONGO_URI=mongodb://db:27017
+      - MONGO_DB_NAME=adminDB
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  admin:
+    build:
+      context: .
+      dockerfile: ./server/Services/Admin/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://db:27017
+      - MONGO_DB_NAME=authentication
+      - CLIENT_URL=*
+      - JWT_EXPIRES_IN=1d
+      - JWT_SECRET=your_jwt_secret
+      - GOOGLE_CLIENT_ID=your_google_client_id
+      - GOOGLE_CLIENT_SECRET=your_google_client_secret
+      - GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
+      - RESEND_API=your_resend_api_key
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  bookings:
+    build:
+      context: .
+      dockerfile: ./server/Services/bookings/Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - DATABASE_URL=mongodb://db:27017      
+      - PORT=5002
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  hotel:
+    build:
+      context: .
+      dockerfile: ./server/Services/Hotel/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URI=mongodb://db:27017         
+      - MONGO_DB_NAME=ghumgham
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  notifications:
+    build:
+      context: .
+      dockerfile: ./server/Services/notifications/Dockerfile
+    ports:
+      - "6000:6000"
+    environment:
+      - MONGODB_URI=mongodb://db:27017       
+      - MONGODB_DB_NAME=notifications
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mongo:7
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
