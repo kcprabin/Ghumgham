@@ -4,11 +4,11 @@ import type { HotelInput } from "../validator/hotel.validator.js"
 import { createHotelSchema } from "../validator/hotel.validator.js"
 
 const registerHotel = asyncHandler(async (req : any,res : any)=>{
-    const userId = req.user.id;
+    const userId = req.user?._id || req.user?.id;
     if (!userId) {
         return apiError(res, 401, "Unauthorized: User ID not found in request");
     }
-    if (req.user.isVerified !== true) {
+    if (req.user?.isVerified !== true) {
         return apiError(res, 401, "Unauthorized: User is not verified");
     }
 
@@ -78,6 +78,20 @@ const deleteRoom = asyncHandler(async (req : any,res : any)=>{
   
 })
 
+const featuredHotels = asyncHandler(async (req : any,res : any)=>{
+    try {
+        const hotels = await hotelModel.find({ isFeatured: true });
+        if (hotels.length === 0) {
+            return apiError(res, 404, "No featured hotels found");
+        }
+        return apiResponse(res, 200, true, "Featured hotels retrieved successfully", hotels);
+    } catch (error) {
+        return apiError(res, 500, "Internal server error");
+    }
+})  
 
 
-export  { registerHotel, createroom, deleteRoom ,}
+
+
+
+export  { registerHotel, createroom, deleteRoom , featuredHotels}

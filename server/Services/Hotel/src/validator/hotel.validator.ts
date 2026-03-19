@@ -1,5 +1,6 @@
 import zod from 'zod';
 import mongoose from 'mongoose';
+import { is } from 'zod/locales';
 
 export const createHotelSchema = zod.object({
   userId: zod.string().min(1, 'User ID is required'),
@@ -19,6 +20,7 @@ export const createHotelSchema = zod.object({
   pricePerNight: zod.number().positive('Price per night must be greater than 0'),
   rating: zod.number().min(0).max(5).default(0),
   numberOfReviews: zod.number().min(0).default(0),
+  isFeatured: zod.boolean().default(false),
 
 });
 

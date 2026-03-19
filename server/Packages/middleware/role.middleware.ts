@@ -2,7 +2,12 @@ import jwt from "jsonwebtoken";
 import { apiError } from "../Utils/api.error.js";
 
 const roleMiddleware = async (req: any, res: any, next: any) => {
-  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+  const authHeader = req.headers?.authorization;
+  const bearerToken = authHeader?.startsWith("Bearer ")
+    ? authHeader.split(" ")[1]
+    : undefined;
+  const token = req.cookies?.token || bearerToken;
+
   if (!token) {
     return apiError(res, 401, "Unauthorized");
   }
