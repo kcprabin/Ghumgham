@@ -4,13 +4,12 @@ services:
   auth:
     build:
       context: .
-      dockerfile: ./server/Services/auth/Dockerfile
+      dockerfile: ./server/Services/Auth/Dockerfile
     container_name: auth_service
     ports:
       - "4001:4001"
-    environment:
-      - MONGO_URI=mongodb://db:27017
-      - MONGO_DB_NAME=adminDB
+    env_file:
+      - ./server/Services/Auth/.env
     depends_on:
       - db
     restart: unless-stopped
@@ -18,19 +17,11 @@ services:
   admin:
     build:
       context: .
-      dockerfile: ./server/Services/Admin/Dockerfile
+      dockerfile: ./server/Services/admin/Dockerfile
     ports:
       - "3000:3000"
-    environment:
-      - MONGO_URI=mongodb://db:27017
-      - MONGO_DB_NAME=authentication
-      - CLIENT_URL=*
-      - JWT_EXPIRES_IN=1d
-      - JWT_SECRET=your_jwt_secret
-      - GOOGLE_CLIENT_ID=your_google_client_id
-      - GOOGLE_CLIENT_SECRET=your_google_client_secret
-      - GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
-      - RESEND_API=your_resend_api_key
+    env_file:
+      - ./server/Services/admin/.env
     depends_on:
       - db
     restart: unless-stopped
@@ -38,12 +29,11 @@ services:
   bookings:
     build:
       context: .
-      dockerfile: ./server/Services/bookings/Dockerfile
+      dockerfile: ./server/Services/booking/Dockerfile
     ports:
       - "5002:5002"
-    environment:
-      - DATABASE_URL=mongodb://db:27017      
-      - PORT=5002
+    env_file:
+      - ./server/Services/booking/.env
     depends_on:
       - db
     restart: unless-stopped
@@ -54,9 +44,8 @@ services:
       dockerfile: ./server/Services/Hotel/Dockerfile
     ports:
       - "3001:3001"
-    environment:
-      - MONGO_URI=mongodb://db:27017         
-      - MONGO_DB_NAME=ghumgham
+    env_file:
+      - ./server/Services/Hotel/.env
     depends_on:
       - db
     restart: unless-stopped
@@ -67,9 +56,8 @@ services:
       dockerfile: ./server/Services/notifications/Dockerfile
     ports:
       - "6000:6000"
-    environment:
-      - MONGODB_URI=mongodb://db:27017       
-      - MONGODB_DB_NAME=notifications
+    env_file:
+      - ./server/Services/notifications/.env  
     depends_on:
       - db
     restart: unless-stopped

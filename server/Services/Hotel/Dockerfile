@@ -2,7 +2,7 @@ FROM node:20-slim
 WORKDIR /app
 
 # Copy shared Packages from root context
-COPY Packages/ ./Packages/
+COPY server/Packages/ ./Packages/
 
 # Copy service-specific files
 # (path is relative to the build context = project root)
