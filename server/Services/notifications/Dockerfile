@@ -1,15 +1,16 @@
 FROM node:20-slim
-
 WORKDIR /app
 
+# Copy shared Packages from root context
+COPY Packages/ ./Packages/
 
-COPY package.json package-lock.json ./
-COPY Packages/ /Packages
-
+# Copy service-specific files
+# (path is relative to the build context = project root)
+COPY server/Services/notifications/package.json server/Services/notifications/package-lock.json ./
 
 RUN npm install
 
-COPY . .
+COPY server/Services/notifications/ .
 
 EXPOSE 6000
 

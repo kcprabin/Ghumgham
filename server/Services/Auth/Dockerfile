@@ -1,14 +1,16 @@
 FROM node:20-slim
-
 WORKDIR /app
 
 
-COPY Packages/ /Packages
-COPY package.json package-lock.json ./
+COPY Packages/ ./Packages/
+
+# Copy service-specific files
+# (path is relative to the build context = project root)
+COPY server/Services/Auth/package.json server/Services/Auth/package-lock.json ./
 
 RUN npm install
 
-COPY . .
+COPY server/Services/Auth/ .
 
 EXPOSE 3000
 

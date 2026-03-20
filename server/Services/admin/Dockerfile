@@ -1,15 +1,15 @@
 FROM node:20-slim
-
 WORKDIR /app
 
-# Copy lockfiles first — better layer caching
-# (only re-runs npm ci if these files change)
-COPY Packages/ /Packages
-COPY package.json package-lock.json ./
+
+COPY Packages/ ./Packages/
+
+
+COPY server/Services/admin/package.json server/Services/admin/package-lock.json ./
 
 RUN npm install
 
-COPY . .
+COPY server/Services/admin/ .
 
 EXPOSE 4001
 
