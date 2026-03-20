@@ -6,6 +6,7 @@
     // "outDir": "./dist",
    
     "paths": {
+      "@packages": ["./Packages/index.ts"],
       "@packages/*": ["./Packages/*"]
     },
 
