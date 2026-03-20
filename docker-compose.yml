@@ -7,7 +7,7 @@ services:
       dockerfile: ./server/Services/Auth/Dockerfile
     container_name: auth_service
     ports:
-      - "4001:4001"
+      - "3000:3000"
     env_file:
       - ./server/Services/Auth/.env
     depends_on:
@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: ./server/Services/admin/Dockerfile
     ports:
-      - "3000:3000"
+      - "4001:4001"
     env_file:
       - ./server/Services/admin/.env
     depends_on:
