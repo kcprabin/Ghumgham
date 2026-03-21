@@ -13,7 +13,7 @@ import {
 } from "../Controllers/user.controller.js";
 
 import passport from "passport";
-import { roleMiddleware } from "../../../../Packages/middleware/role.middleware.js";
+import { roleMiddleware } from "@packages";
 
 const router = Router();
 

@@ -6,7 +6,8 @@
     // "outDir": "./dist",
    
     "paths": {
-      "@packages": ["../../Packages/index.ts"]
+      "@packages": ["./Packages/index.ts"],
+      "@packages/*": ["./Packages/*"]
     },
 
     // Environment Settings

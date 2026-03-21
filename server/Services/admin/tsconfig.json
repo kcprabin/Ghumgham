@@ -15,7 +15,8 @@
     // "types": ["node"],
     // and npm install -D @types/node
      "paths": {
-      "@packages": ["../../Packages/index.ts"]
+      "@packages": ["./Packages/index.ts"],
+      "@packages/*": ["./Packages/*"]
     },
 
     // Other Outputs
