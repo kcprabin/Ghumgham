@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+vendor/
+__pycache__/
+*.pyc
+.venv/
+env/
+venv/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.tsc-out/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+.sublime-project
+.sublime-workspace
+
+# Testing
+coverage/
+.nyc_output/
+jest-coverage/
+.test-cache/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Git
+.git/
+
+# Misc
+.cache/
+.turbo/
+.vercel/
+*.pem
