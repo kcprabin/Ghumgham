@@ -62,7 +62,7 @@ export const realixLanguages = [
 export const realixFaqs = [
   {
     id: 'how-realix-works',
-    question: 'How does Ghumgham work?',
+    question: 'How does Travallee work?',
     answer:
       'Browse destinations, compare stays, save favorites, and confirm bookings in a few taps. The app keeps your saved places, alerts, and profile settings together so planning stays lightweight.',
   },

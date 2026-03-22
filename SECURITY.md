@@ -11,9 +11,9 @@ Current security updates are provided for:
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Ghumgham, please **do not** open a public GitHub issue. Instead:
+If you discover a security vulnerability in Travallee, please **do not** open a public GitHub issue. Instead:
 
-1. **Email us** at security@ghumgham.com (or create a private security advisory)
+1. **Email us** at kcprabin2063@gmail.com (or create a private security advisory)
 2. **Include details:**
    - Type of vulnerability
    - Location in codebase (file/line if possible)
@@ -66,4 +66,4 @@ We follow responsible disclosure:
 - We release a patched version
 - We publicly announce the vulnerability (post-fix)
 
-Thank you for helping keep Ghumgham secure! 🔒
+Thank you for helping keep Travallee secure!

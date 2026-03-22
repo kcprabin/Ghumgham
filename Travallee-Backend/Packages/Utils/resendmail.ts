@@ -10,8 +10,8 @@ const sendEmail = async (to:string, subject?: string , html?: string , env ?: st
     const { data, error } = await resend.emails.send({
         from: 'onboarding@resend.dev',
         to: to,
-        subject: subject || 'Welcome to Ghumgham!',
-        html: html || '<p>Thank you for joining Ghumgham. We are excited to have you on board!</p>'
+        subject: subject || 'Welcome to Travallee!',
+        html: html || '<p>Thank you for joining Travallee. We are excited to have you on board!</p>'
     });
     
     if (error) {

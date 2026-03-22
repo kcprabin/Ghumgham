@@ -20,7 +20,7 @@ const Herosection = () => {
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
           <Typewriter
             words={[
-              "Manage Your Hotel on Ghumgham",
+              "Manage Your Hotel on Travallee",
               "Update Availability Instantly",
               "Handle Bookings with Ease",
               "Grow Your Hotel Business"

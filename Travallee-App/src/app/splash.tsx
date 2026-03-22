@@ -107,7 +107,7 @@ export default function SplashScreen() {
             />
           </View>
         </View>
-        <Text style={styles.appName}>Ghumgham</Text>
+        <Text style={styles.appName}>Travallee</Text>
       </Animated.View>
 
       <View style={styles.resetContainer}>

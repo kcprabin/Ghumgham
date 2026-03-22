@@ -33,7 +33,7 @@ export default function Success() {
         </View>
 
         {/* Success Message */}
-        <Text style={styles.title}>Thank You for Joining Ghumgham</Text>
+        <Text style={styles.title}>Thank You for Joining Travallee</Text>
         <Text style={styles.message}>
           Your profile is ready. Discover great stays, compare prices, and book
           your next trip with confidence. Please login to continue.

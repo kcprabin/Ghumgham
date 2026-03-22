@@ -1,11 +1,11 @@
-# Contributing to Ghumgham
+# Contributing to Travallee
 
-Thank you for your interest in contributing to Ghumgham! We appreciate all contributions, whether they are bug reports, feature requests, or code changes.
+Thank you for your interest in contributing to Travallee! We appreciate all contributions, whether they are bug reports, feature requests, or code changes.
 
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/Ghumgham.git`
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/Travallee.git`
 3. Create a branch: `git checkout -b feature/your-feature-name`
 4. Install dependencies:
    ```bash

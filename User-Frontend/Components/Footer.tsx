@@ -7,7 +7,7 @@ const Footer = () => {
 
         {/* Logo / Brand + CTA */}
         <div className="text-center md:text-left">
-          <h2 className="text-3xl font-bold text-white mb-2">Ghumgham</h2>
+          <h2 className="text-3xl font-bold text-white mb-2">Travallee</h2>
           <p className="text-gray-300 text-sm">
             Connecting hotels with travelers. Manage your property, grow your business, and reach more guests.
           </p>
@@ -22,7 +22,7 @@ const Footer = () => {
             <FaTwitter className="hover:text-blue-400 cursor-pointer transition transform hover:scale-110" />
           </div>
           <p className="text-gray-400 text-sm">
-            &copy; 2026 Ghumgham. All rights reserved.
+            &copy; 2026 Travallee. All rights reserved.
           </p>
         </div>
       </div>

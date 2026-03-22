@@ -9,7 +9,7 @@ const Sidebar: React.FC = () => {
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: '📊' },
     { path: '/guests', label: 'Guest', icon: '👥' },
-    { path: '/rooms', label: 'Room', icon: '🏨' },
+    { path: '/rooms', label: 'Room', icon: 'R' },
     { path: '/deals', label: 'Deal', icon: '🎁' },
     { path: '/reviews', label: 'Reviews', icon: '⭐' },
     { path: '/earning', label: 'Earning', icon: '💰' },

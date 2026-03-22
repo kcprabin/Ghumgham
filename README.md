@@ -1,4 +1,4 @@
-# Ghumgham 🏨 — Hotel Management System
+# Travallee — Hotel Management System
 
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![Version](https://img.shields.io/badge/version-0.1.0-green?style=flat-square)
@@ -12,7 +12,7 @@ A modern, full-stack **Hotel Management System** built with React, TypeScript, R
 ### Admin Dashboard
 - 📊 Real-time analytics and KPIs
 - 👥 Guest management with detailed profiles
-- 🏨 Room inventory and occupancy tracking
+- Room inventory and occupancy tracking
 - 💰 Revenue analytics and payment management
 - ⭐ Customer reviews and feedback
 - 📅 Booking management and reservations
@@ -55,10 +55,10 @@ A modern, full-stack **Hotel Management System** built with React, TypeScript, R
 - **Docker** containerization
 - **Microservices** architecture
 
-## 📦 Project Structure
+## Project Structure
 
 ```
-Ghumgham/
+Travallee/
 ├── Admin-Frontend/          # React admin dashboard
 │   ├── src/
 │   │   ├── components/      # Reusable UI components
@@ -127,7 +127,7 @@ Scan the QR code with Expo Go app on your phone.
 - [Changelog](CHANGELOG.md)
 - [Security Policy](SECURITY.md)
 
-## 🔐 Demo Credentials
+## Demo Credentials
 
 ### Admin Dashboard
 ```
@@ -172,13 +172,13 @@ npm run format
 
 ## 🐛 Reporting Issues
 
-Found a bug? Please open an [issue](https://github.com/kcprabin/Ghumgham/issues) using the bug report template.
+Found a bug? Please open an [issue](https://github.com/kcprabin/Travallee/issues) using the bug report template.
 
 ## 💡 Feature Requests
 
-Have an idea? Submit a [feature request](https://github.com/kcprabin/Ghumgham/issues) with details.
+Have an idea? Submit a [feature request](https://github.com/kcprabin/Travallee/issues) with details.
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please:
 1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -192,18 +192,18 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fi
 
 ## 🙏 Acknowledgments
 
-- Built with ❤️ for hotel management professionals
+- Built with care for hotel management professionals
 - Special thanks to contributors and testers
 - Icons and graphics from open-source libraries
 
 ## 📞 Support
 
-- 📧 Email: support@ghumgham.com
+- Email: kcprabin2063@gmail.com
 - 💬 Discussions: GitHub Discussions
 - 🐛 Issues: GitHub Issues
 
 ---
 
-**Made with ❤️ by the Ghumgham Team**
+**Made with care by Prabin K.C.**
 
 ⭐ If you find this helpful, please star the repository!

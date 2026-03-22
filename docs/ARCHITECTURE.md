@@ -1,8 +1,7 @@
 # Architecture Guide
 
 ## Overview
-
-Ghumgham is a distributed hotel management system with three main layers:
+Travellee is a distributed hotel management system with three main layers:
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -211,7 +210,7 @@ VITE_ENV=development
 ```
 NODE_ENV=development
 PORT=5000
-DB_URL=mongodb://localhost:27017/ghumgham
+DB_URL=mongodb://localhost:27017/travallee
 JWT_SECRET=your-secret-key
 ```
 

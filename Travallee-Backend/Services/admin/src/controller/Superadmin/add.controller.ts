@@ -16,7 +16,7 @@ const addSuperadmin = asyncHandler(async (req:any, res:any) => {
     await superadmin.save();
     const message = `Hello ${name},\n\nYour account has been created successfully. Your temporary password is: ${generatedPassword}`;
 
-        await sendEmail(email, "Welcome to Ghumgham!", message as string);
+        await sendEmail(email, "Welcome to Travallee!", message as string);
     return apiResponse(res, 201, true, "Superadmin created successfully", { id: superadmin._id });
 })
 

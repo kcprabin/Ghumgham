@@ -21,7 +21,7 @@ const ReviewsPage: React.FC = () => {
   const stats = [
     { label: 'Average Rating', value: '4.3★', icon: '⭐' },
     { label: 'Total Reviews', value: '1,284', icon: '💬' },
-    { label: 'Response Rate', value: '87%', icon: '✅' },
+    { label: 'Response Rate', value: '87%', icon: 'R' },
   ];
 
   return (

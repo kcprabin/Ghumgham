@@ -18,7 +18,7 @@ const Contact = () => {
           </h1>
           <p className="text-lg text-gray-200">
             Have questions about listing your hotel or managing bookings on
-            Ghumgham? Reach out via phone, email, or visit us in Kathmandu.
+            Travallee? Reach out via phone, email, or visit us in Kathmandu.
           </p>
         </div>
       </section>
@@ -35,7 +35,7 @@ const Contact = () => {
         <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition text-center">
           <FaEnvelope className="text-3xl text-blue-600 mx-auto mb-4" />
           <h3 className="font-semibold text-lg mb-2">Email</h3>
-          <p className="text-gray-600">support@ghumgham.com</p>
+          <p className="text-gray-600">kcprabin2063@gmail.com</p>
         </div>
 
         <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition text-center">
@@ -52,7 +52,7 @@ const Contact = () => {
           Ready to List Your Hotel?
         </h2>
         <p className="mb-6 text-lg max-w-xl mx-auto">
-          Join Ghumgham and start connecting your hotel with travelers using our
+          Join Travallee and start connecting your hotel with travelers using our
           mobile booking platform.
         </p>
         <button className="px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-200 transition cursor-pointer">

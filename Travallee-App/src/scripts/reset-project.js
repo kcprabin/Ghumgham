@@ -85,7 +85,7 @@ const moveDirectories = async (userInput) => {
     await fs.promises.writeFile(layoutPath, layoutContent);
     console.log("📄 app/_layout.tsx created.");
 
-    console.log("\n✅ Project reset complete. Next steps:");
+    console.log("\n[SUCCESS] Project reset complete. Next steps:");
     console.log(
       `1. Run \`npx expo start\` to start a development server.\n2. Edit app/index.tsx to edit the main screen.${
         userInput === "y"

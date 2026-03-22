@@ -2,8 +2,8 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: "Ghumgham",
-    slug: "ghumgham",
+    name: "Travallee",
+    slug: "travallee",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",

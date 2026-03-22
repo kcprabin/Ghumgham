@@ -14,8 +14,8 @@ Before you begin, ensure you have installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/kcprabin/Ghumgham.git
-cd Ghumgham
+git clone https://github.com/kcprabin/Travallee.git
+cd Travallee
 ```
 
 ### 2. Install Root Dependencies (Optional)
@@ -253,7 +253,7 @@ docker-compose logs <service-name>
 - 📖 Check [README.md](../README.md)
 - 💬 Open GitHub Discussions
 - 🐛 Report bugs with issue template
-- 📧 Email: support@ghumgham.com
+- Email: kcprabin2063@gmail.com
 
 ---
 

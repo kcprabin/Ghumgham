@@ -1,4 +1,4 @@
-// Color palette for Ghumgham app - Dark theme with neon green accent
+// Color palette for Travallee app - Dark theme with neon green accent
 export const Colors = {
   // Background colors
   background: '#000000',

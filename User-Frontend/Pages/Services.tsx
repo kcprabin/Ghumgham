@@ -22,7 +22,7 @@ const Services = () => {
 
           <p className="text-lg text-gray-200 max-w-2xl">
             Everything you need to manage your hotel online, reach travelers,
-            and handle bookings efficiently through the Ghumgham platform.
+            and handle bookings efficiently through the Travallee platform.
           </p>
         </div>
 
@@ -48,7 +48,7 @@ const Services = () => {
             <h3 className="text-xl font-semibold mb-2">Mobile App Exposure</h3>
             <p className="text-gray-600">
               Your property becomes visible to users browsing and booking hotels
-              through the Ghumgham mobile application.
+              through the Travallee mobile application.
             </p>
           </div>
 
@@ -100,7 +100,7 @@ const Services = () => {
         </h2>
 
         <p className="mb-6 text-lg max-w-xl mx-auto">
-          Join Ghumgham and start receiving bookings from travelers using our
+          Join Travallee and start receiving bookings from travelers using our
           mobile hotel booking application.
         </p>
 
