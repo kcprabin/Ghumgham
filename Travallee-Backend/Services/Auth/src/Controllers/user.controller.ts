@@ -5,9 +5,10 @@ import {
   apiResponse,
   UserModel,
   uploadToCloudinary,
-  sendEmail,
-}// @ts-ignore
- from "@packages";
+  hotelModel,
+  roomModel,
+  sendEmail, // @ts-ignore
+} from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
 
@@ -153,8 +154,8 @@ const getUserProfile = asyncHandler(async (req: any, res: any) => {
 
 const updateUserProfile = asyncHandler(async (req: any, res: any) => {
   const userId = req.user.id;
-  const { Name, email, number, Prevpassword, newpassword } = req.body;
-  if (!Name && !email && !number && !newpassword) {
+  const { Name, email, number, } = req.body;
+  if (!Name && !email && !number) {
     return apiError(
       res,
       400,
@@ -168,28 +169,6 @@ const updateUserProfile = asyncHandler(async (req: any, res: any) => {
     return apiError(res, 404, "User not found");
   }
 
-  const file = req.file;
-  if (!file) {
-    return apiError(
-      res,
-      400,
-      "No video file uploaded. Please upload a video file to update the profile video.",
-    );
-  }
-  try {
-    if (file) {
-      const videoUrl = await uploadToCloudinary({ filePath: file.path });
-      user.profileVideo = videoUrl;
-    }
-  } catch (error: any) {
-    return apiError(res, 500, "Failed to upload video", error);
-  }
-
-  const isCorrect = await user.comparePassword(Prevpassword);
-  if (!isCorrect) {
-    return apiError(res, 400, "Invalid previous password");
-  }
-  user.password = newpassword;
   if (Name) user.Name = Name;
   if (email) user.email = email;
   if (number) user.number = number;
@@ -239,7 +218,7 @@ const sendOTP = asyncHandler(async (req: any, res: any) => {
   try {
     await sendEmail(email, "Your OTP Code - Travallee", undefined, {
       name: user.Name || user.Username,
-      otp: otp
+      otp: otp,
     });
   } catch (error) {
     return apiError(res, 500, "Failed to send OTP email");
@@ -292,6 +271,50 @@ const getUserProfilePicture = asyncHandler(async (req: any, res: any) => {
   );
 });
 
+const updateUserProfilePicture = asyncHandler(async (req: any, res: any) => {
+  const userId = req.user.id;
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    return apiError(res, 404, "User not found");
+  }
+  if (!req.file) {
+    return apiError(res, 400, "No file uploaded");
+  }
+  try {
+    const result = await uploadToCloudinary(req.file.path, "profile_pictures");
+    user.profileImage = result.secure_url;
+    await user.save();
+    return apiResponse(
+      res,
+      200,
+      true,
+      "User profile picture updated successfully",
+      { profilePicture: user.profileImage },
+    );
+  } catch (error) {
+    return apiError(res, 500, "Failed to upload profile picture", error);
+  }
+});
+
+const deleteAccount = asyncHandler(async (req: any, res: any) => {
+  const userId = req.user.id;
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    return apiError(res, 404, "User not found");
+  }
+  await UserModel.findByIdAndDelete(userId);
+  return apiResponse(res, 200, true, "User account deleted successfully");
+});
+
+
+// not completed
+const history = asyncHandler(async (req: any, res: any) => {
+  const userId = req.user.id;
+  const hotels = await hotelModel.find({ "bookings.user": userId }).select("name location");
+  const rooms = await roomModel.find({ "bookings.user": userId }).select("roomNumber type");
+  return apiResponse(res, 200, true, "User booking history retrieved successfully", { hotels, rooms });
+}); 
+
 export {
   registerUser,
   loginUser,
@@ -303,4 +326,7 @@ export {
   sendOTP,
   verifyOTP,
   getUserProfilePicture,
+  updateUserProfilePicture,
+  deleteAccount,
+  history
 };

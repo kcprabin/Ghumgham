@@ -1,202 +1,597 @@
-# Travallee Hotel Management System - Installation & Setup
+# Admin Dashboard - Complete Setup Guide
 
-## Overview
-Travallee HMS is a production-ready React TypeScript hotel management system with a clean folder structure, Tailwind CSS styling, React Router v6 navigation, and comprehensive UI components.
+This guide covers installation, configuration, and usage of the Travallee Hotel Management System Admin Dashboard.
 
-## Project Structure
+## 📋 Prerequisites
+
+- **Node.js** 18.0.0 or higher ([Download](https://nodejs.org/))
+- **npm** 9.0.0 or higher (comes with Node.js) or **yarn** 3.0+
+- **Git** ([Download](https://git-scm.com/))
+- **Docker** (optional, for backend services) ([Download](https://www.docker.com/))
+
+## 📁 Project Structure
 
 ```
-src/
-├── components/
-│   ├── ui/                          # Reusable UI primitives
-│   │   ├── Badge.tsx                # Status badge with color mapping
-│   │   ├── Button.tsx               # Multi-variant button component
-│   │   ├── Input.tsx                # Styled input with focus ring
-│   │   ├── Select.tsx               # Styled dropdown select
-│   │   ├── Card.tsx                 # Rounded card with shadow
-│   │   ├── Modal.tsx                # Overlay modal dialog
-│   │   ├── Drawer.tsx               # Right-side slide-in panel
-│   │   ├── Pagination.tsx           # Pagination controls
-│   │   ├── Stars.tsx                # Star rating display
-│   │   ├── BarChart.tsx             # Horizontal bar chart
-│   │   └── Gauge.tsx                # SVG semi-circle gauge
-│   └── layout/                      # Layout components
-│       ├── Sidebar.tsx              # Fixed left navigation (180px)
-│       ├── Topbar.tsx               # Sticky top bar with search
-│       └── PageWrapper.tsx          # Page container with title
-├── pages/                           # Page-level components (one per route)
-│   ├── LoginPage.tsx                # /login route
-│   ├── DashboardPage.tsx            # /dashboard route
-│   ├── GuestPage.tsx                # /guests route with drawer
-│   ├── RoomPage.tsx                 # /rooms route
-│   ├── DealPage.tsx                 # /deals route with modal
-│   ├── ReviewsPage.tsx              # /reviews route
-│   └── EarningPage.tsx              # /earning route (hotel revenue + vendor payouts)
-├── routes/
-│   └── AppRoutes.tsx                # React Router v6 routing config
-├── hooks/                           # Custom React hooks
-│   ├── useModal.ts                  # Modal open/close state
-│   ├── usePagination.ts             # Pagination logic
-│   └── useAuth.ts                   # Authentication state (localStorage)
-├── services/
-│   └── api.ts                       # Placeholder API functions with mock data
-├── types/
-│   └── index.ts                     # TypeScript interfaces & types
-├── data/
-│   └── mock.ts                      # Mock seed data (guests, rooms, deals, vendors, reviews)
-├── utils/
-│   └── helpers.ts                   # Utility functions (formatting, color mapping, classNames)
-├── App.tsx                          # Main App wrapper with Router
-└── main.tsx                         # React DOM entry point
+Admin-Frontend/
+├── src/
+│   ├── components/          # Reusable UI components
+│   │   ├── ui/              # Base components: Button, Card, Modal, etc.
+│   │   └── layout/          # Layout: Sidebar, Topbar, PageWrapper
+│   ├── pages/               # Page-level components
+│   │   ├── DashboardPage.tsx
+│   │   ├── GuestPage.tsx
+│   │   ├── RoomPage.tsx
+│   │   ├── DealPage.tsx
+│   │   ├── ReviewsPage.tsx
+│   │   ├── EarningPage.tsx
+│   │   └── LoginPage.tsx
+│   ├── routes/              # React Router configuration
+│   ├── hooks/               # Custom hooks
+│   │   ├── useAuth.ts
+│   │   ├── useModal.ts
+│   │   └── usePagination.ts
+│   ├── services/            # API services
+│   │   └── api.ts
+│   ├── types/               # TypeScript definitions
+│   │   └── index.ts
+│   ├── data/                # Mock data
+│   │   └── mock.ts
+│   ├── utils/               # Utility functions
+│   │   └── helpers.ts
+│   ├── App.tsx              # Root component
+│   ├── main.tsx             # Entry point
+│   └── index.css            # Global styles
+├── public/                  # Static assets
+├── index.html               # HTML template
+├── package.json             # Dependencies and scripts
+├── tsconfig.json            # TypeScript config
+├── vite.config.ts           # Vite configuration
+├── tailwind.config.js       # Tailwind CSS config
+├── postcss.config.js        # PostCSS config
+└── .env                      # Environment variables (create this)
 ```
 
-## Key Features
+## 🚀 Quick Start (5 Minutes)
 
-### Authentication
-- **useAuth hook** with localStorage persistence
-- Login page with email/password validation
-- Auto-redirect to dashboard on successful login
-
-### Pages & Features
-1. **Dashboard** - KPIs, room types, occupancy charts, customer feedback
-2. **Guest Management** - Searchable table, click-to-open drawer, pagination
-3. **Room Management** - Room status, filterable tabs, pagination
-4. **Deal Management** - Add deal modal form, status badges
-5. **Reviews** - Star ratings, filter tabs, reply functionality
-6. **Earning** - Revenue charts, vendor payout management with "Pay Now" button
-
-### UI Components
-- **Badge** - Color-coded status labels
-- **Button** - Primary, outline, ghost variants with sizes
-- **Input/Select** - Blue focus rings, labels
-- **Card** - White rounded container with shadow
-- **Modal** - Overlay dialog with form fields and close handlers
-- **Drawer** - Right-side panel that slides in (used for guest details)
-- **Pagination** - Previous/page numbers/Next controls
-- **Stars** - Filled/empty star rating
-- **BarChart** - Horizontal bars with labels and values
-- **Gauge** - SVG progress semicircle
-
-### Styling
-- **Tailwind CSS** for all utility classes
-- **Custom color palette** with primary blue (#4285F4)
-- **Responsive design** with mobile-first breakpoints
-- **Plus Jakarta Sans** Google Font
-- **Consistent spacing** using Tailwind scale
-
-### State Management
-- React Hooks (useState, useEffect)
-- Custom hooks for modals, pagination, auth
-- Mock API calls with simulated delays
-
-## Installation
-
-### 1. Install Dependencies
+### Step 1: Install Dependencies
 ```bash
 cd Admin-Frontend
 npm install
 ```
 
-### 2. Add Missing Packages
-If you haven't already, ensure these are in package.json:
+### Step 2: Create Environment File
 ```bash
-npm install react-router-dom
-npm install -D tailwindcss postcss autoprefixer
-npm install -D @types/react @types/react-dom
+cat > .env << EOF
+# Backend API Configuration
+VITE_API_BASE_URL=http://localhost:4000/api/v1
+VITE_AUTH_SERVICE_URL=http://localhost:3000/api/v1
+VITE_ADMIN_SERVICE_URL=http://localhost:4001/api/v1
+VITE_BOOKING_SERVICE_URL=http://localhost:5002/api/v1
+VITE_HOTEL_SERVICE_URL=http://localhost:5003/api/v1
+
+# App Settings
+VITE_APP_NAME=Travallee
+VITE_MOCK_API=true
+EOF
 ```
 
-### 3. Verify Configuration Files
-The following are now created:
-- `tailwind.config.js` - Tailwind configuration
-- `postcss.config.js` - PostCSS + Tailwind
-- `src/index.css` - Tailwind directives
-- `src/App.css` - Global styles
-
-### 4. Run Development Server
+### Step 3: Start Development Server
 ```bash
 npm run dev
 ```
 
-The app will open at `http://localhost:5173`
+Open **http://localhost:5173** and login with:
+- **Email:** admin@travallee.com
+- **Password:** admin123
 
-## Usage
+## 🎯 Multiple Ways to Run
 
-### Login
+### Option 1: Standalone Frontend (Recommended for Frontend-Only Work)
+```bash
+npm install
+npm run dev
 ```
-Email: admin@travallee.com
-Password: password123
+- Uses mock API data from `src/data/mock.ts`
+- No backend required
+- Hot module reloading enabled
+- Perfect for UI/UX development
+
+### Option 2: Frontend + Docker Backend (Full Stack Development)
+
+**Terminal 1 - Backend Services:**
+```bash
+cd ../Travallee-Backend
+docker-compose up -d
+docker-compose logs -f
 ```
-(Any non-empty email/password will work in demo mode)
 
-### Navigation
-- **Sidebar** (left): Click nav items to switch pages
-- **Topbar** (top): Search (non-functional), bell icon, avatar
+**Terminal 2 - Frontend:**
+```bash
+cd ../Admin-Frontend
+npm install
+npm run dev
+```
 
-### Interactive Features
-- **Guests**: Click row to open drawer, use pagination
-- **Deals**: Click "+ Add deal" to open modal form
-- **Vendor Payouts**: Click "Pay Now" to update payment status, "+ Add Vendor" for modal
-- **Reviews**: View cards with star ratings and reply buttons
+Update `.env` to connect to real backend:
+```env
+VITE_MOCK_API=false
+VITE_API_BASE_URL=http://localhost:4000/api/v1
+```
 
-## TypeScript Types
+### Option 3: Manual Backend + Frontend (Complete Control)
 
-Core entities defined in `src/types/index.ts`:
+**Terminal 1 - Auth Service:**
+```bash
+cd Travallee-Backend/Services/Auth
+npm install
+npm run dev
+# Runs on http://localhost:3000
+```
+
+**Terminal 2 - Admin Service:**
+```bash
+cd Travallee-Backend/Services/admin
+npm install
+npm run dev
+# Runs on http://localhost:4001
+```
+
+**Terminal 3 - Booking Service:**
+```bash
+cd Travallee-Backend/Services/booking
+npm install
+npm run dev
+# Runs on http://localhost:5002
+```
+
+**Terminal 4 - Hotel Service:**
+```bash
+cd Travallee-Backend/Services/Hotel
+npm install
+npm run dev
+# Runs on http://localhost:5003
+```
+
+**Terminal 5 - Frontend:**
+```bash
+cd Admin-Frontend
+npm install
+npm run dev
+```
+
+### Option 4: Production Build
+```bash
+npm install
+npm run build
+npm run preview
+```
+
+The production build is optimized and available at **http://localhost:4173**
+
+### Option 5: With Package Manager Workspaces (Monorepo)
+
+If the root `package.json` has workspaces configured:
+
+```bash
+cd ../../
+npm install              # Install all dependencies
+npm run dev:all         # Run all dev servers
+npm run build:all       # Build all projects
+```
+
+## 📝 Environment Variables
+
+Create a `.env` file in the `Admin-Frontend` directory:
+
+```env
+# ===== API CONFIGURATION =====
+# Base API URL (for aggregated endpoints)
+VITE_API_BASE_URL=http://localhost:4000/api/v1
+
+# Service-specific URLs (optional)
+VITE_AUTH_SERVICE_URL=http://localhost:3000/api/v1
+VITE_ADMIN_SERVICE_URL=http://localhost:4001/api/v1
+VITE_BOOKING_SERVICE_URL=http://localhost:5002/api/v1
+VITE_HOTEL_SERVICE_URL=http://localhost:5003/api/v1
+
+# ===== APP CONFIGURATION =====
+VITE_APP_NAME=Travallee
+VITE_APP_VERSION=0.1.0
+VITE_ENVIRONMENT=development
+
+# ===== FEATURE FLAGS =====
+VITE_MOCK_API=true              # Use mock data instead of real API
+VITE_ENABLE_ANALYTICS=true
+VITE_ENABLE_NOTIFICATIONS=true
+
+# ===== DEVELOPMENT =====
+VITE_API_TIMEOUT=10000          # Request timeout in ms
+VITE_DEBUG=false
+```
+
+**Environment-Specific Configs:**
+
+Development (`.env`):
+```env
+VITE_MOCK_API=true
+VITE_DEBUG=true
+VITE_API_BASE_URL=http://localhost:4000/api/v1
+```
+
+Staging (`.env.staging`):
+```env
+VITE_MOCK_API=false
+VITE_DEBUG=false
+VITE_API_BASE_URL=https://api-staging.travallee.com/api/v1
+```
+
+Production (`.env.production`):
+```env
+VITE_MOCK_API=false
+VITE_DEBUG=false
+VITE_API_BASE_URL=https://api.travallee.com/api/v1
+```
+
+Run with specific config:
+```bash
+npm run build -- --mode production
+npm run build -- --mode staging
+```
+
+## 🛠️ Available NPM Scripts
+
+### Development
+```bash
+npm run dev              # Start dev server (HMR enabled)
+npm run dev -- --port 3000  # Use custom port
+npm run dev -- --open    # Auto-open in browser
+```
+
+### Building
+```bash
+npm run build            # Production build
+npm run build:watch      # Rebuild on file changes
+npm run preview          # Preview production build locally
+npm run preview -- --port 8080  # Custom port for preview
+```
+
+### Code Quality
+```bash
+npm run lint             # Check for linting errors
+npm run lint:fix         # Fix auto-fixable linting issues
+npm run format           # Format code with Prettier
+npm run type-check       # Check TypeScript types
+```
+
+### Testing
+```bash
+npm run test             # Run tests
+npm run test:watch       # Watch mode for tests
+npm run test:coverage    # Generate coverage report
+```
+
+## 🔐 Authentication
+
+### Demo Credentials
+
+| Email | Password | Notes |
+|-------|----------|-------|
+| admin@travallee.com | admin123 | Full admin access |
+| manager@travallee.com | manager123 | Manager access |
+| test@example.com | test123 | Limited test access |
+
+In mock API mode, any non-empty email/password combination works.
+
+### How Authentication Works
+
+1. User enters credentials on Login page
+2. `useAuth` hook stores in localStorage:
+   ```typescript
+   localStorage.setItem('travallee_user', JSON.stringify({ email, isLoggedIn: true }))
+   ```
+3. Protected routes check `isLoggedIn` status
+4. Logout clears storage and redirects to login
+
+## 📦 Mock Data
+
+The application includes pre-populated mock data in `src/data/mock.ts`:
 
 ```typescript
-type BadgeStatus = 'Available' | 'Booked' | 'Reserved' | 'Waitlist' | 'Clean' | 'Dirty' | 'Inspected' | 'Pick up' | 'Ongoing' | 'Full' | 'Inactive' | 'New' | 'Paid' | 'Pending' | 'Overdue'
+// Guests (10 total)
+- Various booking statuses: Available, Booked, Reserved
+- Different room types and stay durations
 
-interface Guest { id, name, room, total, paid, status: BadgeStatus }
-interface Room  { number, bed, floor, facility, status: BadgeStatus }
-interface Deal  { ref, name, reservationsLeft, endDate, roomType, status: BadgeStatus }
-interface Vendor { id, name, category, amountDue, lastPaid, status: BadgeStatus }
-interface Review { name, room, rating, date, text }
+// Rooms (8 total)
+- Across 5 floors
+- Different bed types: Single, Double, Suite
+- Status tracking: Clean, Dirty, Inspected
+
+// Deals (4 active)
+- Status: Ongoing, Full, Inactive, New
+- Different room types and availability
+
+// Vendors (6 total)
+- Payment statuses: Paid, Pending, Overdue
+- Category-based grouping
+
+// Reviews (5 total)
+- Star ratings (1-5)
+- Customer feedback text
 ```
 
-## Mock Data
-All mock data is in `src/data/mock.ts`:
-- 10 guests with mixed statuses
-- 8 rooms with different bed types
-- 4 deals (Ongoing, Full, Inactive, New)
-- 6 vendors with payment statuses
-- 5 reviews with ratings
+To use real API data instead:
+1. Set `VITE_MOCK_API=false` in `.env`
+2. Implement actual API calls in `src/services/api.ts`
+3. Ensure backend services are running
 
-## API Services
-Placeholder functions in `src/services/api.ts`:
-- `getGuests()`, `getRooms()`, `getDeals()`, `getVendors()`, `getReviews()`
-- `updateVendorStatus(vendorId, status)` - Updates vendor payment status
-- `addVendor(vendor)` - Adds new vendor to list
-- `addDeal(deal)` - Adds new deal to list
+## 🎨 Styling
 
-All return promised with 300ms simulated delay.
+### Tailwind CSS
+- **Configuration:** `tailwind.config.js`
+- **Directives:** `src/index.css`
 
-## Custom Hooks
-
-### useAuth
-```typescript
-const { isLoggedIn, login, logout } = useAuth();
-login(email, password); // Sets isLoggedIn = true
-logout(); // Clears auth state
+### Color Scheme
+```css
+Primary:     #4285F4 (Blue)
+Success:     #34A853
+Warning:     #FBBC04
+Error:       #EA4335
+Neutral:     #5F6368
+Background:  #FFFFFF
 ```
 
-### useModal
+### Typography
+- **Font:** Plus Jakarta Sans ([Google Fonts](https://fonts.google.com/))
+- **Headings:** 600-700 weight
+- **Body:** 400-500 weight
+
+### Responsive Breakpoints
+```
+xs: 320px   (Mobile)
+sm: 640px   (Tablet)
+md: 768px   (Small laptop)
+lg: 1024px  (Laptop)
+xl: 1280px  (Desktop)
+2xl: 1536px (Large desktop)
+```
+
+## 🧩 Custom Hooks Usage
+
+### useAuth - Authentication State
 ```typescript
+import { useAuth } from '@/hooks/useAuth';
+
+const { isLoggedIn, user, login, logout } = useAuth();
+
+// Login
+login('admin@travallee.com', 'admin123');
+
+// Check authentication
+if (isLoggedIn) {
+  // Render authenticated content
+}
+
+// Logout
+logout();
+```
+
+### useModal - Modal State Management
+```typescript
+import { useModal } from '@/hooks/useModal';
+
 const { isOpen, open, close, toggle } = useModal();
-<Modal isOpen={isOpen} onClose={close} />
+
+return (
+  <>
+    <button onClick={open}>Open Modal</button>
+    <Modal isOpen={isOpen} onClose={close}>
+      Modal Content
+    </Modal>
+  </>
+);
 ```
 
-### usePagination
+### usePagination - Pagination Logic
 ```typescript
-const pagination = usePagination({ totalItems: 100, pageSize: 10 });
-pagination.page          // Current page (1-based)
-pagination.totalPages    // Calculated total pages
-pagination.setPage(2)    // Go to page 2
-pagination.nextPage()    // Next page
-pagination.prevPage()    // Previous page
-pagination.startIndex    // For array slicing
-pagination.endIndex
+import { usePagination } from '@/hooks/usePagination';
+
+const pagination = usePagination({
+  totalItems: 100,
+  pageSize: 10
+});
+
+// Properties
+pagination.page           // Current page (1-indexed)
+pagination.totalPages     // Total number of pages
+pagination.startIndex     // For array slicing
+pagination.endIndex       // For array slicing
+
+// Methods
+pagination.setPage(2)     // Jump to page
+pagination.nextPage()     // Go to next page
+pagination.prevPage()     // Go to previous page
 ```
 
-## Styling Guide
+## 🔗 API Services
+
+All API calls are centralized in `src/services/api.ts`:
+
+```typescript
+// Fetch operations
+getGuests()              // Returns Promise<Guest[]>
+getRooms()               // Returns Promise<Room[]>
+getDeals()               // Returns Promise<Deal[]>
+getVendors()             // Returns Promise<Vendor[]>
+getReviews()             // Returns Promise<Review[]>
+
+// Mutation operations
+updateVendorStatus(id, status)  // Update vendor payment status
+addVendor(vendor)               // Create new vendor
+addDeal(deal)                   // Create new deal
+```
+
+Example:
+```typescript
+import { getGuests } from '@/services/api';
+
+const guests = await getGuests();
+console.log(guests); // Array of guest objects
+```
+
+## 📊 Data Types
+
+### Guest
+```typescript
+interface Guest {
+  id: string;
+  name: string;
+  room: string;
+  total: number;
+  paid: number;
+  status: 'Available' | 'Booked' | 'Reserved' | 'Waitlist';
+}
+```
+
+### Room
+```typescript
+interface Room {
+  number: string;
+  bed: 'Single' | 'Double' | 'Suite';
+  floor: number;
+  facility: string;
+  status: 'Clean' | 'Dirty' | 'Inspected' | 'Booked';
+}
+```
+
+### Deal
+```typescript
+interface Deal {
+  ref: string;
+  name: string;
+  reservationsLeft: number;
+  endDate: string;
+  roomType: string;
+  status: 'Ongoing' | 'Full' | 'Inactive' | 'New';
+}
+```
+
+### Vendor
+```typescript
+interface Vendor {
+  id: string;
+  name: string;
+  category: string;
+  amountDue: number;
+  lastPaid: string;
+  status: 'Paid' | 'Pending' | 'Overdue';
+}
+```
+
+### Review
+```typescript
+interface Review {
+  name: string;
+  room: string;
+  rating: number;
+  date: string;
+  text: string;
+}
+```
+
+## 🐛 Troubleshooting
+
+### Issue: Port 5173 Already in Use
+**Solution:**
+```bash
+npm run dev -- --port 3000  # Use different port
+# or
+lsof -ti:5173 | xargs kill -9  # Kill process using port
+```
+
+### Issue: Module Not Found Errors
+**Solution:**
+```bash
+rm -rf node_modules package-lock.json
+npm install
+npm run dev
+```
+
+### Issue: TypeScript Errors
+**Solution:**
+```bash
+npm run type-check      # Check for type errors
+npm run lint:fix        # Auto-fix lint issues
+npm install --save-dev typescript@latest  # Update TypeScript
+```
+
+### Issue: Tailwind Styles Not Applied
+**Solution:**
+```bash
+# Rebuild Tailwind
+npm run build -- --mode development
+# Clear cache
+rm -rf node_modules/.vite
+npm run dev
+```
+
+### Issue: Connection Refused When Using Backend
+**Solution:**
+1. Verify backend is running: `docker-compose ps`
+2. Check backend logs: `docker-compose logs auth`
+3. Update `.env` with correct API URL
+4. Ensure firewall allows localhost connections
+
+## 🚀 Deployment
+
+### Build for Production
+```bash
+npm install
+npm run build
+```
+
+Output in `dist/` folder.
+
+### Deploy to Vercel
+```bash
+npm install -g vercel
+vercel
+```
+
+### Deploy to Netlify
+```bash
+npm install -g netlify-cli
+netlify deploy --prod --dir=dist
+```
+
+### Deploy to GitHub Pages
+```bash
+npm run build
+# Push dist/ to gh-pages branch
+```
+
+## 📚 Additional Resources
+
+- [Vite Documentation](https://vitejs.dev/)
+- [React Documentation](https://react.dev/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Router](https://reactrouter.com/)
+
+## 💡 Tips and Best Practices
+
+1. **Use Mock API During Development** - Set `VITE_MOCK_API=true`
+2. **Hot Module Reloading** - `npm run dev` supports automatic refresh
+3. **Type Safety** - Run `npm run type-check` before commits
+4. **Code Formatting** - Auto-format with `npm run format`
+5. **Environment Separation** - Use `.env.staging` and `.env.production`
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+MIT License - See [LICENSE](../LICENSE)
 
 ### Colors
 - **Primary**: `#4285F4` (blue) - buttons, active states, accents
