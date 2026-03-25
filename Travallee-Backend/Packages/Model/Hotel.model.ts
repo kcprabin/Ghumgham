@@ -94,7 +94,7 @@ const HotelSchema = new mongoose.Schema(
         totalPrice: { type: Number, required: true },
       },
     ],
-  },
+    roomIDs:[]  },
   { timestamps: true },
 );
 

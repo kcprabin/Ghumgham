@@ -1,5 +1,6 @@
 import { Router } from "express";
-import {registerHotel , createroom ,deleteRoom , featuredHotels} from "../controller/register.controller.js";
+import {registerHotel , createroom ,deleteRoom , featuredHotels, HotelData} from "../controller/register.controller.js";
+// @ts-ignore --- IGNORE ---
 import {roleMiddleware , passwordCheck} from "@packages"
 
 
@@ -9,7 +10,8 @@ router.post("/register", registerHotel);
 router.post("/room/:hotelId",roleMiddleware, createroom);
 router.delete("/room/:hotelId/:roomId",roleMiddleware, passwordCheck, deleteRoom); 
 router.get("/featured", featuredHotels); 
+router.get("/:hotelId", HotelData);
 
-
+    
 
 export default router;
