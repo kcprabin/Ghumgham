@@ -229,7 +229,7 @@ export function getWelcomeLoginTemplate(params: WelcomeLoginParams): string {
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -349,7 +349,7 @@ export function getBookingConfirmationTemplate(params: BookingConfirmationParams
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -466,7 +466,7 @@ export function getBookingCancellationTemplate(params: BookingCancellationParams
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -585,7 +585,7 @@ export function getBookingReminderTemplate(params: BookingReminderParams): strin
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -697,7 +697,7 @@ export function getPaymentSuccessTemplate(params: PaymentSuccessParams): string 
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -813,7 +813,7 @@ export function getPaymentFailedTemplate(params: PaymentFailedParams): string {
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -913,7 +913,7 @@ export function getResetPasswordTemplate(params: ResetPasswordParams): string {
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -1009,7 +1009,7 @@ export function getTwoFactorAuthTemplate(params: TwoFactorAuthParams): string {
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -1116,7 +1116,7 @@ export function getDeleteAccountTemplate(params: DeleteAccountParams): string {
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }
 
 /**
@@ -1273,5 +1273,5 @@ export function getCheckInReminderTemplate(params: CheckInReminderParams): strin
     </div>
 </body>
 </html>`;
-  return interpolateTemplate(html, params as Record<string, string>);
+  return interpolateTemplate(html, params as unknown as Record<string, string>);
 }

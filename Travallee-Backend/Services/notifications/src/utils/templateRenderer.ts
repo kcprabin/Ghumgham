@@ -1,6 +1,18 @@
 
 
 
+import type {
+  WelcomeLoginParams,
+  BookingConfirmationParams,
+  BookingCancellationParams,
+  BookingReminderParams,
+  PaymentSuccessParams,
+  PaymentFailedParams,
+  ResetPasswordParams,
+  TwoFactorAuthParams,
+  DeleteAccountParams,
+  CheckInReminderParams,
+} from '../templates/index.js';
 import {
   getWelcomeLoginTemplate,
   getBookingConfirmationTemplate,
@@ -12,17 +24,7 @@ import {
   getTwoFactorAuthTemplate,
   getDeleteAccountTemplate,
   getCheckInReminderTemplate,
-  WelcomeLoginParams,
-  BookingConfirmationParams,
-  BookingCancellationParams,
-  BookingReminderParams,
-  PaymentSuccessParams,
-  PaymentFailedParams,
-  ResetPasswordParams,
-  TwoFactorAuthParams,
-  DeleteAccountParams,
-  CheckInReminderParams,
-} from './index';
+} from '../templates/index.js';
 
 /**
  * Enum for all available email templates
