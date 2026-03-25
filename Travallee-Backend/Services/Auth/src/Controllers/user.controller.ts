@@ -1,5 +1,5 @@
-
-import { apiError, asyncHandler, apiResponse , UserModel , uploadVideoToCloudinary , sendEmail} from "@packages";
+// @ts-ignore
+import { apiError, asyncHandler, apiResponse , UserModel , uploadToCloudinary , sendEmail} from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
 
@@ -143,7 +143,7 @@ const updateUserProfile = asyncHandler(async (req: any, res: any) => {
     }
     try {
       if (file) {
-          const videoUrl = await uploadVideoToCloudinary({ filePath: file.path });
+          const videoUrl = await uploadToCloudinary({ filePath: file.path });
           user.profileVideo = videoUrl;
       }
     } catch (error: any) {

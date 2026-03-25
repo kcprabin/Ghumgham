@@ -1,4 +1,5 @@
 
+
 import {
   asyncHandler,
   apiError,
@@ -6,10 +7,9 @@ import {
   hotelModel,
   roomModel,
   uploadToCloudinary,
-  roleMiddleware,
   passwordCheck,
 } // @ts-ignore
-from "@packages";
+ from "@packages";
 import type { HotelInput, RoomInput } from "../validator/hotel.validator.js";
 import {
   createHotelSchema,
