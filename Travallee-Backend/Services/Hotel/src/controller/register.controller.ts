@@ -283,15 +283,13 @@ const RoomData = asyncHandler(async (req: any, res: any) => {
     }
 
     const pageNum = Math.max(1, parseInt(page) || 1);
-    const limitNum = Math.max(1, Math.min(50, parseInt(limit) || 10)); // Max 50 per page
+    const limitNum = Math.max(1, Math.min(50, parseInt(limit) || 10));
     const skip = (pageNum - 1) * limitNum;
 
-    // Get total count
     const totalRooms = await roomModel.countDocuments({
       hotelId: new mongoose.Types.ObjectId(hotelId),
     });
 
-    // Get paginated rooms
     const rooms = await roomModel
       .find({ hotelId: new mongoose.Types.ObjectId(hotelId) })
       .limit(limitNum)
@@ -327,6 +325,163 @@ const RoomData = asyncHandler(async (req: any, res: any) => {
 });
 
 
+const searchHotels = asyncHandler(async (req: any, res: any) => {
+
+   // query = name 
+  const { query, location, page = 1, limit = 10 } = req.query;
+
+  if (!query && !location) {
+    return apiError(res, 400, "Search query or location is required");
+  }
+
+  try {
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.max(1, Math.min(50, parseInt(limit) || 10));
+    const skip = (pageNum - 1) * limitNum;
+
+
+    const searchFilter: any = {};
+
+    if (query) {
+      searchFilter.$or = [
+        { hotelName: { $regex: query, $options: "i" } },
+        { hotelDescription: { $regex: query, $options: "i" } },
+      ];
+    }
+
+    if (location) {
+      searchFilter.hotelLocation = { $regex: location, $options: "i" };
+    }
+
+    const totalHotels = await hotelModel.countDocuments(searchFilter);
+
+    // Get paginated results
+    const hotels = await hotelModel
+      .find(searchFilter)
+      .limit(limitNum)
+      .skip(skip)
+      .select(
+        "hotelName hotelLocation hotelImages propertyType rating numberOfReviews isFeatured"
+      )
+      .sort({ rating: -1, numberOfReviews: -1 });
+
+    if (hotels.length === 0) {
+      return apiError(res, 404, "No hotels found matching your search");
+    }
+
+    return apiResponse(res, 200, true, "Hotels found successfully", {
+      hotels,
+      pagination: {
+        total: totalHotels,
+        currentPage: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(totalHotels / limitNum),
+      },
+    });
+  } catch (error: any) {
+    console.error("Error searching hotels:", error);
+    return apiError(res, 500, "Internal server error: Unable to search hotels");
+  }
+});
+
+
+// not completed
+const Filter = asyncHandler(async (req: any, res: any) => {
+    
+});
+
+
+const searchRooms = asyncHandler(async (req: any, res: any) => {
+  const { hotelId } = req.params;
+  const { query, roomType, minPrice, maxPrice, page = 1, limit = 10 } = req.query;
+
+  if (!hotelId) {
+    return apiError(res, 400, "Hotel ID is required in URL parameters");
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(hotelId)) {
+    return apiError(res, 400, "Invalid hotel ID format");
+  }
+
+  if (!query && !roomType) {
+    return apiError(res, 400, "Search query or room type is required");
+  }
+
+  try {
+    // Verify hotel exists
+    const hotel = await hotelModel.findById(hotelId);
+    if (!hotel) {
+      return apiError(res, 404, "Hotel not found", { hotelId });
+    }
+
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.max(1, Math.min(50, parseInt(limit) || 10));
+    const skip = (pageNum - 1) * limitNum;
+
+    // Build search filter
+    const searchFilter: any = {
+      hotelId: new mongoose.Types.ObjectId(hotelId),
+    };
+
+    if (query) {
+      // Case-insensitive search in room number, type, and description
+      searchFilter.$or = [
+        { roomNumber: { $regex: query, $options: "i" } },
+        { roomType: { $regex: query, $options: "i" } },
+        { roomDescription: { $regex: query, $options: "i" } },
+        { amenities: { $in: [new RegExp(query, "i")] } },
+      ];
+    }
+
+    if (roomType) {
+      searchFilter.roomType = { $regex: roomType, $options: "i" };
+    }
+
+    // Price range filter
+    if (minPrice || maxPrice) {
+      searchFilter.pricePerNight = {};
+      if (minPrice) searchFilter.pricePerNight.$gte = parseFloat(minPrice);
+      if (maxPrice) searchFilter.pricePerNight.$lte = parseFloat(maxPrice);
+    }
+
+    // Get total count
+    const totalRooms = await roomModel.countDocuments(searchFilter);
+
+    // Get paginated results
+    const rooms = await roomModel
+      .find(searchFilter)
+      .limit(limitNum)
+      .skip(skip)
+      .select(
+        "roomNumber roomType pricePerNight capacity amenities roomImages rating"
+      )
+      .sort({ floorNumber: 1, roomNumber: 1 });
+
+    if (rooms.length === 0) {
+      return apiError(res, 404, "No rooms found matching your search");
+    }
+
+    return apiResponse(res, 200, true, "Rooms found successfully", {
+      rooms,
+      pagination: {
+        total: totalRooms,
+        currentPage: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(totalRooms / limitNum),
+      },
+    });
+  } catch (error: any) {
+    console.error("Error searching rooms:", error);
+
+    if (error instanceof mongoose.Error.CastError) {
+      return apiError(res, 400, "Invalid data format");
+    }
+
+    return apiError(res, 500, "Internal server error: Unable to search rooms");
+  }
+});
+
+
 
 export {
   registerHotel,
@@ -335,4 +490,6 @@ export {
   featuredHotels,
   HotelData,
   RoomData,
+  searchHotels,
+  searchRooms,
 };
