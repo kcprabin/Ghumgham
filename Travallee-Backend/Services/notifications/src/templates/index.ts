@@ -129,9 +129,7 @@ export interface CheckInReminderParams {
   view_online_link: string;
 }
 
-/**
- * Template utility function to replace all placeholders
- */
+
 function interpolateTemplate(html: string, params: Record<string, string>): string {
   let result = html;
   for (const [key, value] of Object.entries(params)) {

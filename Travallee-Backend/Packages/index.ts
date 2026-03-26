@@ -17,7 +17,6 @@ import {
 } from "./middleware/role.middleware.js";
 import { passwordCheck } from "./Utils/Func/password.js";
 import {connectDB} from "./Utils/Func/connect.db.js"
-import { sendEmail } from "./Utils/Func/Resend.js";
 import { uploadToCloudinary } from "./Utils/Func/cloudinary.js";
 import { roomModel } from "./Model/Room.model.js";
 import { bookingModel } from "./Model/Booking.model.js";
@@ -44,7 +43,6 @@ export {
     anyAuthenticatedMiddleware,
     checkOwnership,
     passwordCheck,
-    sendEmail,
     roomModel,
     bookingModel,
     uploadToCloudinary

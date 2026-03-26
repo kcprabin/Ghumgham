@@ -6,11 +6,18 @@ import {
   UserModel,
   uploadToCloudinary,
   hotelModel,
-  roomModel,
-  sendEmail, // @ts-ignore
+  roomModel, // @ts-ignore
 } from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
+import { Queue, tryCatch } from "bullmq";
+
+const emailQueueRegister = new Queue("emailQueueRegister", {
+  connection: {
+    host: process.env.REDIS_HOST || "redis",
+    port: Number(process.env.REDIS_PORT) || 6379,
+  },
+});
 
 const registerUser = asyncHandler(async (req: any, res: any) => {
   try {
@@ -37,8 +44,16 @@ const registerUser = asyncHandler(async (req: any, res: any) => {
       Name: newUser.Name,
       role: newUser.role,
     };
-
-    
+    try {
+      await emailQueueRegister.add("sendWelcomeEmail", {
+        Name: newUser.Name,
+        to: newUser.email,
+        subject: "Welcome to Travallee!",
+      });
+    } catch (error: any) {
+      console.error("Failed to add email job to queue:", error);
+      console.log(" Proceeding without sending welcome email.");
+    }
 
     return apiResponse(
       res,
@@ -157,7 +172,7 @@ const getUserProfile = asyncHandler(async (req: any, res: any) => {
 
 const updateUserProfile = asyncHandler(async (req: any, res: any) => {
   const userId = req.user.id;
-  const { Name, email, number, } = req.body;
+  const { Name, email, number } = req.body;
   if (!Name && !email && !number) {
     return apiError(
       res,
@@ -218,14 +233,14 @@ const sendOTP = asyncHandler(async (req: any, res: any) => {
   user.otp = otp;
   await user.save();
 
-  try {
-    await sendEmail(email, "Your OTP Code - Travallee", undefined, {
-      name: user.Name || user.Username,
-      otp: otp,
-    });
-  } catch (error) {
-    return apiError(res, 500, "Failed to send OTP email");
-  }
+  // try {
+  //   await sendEmail(email, "Your OTP Code - Travallee", undefined, {
+  //     name: user.Name || user.Username,
+  //     otp: otp,
+  //   });
+  // } catch (error) {
+  //   return apiError(res, 500, "Failed to send OTP email");
+  // }
   return apiResponse(res, 200, true, "OTP sent successfully to email");
 });
 
@@ -309,14 +324,23 @@ const deleteAccount = asyncHandler(async (req: any, res: any) => {
   return apiResponse(res, 200, true, "User account deleted successfully");
 });
 
-
 // not completed
 const history = asyncHandler(async (req: any, res: any) => {
   const userId = req.user.id;
-  const hotels = await hotelModel.find({ "bookings.user": userId }).select("name location");
-  const rooms = await roomModel.find({ "bookings.user": userId }).select("roomNumber type");
-  return apiResponse(res, 200, true, "User booking history retrieved successfully", { hotels, rooms });
-}); 
+  const hotels = await hotelModel
+    .find({ "bookings.user": userId })
+    .select("name location");
+  const rooms = await roomModel
+    .find({ "bookings.user": userId })
+    .select("roomNumber type");
+  return apiResponse(
+    res,
+    200,
+    true,
+    "User booking history retrieved successfully",
+    { hotels, rooms },
+  );
+});
 
 export {
   registerUser,
@@ -331,5 +355,5 @@ export {
   getUserProfilePicture,
   updateUserProfilePicture,
   deleteAccount,
-  history
+  history,
 };
