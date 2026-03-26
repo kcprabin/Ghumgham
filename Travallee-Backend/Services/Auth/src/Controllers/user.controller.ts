@@ -37,6 +37,9 @@ const registerUser = asyncHandler(async (req: any, res: any) => {
       Name: newUser.Name,
       role: newUser.role,
     };
+
+    
+
     return apiResponse(
       res,
       201,

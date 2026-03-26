@@ -8,7 +8,7 @@ interface EmailResponse {
   created_at: string;
 }
 
-const sendEmail = async (
+const sendEmailNodeMailer = async (
   to: string,
   subject?: string,
   html?: string,
@@ -47,4 +47,4 @@ const sendEmail = async (
   }
 };
 
-export { sendEmail };
+export { sendEmailNodeMailer };
