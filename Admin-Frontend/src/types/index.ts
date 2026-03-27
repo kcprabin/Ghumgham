@@ -83,6 +83,7 @@ export interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   label?: string;
+  disabled?: boolean;
 }
 
 export interface SelectProps {

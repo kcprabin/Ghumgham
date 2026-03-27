@@ -38,7 +38,10 @@ const UserSchema = new mongoose.Schema<UserType, UserModel, UserMethods>({
   Username: { type: String, required: true, minlength: 3 },
   password: { type: String, required: true, minlength: 6 },
   profileimage: { type: String },
-  role: { type: String },
+  role: { type: String ,
+    default: "user",
+     enum: ["user", "admin" , "superadmin"]
+   },
   googleId: { type: String },
   isVerified: { type: Boolean },
   otp: { type: Number },

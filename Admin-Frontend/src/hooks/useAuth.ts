@@ -1,15 +1,20 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 export const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(
-    () => localStorage.getItem('isLoggedIn') === 'true'
+    () => !!localStorage.getItem('authToken')
   );
 
+  const user = useMemo(() => {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
+  }, []);
+
   const login = useCallback((email: string, password: string) => {
-    // Placeholder login logic
-    if (email && password) {
+    // This is called after the token is already stored in LoginPage
+    // Just ensure the logged in state is set
+    if (localStorage.getItem('authToken')) {
       setIsLoggedIn(true);
-      localStorage.setItem('isLoggedIn', 'true');
       return true;
     }
     return false;
@@ -18,7 +23,9 @@ export const useAuth = () => {
   const logout = useCallback(() => {
     setIsLoggedIn(false);
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
   }, []);
 
-  return { isLoggedIn, login, logout };
+  return { isLoggedIn, user, login, logout };
 };

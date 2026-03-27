@@ -1,3 +1,4 @@
+import axios from 'axios';
 import type {
   Guest,
   Room,
@@ -6,6 +7,37 @@ import type {
   Review,
 } from '../types';
 import { mockGuests, mockRooms, mockDeals, mockVendors, mockReviews } from '../data/mock';
+
+// Configure axios instance
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api/v1',
+  timeout: 10000,
+});
+
+// Add token to all requests
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Handle token expiration
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Simulating API calls with mock data
 
 // Simulating API calls with mock data
 export const getGuests = async (): Promise<Guest[]> => {
