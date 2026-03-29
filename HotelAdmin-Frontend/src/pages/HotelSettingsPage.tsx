@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 
+interface Staff {
+  id: string;
+  name: string;
+  position: string;
+  email: string;
+  phone: string;
+  joinDate: string;
+  status: 'active' | 'inactive';
+}
+
 interface HotelDetails {
   ownerName: string;
   hotelName: string;
@@ -19,6 +29,7 @@ interface HotelDetails {
   rating: number;
   numberOfReviews: number;
   isFeatured: boolean;
+  staff: Staff[];
 }
 
 const HotelSettingsPage: React.FC = () => {
@@ -45,11 +56,26 @@ const HotelSettingsPage: React.FC = () => {
     rating: 4.3,
     numberOfReviews: 127,
     isFeatured: true,
+    staff: [
+      { id: '1', name: 'John Smith', position: 'Manager', email: 'john@hotel.com', phone: '9812345601', joinDate: '2023-01-15', status: 'active' },
+      { id: '2', name: 'Sarah Johnson', position: 'Receptionist', email: 'sarah@hotel.com', phone: '9812345602', joinDate: '2023-06-20', status: 'active' },
+      { id: '3', name: 'Mike Chen', position: 'Chef', email: 'mike@hotel.com', phone: '9812345603', joinDate: '2023-03-10', status: 'active' },
+    ],
   });
 
   const [formData, setFormData] = useState<HotelDetails>(hotelDetails);
   const [facilitiesInput, setFacilitiesInput] = useState(hotelDetails.facilities.join(', '));
   const [imageInput, setImageInput] = useState(hotelDetails.hotelImages.join('\n'));
+  const [staffList, setStaffList] = useState<Staff[]>(hotelDetails.staff);
+  const [newStaff, setNewStaff] = useState<Staff>({
+    id: '',
+    name: '',
+    position: '',
+    email: '',
+    phone: '',
+    joinDate: new Date().toISOString().split('T')[0],
+    status: 'active',
+  });
 
   useEffect(() => {
     // Load from localStorage on mount
@@ -60,6 +86,7 @@ const HotelSettingsPage: React.FC = () => {
       setFormData(parsed);
       setFacilitiesInput(parsed.facilities.join(', '));
       setImageInput(parsed.hotelImages.join('\n'));
+      setStaffList(parsed.staff || []);
     }
   }, []);
 
@@ -84,11 +111,41 @@ const HotelSettingsPage: React.FC = () => {
         .split('\n')
         .map((i) => i.trim())
         .filter((i) => i),
+      staff: staffList,
     };
     setHotelDetails(updated);
     localStorage.setItem('hotelDetails', JSON.stringify(updated));
     setIsEditing(false);
     alert('Hotel details updated successfully!');
+  };
+
+  const handleAddStaff = () => {
+    if (!newStaff.name || !newStaff.position || !newStaff.email) {
+      alert('Please fill in all staff fields');
+      return;
+    }
+    const staffWithId = {
+      ...newStaff,
+      id: Date.now().toString(),
+    };
+    setStaffList([...staffList, staffWithId]);
+    setNewStaff({
+      id: '',
+      name: '',
+      position: '',
+      email: '',
+      phone: '',
+      joinDate: new Date().toISOString().split('T')[0],
+      status: 'active',
+    });
+  };
+
+  const handleRemoveStaff = (id: string) => {
+    setStaffList(staffList.filter((s) => s.id !== id));
+  };
+
+  const handleStaffChange = (field: keyof Staff, value: string) => {
+    setNewStaff((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleCancel = () => {
@@ -656,7 +713,6 @@ const HotelSettingsPage: React.FC = () => {
               </label>
               <p
                 style={{
-                  fontSize: '13px',
                   color: formData.isactive ? '#22c55e' : '#ef4444',
                   marginTop: '6px',
                   fontSize: '14px',
@@ -795,11 +851,11 @@ const HotelSettingsPage: React.FC = () => {
             padding: '20px',
           }}
         >
-          <h3 style={{ fontSize: '18px', fontWeight: 500, marginBottom: '16px', color: 'var(--text)' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '18px', color: 'var(--text)' }}>
             Verification Documents
           </h3>
           {displayData.VerificationDocuments.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {displayData.VerificationDocuments.map((doc, idx) => (
                 <a
                   key={idx}
@@ -807,17 +863,247 @@ const HotelSettingsPage: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    fontSize: '13px',
-                    color: 'var(--blue)',
+                    fontSize: '15px',
+                    color: isDarkMode ? '#00d4ff' : 'var(--blue)',
                     textDecoration: 'underline',
+                    fontWeight: 500,
+                    transition: 'opacity 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.opacity = '0.8';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.opacity = '1';
                   }}
                 >
-                  Document {idx + 1}: {doc.substring(0, 60)}...
+                  ◈ Document {idx + 1}: {doc.substring(0, 50)}...
                 </a>
               ))}
             </div>
           ) : (
-            <p style={{ fontSize: '14px', color: 'var(--muted)' }}>No verification documents</p>
+            <p style={{ fontSize: '15px', color: 'var(--muted)' }}>No verification documents</p>
+          )}
+        </div>
+
+        {/* Staff & Employees */}
+        <div
+          style={{
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: '12px',
+            padding: '20px',
+            marginBottom: '24px',
+          }}
+        >
+          <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '18px', color: 'var(--text)' }}>
+            Staff & Employees ({staffList.length})
+          </h3>
+
+          {/* Staff List */}
+          {staffList.length > 0 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', marginBottom: '20px' }}>
+              {staffList.map((staff) => (
+                <div
+                  key={staff.id}
+                  style={{
+                    background: isDarkMode ? 'rgba(0, 212, 255, 0.08)' : 'rgba(44, 62, 80, 0.05)',
+                    border: `1px solid ${isDarkMode ? 'rgba(0, 212, 255, 0.2)' : 'var(--border)'}`,
+                    borderRadius: '8px',
+                    padding: '12px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <p style={{ color: 'var(--text)', fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>
+                      {staff.name}
+                    </p>
+                    <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: 'var(--muted)' }}>
+                      <span>◆ {staff.position}</span>
+                      <span>✉ {staff.email}</span>
+                      <span>☎ {staff.phone}</span>
+                      <span
+                        style={{
+                          color: staff.status === 'active' ? '#22c55e' : '#ef4444',
+                          fontWeight: 500,
+                        }}
+                      >
+                        ● {staff.status.charAt(0).toUpperCase() + staff.status.slice(1)}
+                      </span>
+                    </div>
+                  </div>
+                  {isEditing && (
+                    <button
+                      onClick={() => handleRemoveStaff(staff.id)}
+                      style={{
+                        padding: '6px 12px',
+                        background: '#ef4444',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        marginLeft: '12px',
+                        transition: 'all 0.2s',
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.opacity = '0.9';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.opacity = '1';
+                      }}
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p style={{ fontSize: '15px', color: 'var(--muted)', marginBottom: '20px' }}>No staff members added</p>
+          )}
+
+          {/* Add Staff Form */}
+          {isEditing && (
+            <div
+              style={{
+                background: isDarkMode ? 'rgba(0, 212, 255, 0.05)' : 'rgba(44, 62, 80, 0.03)',
+                border: `2px dashed ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'var(--border)'}`,
+                borderRadius: '8px',
+                padding: '16px',
+              }}
+            >
+              <p style={{ fontSize: '14px', fontWeight: 600, color: isDarkMode ? '#00d4ff' : 'var(--accent)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                ➕ Add New Staff Member
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={newStaff.name}
+                  onChange={(e) => handleStaffChange('name', e.target.value)}
+                  style={{
+                    padding: '10px 12px',
+                    border: `2px solid ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    background: 'var(--surface2)',
+                    color: 'var(--text)',
+                    fontSize: '14px',
+                    outline: 'none',
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Position (Manager, Chef, etc.)"
+                  value={newStaff.position}
+                  onChange={(e) => handleStaffChange('position', e.target.value)}
+                  style={{
+                    padding: '10px 12px',
+                    border: `2px solid ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    background: 'var(--surface2)',
+                    color: 'var(--text)',
+                    fontSize: '14px',
+                    outline: 'none',
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={newStaff.email}
+                  onChange={(e) => handleStaffChange('email', e.target.value)}
+                  style={{
+                    padding: '10px 12px',
+                    border: `2px solid ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    background: 'var(--surface2)',
+                    color: 'var(--text)',
+                    fontSize: '14px',
+                    outline: 'none',
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={newStaff.phone}
+                  onChange={(e) => handleStaffChange('phone', e.target.value)}
+                  style={{
+                    padding: '10px 12px',
+                    border: `2px solid ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    background: 'var(--surface2)',
+                    color: 'var(--text)',
+                    fontSize: '14px',
+                    outline: 'none',
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                <input
+                  type="date"
+                  value={newStaff.joinDate}
+                  onChange={(e) => handleStaffChange('joinDate', e.target.value)}
+                  style={{
+                    padding: '10px 12px',
+                    border: `2px solid ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    background: 'var(--surface2)',
+                    color: 'var(--text)',
+                    fontSize: '14px',
+                    outline: 'none',
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                />
+                <select
+                  value={newStaff.status}
+                  onChange={(e) => handleStaffChange('status', e.target.value as 'active' | 'inactive')}
+                  style={{
+                    padding: '10px 12px',
+                    border: `2px solid ${isDarkMode ? 'rgba(0, 212, 255, 0.3)' : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    background: 'var(--surface2)',
+                    color: 'var(--text)',
+                    fontSize: '14px',
+                    outline: 'none',
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+              <button
+                onClick={handleAddStaff}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: isDarkMode ? '#00d4ff' : 'var(--accent)',
+                  color: isDarkMode ? '#1a1a2e' : '#fff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontWeight: 600,
+                  fontSize: '15px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.opacity = '0.9';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.opacity = '1';
+                }}
+              >
+                ✚ Add Staff Member
+              </button>
+            </div>
           )}
         </div>
       </div>
