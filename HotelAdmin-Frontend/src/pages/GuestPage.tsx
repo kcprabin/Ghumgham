@@ -71,8 +71,8 @@ const GuestPage: React.FC = () => {
             Guest Management
           </h1>
           <button style={{
-            background: 'var(--gold)',
-            color: '#0f0e0c',
+            background: 'var(--accent)',
+            color: '#ffffff',
             border: 'none',
             padding: '8px 16px',
             borderRadius: '9px',
@@ -94,7 +94,7 @@ const GuestPage: React.FC = () => {
           {[
             { label: 'Total Guests', value: guests.length, color: 'var(--text)' },
             { label: 'Active', value: guests.filter((g) => g.status === 'active').length, color: 'var(--green)' },
-            { label: 'Total Revenue', value: '$' + guests.reduce((sum, g) => sum + g.totalSpent, 0), color: 'var(--gold)' },
+            { label: 'Total Revenue', value: '$' + guests.reduce((sum, g) => sum + g.totalSpent, 0), color: 'var(--accent)' },
           ].map((stat, i) => (
             <div
               key={i}
@@ -161,7 +161,7 @@ const GuestPage: React.FC = () => {
                     <td style={{ color: 'var(--muted)' }}>{guest.email}</td>
                     <td style={{ color: 'var(--muted)' }}>{guest.phone}</td>
                     <td style={{ color: 'var(--muted)' }}>{guest.lastStay}</td>
-                    <td style={{ color: 'var(--gold)' }}>${guest.totalSpent}</td>
+                    <td style={{ color: 'var(--accent)' }}>${guest.totalSpent}</td>
                     <td>
                       <span
                         className="pill"
@@ -173,7 +173,7 @@ const GuestPage: React.FC = () => {
                         {guest.status}
                       </span>
                     </td>
-                    <td style={{ color: 'var(--gold)', cursor: 'pointer' }}>View</td>
+                    <td style={{ color: 'var(--accent)', cursor: 'pointer' }}>View</td>
                   </tr>
                 ))}
               </tbody>

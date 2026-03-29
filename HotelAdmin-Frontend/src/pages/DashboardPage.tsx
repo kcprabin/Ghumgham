@@ -27,11 +27,11 @@ const DashboardPage: React.FC = () => {
     <>
       <div className="page-header">
         <div>
-          <div className="page-title">Good Morning, Arjun ✦</div>
+          <div className="page-title">Good Morning, Arjun</div>
           <div className="page-sub">Friday, 27 March 2026 · Kathmandu</div>
         </div>
         <div className="header-right">
-          <div className="btn-notif">🔔</div>
+          <div className="btn-notif">●</div>
         </div>
       </div>
 
@@ -43,7 +43,7 @@ const DashboardPage: React.FC = () => {
             className="add-staff-btn"
             onClick={() => setIsModalOpen(true)}
           >
-            <span className="icon">👤</span> Add Staff
+            <span className="icon">+</span> Add Staff
           </button>
         </div>
       </div>
@@ -58,7 +58,7 @@ const DashboardPage: React.FC = () => {
                 className="modal-close"
                 onClick={() => setIsModalOpen(false)}
               >
-                ✕
+                ×
               </button>
             </div>
             <div className="modal-body">
@@ -168,21 +168,21 @@ const DashboardPage: React.FC = () => {
       </div>
       <div className="mid-row">
         <div className="mini-m">
-          <div className="m-icon mi1">🍽</div>
+          <div className="m-icon mi1">■</div>
           <div>
             <div className="m-val">Rs. 18,400</div>
             <div className="m-lbl">Restaurant Revenue Today</div>
           </div>
         </div>
         <div className="mini-m">
-          <div className="m-icon mi2">⭐</div>
+          <div className="m-icon mi2">★</div>
           <div>
             <div className="m-val">4.7 / 5</div>
             <div className="m-lbl">Average Guest Rating</div>
           </div>
         </div>
         <div className="mini-m">
-          <div className="m-icon mi3">🛎</div>
+          <div className="m-icon mi3">◆</div>
           <div>
             <div className="m-val">12</div>
             <div className="m-lbl">Service Requests Open</div>
@@ -212,7 +212,7 @@ const DashboardPage: React.FC = () => {
             </thead>
             <tbody>
               <tr>
-                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--gold2)' }}>
+                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--accent)' }}>
                   101
                 </td>
                 <td>Deluxe</td>
@@ -223,7 +223,7 @@ const DashboardPage: React.FC = () => {
                 </td>
               </tr>
               <tr>
-                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--gold2)' }}>
+                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--accent)' }}>
                   204
                 </td>
                 <td>Suite</td>
@@ -234,7 +234,7 @@ const DashboardPage: React.FC = () => {
                 </td>
               </tr>
               <tr>
-                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--gold2)' }}>
+                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--accent)' }}>
                   305
                 </td>
                 <td>Standard</td>
@@ -245,7 +245,7 @@ const DashboardPage: React.FC = () => {
                 </td>
               </tr>
               <tr>
-                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--gold2)' }}>
+                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--accent)' }}>
                   112
                 </td>
                 <td>Deluxe</td>
@@ -256,7 +256,7 @@ const DashboardPage: React.FC = () => {
                 </td>
               </tr>
               <tr>
-                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--gold2)' }}>
+                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--accent)' }}>
                   208
                 </td>
                 <td>Standard</td>
@@ -267,7 +267,7 @@ const DashboardPage: React.FC = () => {
                 </td>
               </tr>
               <tr>
-                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--gold2)' }}>
+                <td style={{ fontFamily: "'Playfair Display',serif", color: 'var(--accent)' }}>
                   310
                 </td>
                 <td>Suite</td>
@@ -303,7 +303,7 @@ const DashboardPage: React.FC = () => {
             </div>
             <div className="legend">
               <div className="leg-i">
-                <div className="leg-d" style={{ background: 'var(--gold)' }}></div>
+                <div className="leg-d" style={{ background: 'var(--accent)' }}></div>
                 Occupied 37
               </div>
               <div className="leg-i">

@@ -150,7 +150,7 @@ const ReportsPage: React.FC = () => {
             </div>
             <div className="sum-row">
               <span>Net Profit</span>
-              <span className="sum-val" style={{ color: 'var(--gold2)' }}>
+              <span className="sum-val" style={{ color: 'var(--accent)' }}>
                 Rs. 87,513
               </span>
             </div>

@@ -24,7 +24,7 @@ const GuestsPage: React.FC = () => {
       <div className="gc-grid">
         <div className="gc">
           <div className="gc-top">
-            <div className="gc-av" style={{ background: 'rgba(201,168,76,0.15)', color: 'var(--gold2)' }}>
+            <div className="gc-av" style={{ background: 'rgba(44,62,80,0.15)', color: 'var(--accent)' }}>
               PS
             </div>
             <div>
@@ -102,7 +102,7 @@ const GuestsPage: React.FC = () => {
         </div>
         <div className="gc">
           <div className="gc-top">
-            <div className="gc-av" style={{ background: 'rgba(155,127,232,0.15)', color: 'var(--purple)' }}>
+            <div className="gc-av" style={{ background: 'rgba(155,127,232,0.15)', color: 'var(--blue)' }}>
               MK
             </div>
             <div>
@@ -128,7 +128,7 @@ const GuestsPage: React.FC = () => {
         </div>
         <div className="gc">
           <div className="gc-top">
-            <div className="gc-av" style={{ background: 'rgba(201,168,76,0.1)', color: 'var(--gold)' }}>
+            <div className="gc-av" style={{ background: 'rgba(44,62,80,0.1)', color: 'var(--accent)' }}>
               RT
             </div>
             <div>

@@ -80,7 +80,7 @@ const ChatPage: React.FC = () => {
             </div>
           </div>
           <div style={{ display: !activeName ? 'flex' : 'none' }} className="chat-empty2">
-            <div style={{ fontSize: '30px' }}>💬</div>
+            <div style={{ fontSize: '30px' }}>◆</div>
             <div>Select a chat room</div>
             <div style={{ fontSize: '11px' }}>Choose a guest from the sidebar</div>
           </div>

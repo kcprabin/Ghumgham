@@ -54,11 +54,11 @@ const TopBar: React.FC<TopBarProps> = ({ title }) => {
           width: '32px',
           height: '32px',
           borderRadius: '50%',
-          background: 'var(--gold)',
+          background: 'var(--accent)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#0f0e0c',
+          color: '#ffffff',
           fontWeight: 600,
           fontSize: '14px',
         }}>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 import DashboardPage from '../../pages/DashboardPage';
 import BookingsPage from '../../pages/BookingsPage';
 import GuestsPage from '../../pages/GuestsPage';
@@ -6,8 +7,10 @@ import ChatPage from '../../pages/ChatPage';
 import ReviewsPage from '../../pages/ReviewsPage';
 import EarningsPage from '../../pages/EarningsPage';
 import ReportsPage from '../../pages/ReportsPage';
+import HotelSettingsPage from '../../pages/HotelSettingsPage';
 
 const HotelAdminLayout: React.FC = () => {
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [currentPage, setCurrentPage] = useState('dashboard');
 
   const navToPage = (page: string) => {
@@ -32,7 +35,7 @@ const HotelAdminLayout: React.FC = () => {
     <>
       <aside className="sidebar">
         <div className="logo">
-          <div className="logo-icon">⬧ AURVM</div>
+          <div className="logo-icon">AURVM</div>
           <div className="logo-sub">Hotel Admin</div>
         </div>
         <div className="nav-label">Main</div>
@@ -40,31 +43,31 @@ const HotelAdminLayout: React.FC = () => {
           className="nav-item active"
           onClick={() => navToPage('dashboard')}
         >
-          <span className="icon">⊞</span> Dashboard
+          <span className="icon">■</span> Dashboard
         </div>
         <div className="nav-item" onClick={() => navToPage('reservations')}>
-          <span className="icon">📋</span> Reservations
+          <span className="icon">▬</span> Reservations
         </div>
         <div className="nav-item" onClick={() => navToPage('guests')}>
-          <span className="icon">👤</span> Guests
+          <span className="icon">●</span> Guests
         </div>
         <div className="nav-label">Operations</div>
         <div className="nav-item" onClick={() => navToPage('messages')}>
-          <span className="icon">💬</span> Messages{' '}
+          <span className="icon">◆</span> Messages{' '}
           <span className="nav-badge">4</span>
         </div>
         <div className="nav-item" onClick={() => navToPage('reviews')}>
-          <span className="icon">⭐</span> Reviews
+          <span className="icon">★</span> Reviews
         </div>
         <div className="nav-label">Business</div>
         <div className="nav-item" onClick={() => navToPage('finance')}>
-          <span className="icon">💰</span> Finance
+          <span className="icon">◈</span> Finance
         </div>
         <div className="nav-item" onClick={() => navToPage('reports')}>
-          <span className="icon">📊</span> Reports
+          <span className="icon">▲</span> Reports
         </div>
-        <div className="nav-item">
-          <span className="icon">⚙</span> Settings
+        <div className="nav-item" onClick={() => navToPage('settings')}>
+          <span className="icon">≡</span> Settings
         </div>
         <div className="sidebar-footer">
           <div className="user-pill">
@@ -84,7 +87,17 @@ const HotelAdminLayout: React.FC = () => {
             }}
             title="Logout"
           >
-            <span className="icon">⎋</span> Logout
+            <span className="icon">↾</span> Logout
+          </button>
+          <button 
+            className="logout-btn"
+            onClick={toggleDarkMode}
+            title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            style={{
+              background: isDarkMode ? 'rgba(44, 62, 80, 0.2)' : 'rgba(44, 62, 80, 0.1)',
+            }}
+          >
+            <span className="icon">{isDarkMode ? '☀' : '🌙'}</span> {isDarkMode ? 'Light' : 'Dark'}
           </button>
         </div>
       </aside>
@@ -110,6 +123,9 @@ const HotelAdminLayout: React.FC = () => {
         </div>
         <div className="page" id="page-reports">
           <ReportsPage />
+        </div>
+        <div className="page" id="page-settings">
+          <HotelSettingsPage />
         </div>
       </main>
     </>

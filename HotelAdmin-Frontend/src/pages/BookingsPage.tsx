@@ -89,7 +89,7 @@ const BookingsPage: React.FC = () => {
                 <span className="pill p-cfm">Confirmed</span>
               </td>
               <td>
-                <span style={{ cursor: 'pointer', color: 'var(--gold)', fontSize: '12px' }}>
+                <span style={{ cursor: 'pointer', color: 'var(--accent)', fontSize: '12px' }}>
                   ✏ Edit
                 </span>
               </td>
@@ -106,7 +106,7 @@ const BookingsPage: React.FC = () => {
                 <span className="pill p-cfm">Confirmed</span>
               </td>
               <td>
-                <span style={{ cursor: 'pointer', color: 'var(--gold)', fontSize: '12px' }}>
+                <span style={{ cursor: 'pointer', color: 'var(--accent)', fontSize: '12px' }}>
                   ✏ Edit
                 </span>
               </td>
@@ -123,7 +123,7 @@ const BookingsPage: React.FC = () => {
                 <span className="pill p-pnd">Pending</span>
               </td>
               <td>
-                <span style={{ cursor: 'pointer', color: 'var(--gold)', fontSize: '12px' }}>
+                <span style={{ cursor: 'pointer', color: 'var(--accent)', fontSize: '12px' }}>
                   ✏ Edit
                 </span>
               </td>
@@ -140,7 +140,7 @@ const BookingsPage: React.FC = () => {
                 <span className="pill p-pnd">Pending</span>
               </td>
               <td>
-                <span style={{ cursor: 'pointer', color: 'var(--gold)', fontSize: '12px' }}>
+                <span style={{ cursor: 'pointer', color: 'var(--accent)', fontSize: '12px' }}>
                   ✏ Edit
                 </span>
               </td>
@@ -157,7 +157,7 @@ const BookingsPage: React.FC = () => {
                 <span className="pill p-cfm">Confirmed</span>
               </td>
               <td>
-                <span style={{ cursor: 'pointer', color: 'var(--gold)', fontSize: '12px' }}>
+                <span style={{ cursor: 'pointer', color: 'var(--accent)', fontSize: '12px' }}>
                   ✏ Edit
                 </span>
               </td>

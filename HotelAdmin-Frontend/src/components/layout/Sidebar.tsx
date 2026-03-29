@@ -36,7 +36,7 @@ const Sidebar: React.FC = () => {
           fontFamily: "'Playfair Display', serif",
           fontSize: '18px',
           fontWeight: 600,
-          color: 'var(--gold)',
+          color: 'var(--accent)',
         }}>
           Luxe
         </div>
@@ -77,10 +77,10 @@ const Sidebar: React.FC = () => {
         {expandedSections.includes('main') && (
           <div>
             {[
-              { label: 'Dashboard', path: '/dashboard', icon: '◆' },
-              { label: 'Reservations', path: '/bookings', icon: '📅' },
-              { label: 'Guests', path: '/guests', icon: '👤' },
-              { label: 'Messages', path: '/chat', icon: '💬' },
+              { label: 'Dashboard', path: '/dashboard', icon: '■' },
+              { label: 'Reservations', path: '/bookings', icon: '▬' },
+              { label: 'Guests', path: '/guests', icon: '●' },
+              { label: 'Messages', path: '/chat', icon: '◆' },
             ].map((item) => (
               <a
                 key={item.path}
@@ -95,9 +95,9 @@ const Sidebar: React.FC = () => {
                   borderRadius: '8px',
                   fontSize: '13px',
                   textDecoration: 'none',
-                  color: isActive(item.path) ? 'var(--gold)' : 'var(--text)',
-                  background: isActive(item.path) ? 'rgba(201, 168, 76, 0.1)' : 'transparent',
-                  border: isActive(item.path) ? '1px solid rgba(201, 168, 76, 0.2)' : 'none',
+                  color: isActive(item.path) ? 'var(--accent)' : 'var(--text)',
+                  background: isActive(item.path) ? 'rgba(44, 62, 80, 0.1)' : 'transparent',
+                  border: isActive(item.path) ? '1px solid rgba(44, 62, 80, 0.2)' : 'none',
                   transition: 'all 0.2s',
                   cursor: 'pointer',
                 }}
@@ -109,7 +109,7 @@ const Sidebar: React.FC = () => {
           </div>
         )}
 
-        {/* Operations Section */}
+        {/* Operations Section */}}
         <div
           onClick={() => toggleSection('operations')}
           style={{
@@ -139,8 +139,8 @@ const Sidebar: React.FC = () => {
         {expandedSections.includes('operations') && (
           <div>
             {[
-              { label: 'Rooms', path: '/rooms', icon: '🛏' },
-              { label: 'Reviews', path: '/reviews', icon: '⭐' },
+              { label: 'Rooms', path: '/rooms', icon: '■' },
+              { label: 'Reviews', path: '/reviews', icon: '★' },
             ].map((item) => (
               <a
                 key={item.path}
@@ -155,9 +155,9 @@ const Sidebar: React.FC = () => {
                   borderRadius: '8px',
                   fontSize: '13px',
                   textDecoration: 'none',
-                  color: isActive(item.path) ? 'var(--gold)' : 'var(--text)',
-                  background: isActive(item.path) ? 'rgba(201, 168, 76, 0.1)' : 'transparent',
-                  border: isActive(item.path) ? '1px solid rgba(201, 168, 76, 0.2)' : 'none',
+                  color: isActive(item.path) ? 'var(--accent)' : 'var(--text)',
+                  background: isActive(item.path) ? 'rgba(44, 62, 80, 0.1)' : 'transparent',
+                  border: isActive(item.path) ? '1px solid rgba(44, 62, 80, 0.2)' : 'none',
                   transition: 'all 0.2s',
                   cursor: 'pointer',
                 }}
@@ -169,7 +169,7 @@ const Sidebar: React.FC = () => {
           </div>
         )}
 
-        {/* Business Section */}
+        {/* Business Section */}}
         <div
           onClick={() => toggleSection('business')}
           style={{
@@ -199,7 +199,7 @@ const Sidebar: React.FC = () => {
         {expandedSections.includes('business') && (
           <div>
             {[
-              { label: 'Finance', path: '/earnings', icon: '💰' },
+              { label: 'Finance', path: '/earnings', icon: '◈' },
             ].map((item) => (
               <a
                 key={item.path}
@@ -214,7 +214,7 @@ const Sidebar: React.FC = () => {
                   borderRadius: '8px',
                   fontSize: '13px',
                   textDecoration: 'none',
-                  color: isActive(item.path) ? 'var(--gold)' : 'var(--text)',
+                  color: isActive(item.path) ? 'var(--accent)' : 'var(--text)',
                   background: isActive(item.path) ? 'rgba(201, 168, 76, 0.1)' : 'transparent',
                   border: isActive(item.path) ? '1px solid rgba(201, 168, 76, 0.2)' : 'none',
                   transition: 'all 0.2s',

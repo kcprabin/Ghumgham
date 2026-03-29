@@ -66,7 +66,7 @@ const RoomsPage: React.FC = () => {
             }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLElement;
-              el.style.borderColor = 'var(--gold)';
+              el.style.borderColor = 'var(--accent)';
               el.style.transform = 'translateY(-4px)';
             }}
             onMouseLeave={(e) => {
@@ -80,7 +80,7 @@ const RoomsPage: React.FC = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: '32px',
                 fontWeight: 500,
-                color: 'var(--gold2)',
+                color: 'var(--accent)',
                 marginBottom: '6px',
               }}>
                 {room.number}
@@ -102,7 +102,7 @@ const RoomsPage: React.FC = () => {
               color: 'var(--muted)',
             }}>
               <span>Capacity: {room.capacity}</span>
-              <span style={{ color: 'var(--gold)' }}>{room.price}</span>
+              <span style={{ color: 'var(--accent)' }}>{room.price}</span>
             </div>
             <span
               className={`pill ${
