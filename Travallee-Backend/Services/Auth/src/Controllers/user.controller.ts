@@ -6,21 +6,20 @@ import {
   uploadToCloudinary,
   hotelModel,
   roomModel,
-  redisConnection, // @ts-ignore
+   // @ts-ignore
 } from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
+import { redisConnection } from "../config/redis.connection.js";
 import { z } from "zod";
-import { Queue, tryCatch } from "bullmq";
-import { DEFAULT_REDIS_OPTIONS } from "ioredis/built/redis/RedisOptions.js";
+import { Queue } from "bullmq";
 
-const connection = redisConnection(
-  process.env.REDIS_HOST as string,
-  process.env.REDIS_PORT,
-);
-console.log(connection);
-const registerEmailQueue = new Queue("Register", connection);
+const registerEmailQueue = new Queue("Register", {
+  connection: redisConnection(process.env.REDIS_HOST as string ,Number(process.env.REDIS_PORT))
+});
 
-const otpQueue = new Queue("otp", connection);
+const otpQueue = new Queue("OTP", {
+  connection: redisConnection(process.env.REDIS_HOST as string ,Number(process.env.REDIS_PORT))
+});
 
 const registerUser = asyncHandler(async (req: any, res: any) => {
   try {
@@ -93,7 +92,7 @@ const loginUser = asyncHandler(async (req: any, res: any) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 7000, // 7 day
+      maxAge: 24 * 60 * 60 * 1, // 1 day
     };
     const token = user.generateJWT();
     user.refreshToken = token;
