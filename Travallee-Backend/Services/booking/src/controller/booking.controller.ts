@@ -1,3 +1,4 @@
+//@ts-ignore
 import { asyncHandler,apiError,apiResponse,roomModel,hotelModel,bookingModel } from "@packages"
 import mongoose from "mongoose";
 import * as crypto from "crypto";
@@ -5,6 +6,7 @@ import axios from "axios"
 
 
 // use this for import 
+//@ts-ignore
 import {sendEmail} from "@packages"
 // definitation of packages is in tsconfig.json file
 
