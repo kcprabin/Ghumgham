@@ -14,7 +14,7 @@ import {
 
 import passport from "passport";
 //@ts-ignore
-import { authenticate } from "@packages";
+import { authenticate , upload} from "@packages";
 
 
 const router = Router();
@@ -34,7 +34,7 @@ router.get(
   googleAuth
 );
 router.get("/profile", authenticate, getUserProfile);
-  router.put("/update-profile", authenticate, updateUserProfile);
+  router.put("/update-profile", upload.single("profileImage"), updateUserProfile);
 router.delete("/delete-profile", authenticate, deleteUserProfile);
 router.post("/send-otp", sendOTP);
 router.post("/verify-otp", verifyOTP);

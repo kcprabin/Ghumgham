@@ -12,11 +12,12 @@ import {
 } from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
-import { Queue } from "bullmq";
+import { Queue, tryCatch } from "bullmq";
+import { response } from "express";
 
 const connection = redisConnection(
   process.env.REDIS_HOST as string,
-  Number(process.env.REDIS_PORT)
+  Number(process.env.REDIS_PORT),
 );
 
 const registerEmailQueue = new Queue<RegisterEmailJobData>("Register", {
@@ -181,8 +182,9 @@ const getUserProfile = asyncHandler(async (req: any, res: any) => {
 
 const updateUserProfile = asyncHandler(async (req: any, res: any) => {
   const userId = req.user.id;
+  const profileImage = req.file;
   const { Name, email, number } = req.body;
-  if (!Name && !email && !number) {
+  if (!Name && !email && !number && !profileImage) {
     return apiError(
       res,
       400,
@@ -190,10 +192,19 @@ const updateUserProfile = asyncHandler(async (req: any, res: any) => {
     );
   }
   const user = await UserModel.findById(userId).select(
-    "-password refreshToken",
+    "-password -refreshToken",
   );
   if (!user) {
     return apiError(res, 404, "User not found");
+  }
+  if (profileImage) {
+    try {
+      const response = await uploadToCloudinary(profileImage.path, "profile_pictures");
+      user.profileImage = response.secure_url;
+    } catch (error: any) {
+      console.error("Error uploading profile image to Cloudinary:", error);
+      return apiError(res, 500, "Failed to upload profile image", error);
+    }
   }
 
   if (Name) user.Name = Name;

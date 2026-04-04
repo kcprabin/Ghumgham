@@ -23,8 +23,8 @@ import {connectDB} from "./Utils/Func/connect.db.js"
 import { uploadToCloudinary } from "./Utils/Func/cloudinary.js";
 import { roomModel } from "./Model/Room.model.js";
 import { bookingModel } from "./Model/Booking.model.js";
-import { redisConnection } from "./Utils/Func/redis.connection.js";
-import * as QueueTypes from "./Types/queue.types.js";
+import {upload} from "./middleware/mullter.middleware.js";
+
 
 
 export {
@@ -50,7 +50,7 @@ export {
     roomModel,
     bookingModel,
     uploadToCloudinary,
-    redisConnection,
+    upload,
 };
 
 export * from "./Types/queue.types.js";
