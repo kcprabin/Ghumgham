@@ -131,7 +131,7 @@ const createBooking = asyncHandler(async (req: any, res: any) => {
                                     },
                                     {
                                          headers: {
-                                                    "Authorization": `Key ${process.env.KHALTI_SECRET_KEY}`,
+                                                    "Authorization": `Key ${hotel.khalti_SecretKey}`,
                                                     "Content-Type": "application/json",
                                                     }
                                     }
@@ -177,7 +177,8 @@ const esewaSuccess = asyncHandler(async (req: any, res: any) => {
         if (verifyResponse.data.status == "COMPLETE") {
             await bookingModel.findByIdAndUpdate(bookingId, {
                 status: "CONFIRMED",
-                bookingPayment: "PAID"
+                bookingPayment: "PAID",
+                paymentReferenceId:decoded.ref_id
             });
 
             return res.redirect(`${process.env.FRONTEND_URL}/payment-sucess`);
