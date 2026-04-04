@@ -23,6 +23,9 @@ import {connectDB} from "./Utils/Func/connect.db.js"
 import { uploadToCloudinary } from "./Utils/Func/cloudinary.js";
 import { roomModel } from "./Model/Room.model.js";
 import { bookingModel } from "./Model/Booking.model.js";
+import { redisConnection } from "./Utils/Func/redis.connection.js";
+import * as QueueTypes from "./Types/queue.types.js";
+
 
 export {
     connectDB,
@@ -46,5 +49,8 @@ export {
     passwordCheck,
     roomModel,
     bookingModel,
-    uploadToCloudinary
-}
+    uploadToCloudinary,
+    redisConnection,
+};
+
+export * from "./Types/queue.types.js";

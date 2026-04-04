@@ -219,7 +219,7 @@ export class TemplateRenderer {
 
     if (missingParams.length > 0) {
       console.warn(
-        `[⚠️  Validation] Template "${metadata.name}" missing params: ${missingParams.join(', ')}`
+        `[  Validation] Template "${metadata.name}" missing params: ${missingParams.join(', ')}`
       );
       return false;
     }
