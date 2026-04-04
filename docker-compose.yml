@@ -1,15 +1,24 @@
-version: '3.8'
-
 services:
+  redis:
+    image: redis:7
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    logging:
+      driver: "none"
   auth:
     build:
       context: .
-      dockerfile: ./server/Services/Auth/Dockerfile
+      dockerfile: ./Travallee-Backend/Services/Auth/Dockerfile
     container_name: auth_service
     ports:
       - "3000:3000"
     env_file:
-      - ./server/Services/Auth/.env
+      - ./Travallee-Backend/Services/Auth/.env
+    volumes:
+      - ./Travallee-Backend/Services/Auth/src:/app/src
+      - /app/node_modules
     depends_on:
       - db
     restart: unless-stopped
@@ -17,11 +26,14 @@ services:
   admin:
     build:
       context: .
-      dockerfile: ./server/Services/admin/Dockerfile
+      dockerfile: ./Travallee-Backend/Services/admin/Dockerfile
     ports:
       - "4001:4001"
     env_file:
-      - ./server/Services/admin/.env
+      - ./Travallee-Backend/Services/admin/.env
+    volumes:
+      - ./Travallee-Backend/Services/admin/src:/app/src
+      - /app/node_modules
     depends_on:
       - db
     restart: unless-stopped
@@ -29,11 +41,14 @@ services:
   bookings:
     build:
       context: .
-      dockerfile: ./server/Services/booking/Dockerfile
+      dockerfile: ./Travallee-Backend/Services/booking/Dockerfile
     ports:
       - "5002:5002"
     env_file:
-      - ./server/Services/booking/.env
+      - ./Travallee-Backend/Services/booking/.env
+    volumes:
+      - ./Travallee-Backend/Services/booking/src:/app/src
+      - /app/node_modules
     depends_on:
       - db
     restart: unless-stopped
@@ -41,23 +56,30 @@ services:
   hotel:
     build:
       context: .
-      dockerfile: ./server/Services/Hotel/Dockerfile
+      dockerfile: ./Travallee-Backend/Services/Hotel/Dockerfile
     ports:
       - "3001:3001"
     env_file:
-      - ./server/Services/Hotel/.env
+      - ./Travallee-Backend/Services/Hotel/.env
+    volumes:
+      - ./Travallee-Backend/Services/Hotel/src:/app/src
+      - /app/node_modules
     depends_on:
       - db
     restart: unless-stopped
 
+
   notifications:
     build:
       context: .
-      dockerfile: ./server/Services/notifications/Dockerfile
+      dockerfile: ./Travallee-Backend/Services/notifications/Dockerfile
     ports:
       - "6000:6000"
     env_file:
-      - ./server/Services/notifications/.env  
+      - ./Travallee-Backend/Services/notifications/.env
+    volumes:
+      - ./Travallee-Backend/Services/notifications/src:/app/src
+      - /app/node_modules
     depends_on:
       - db
     restart: unless-stopped
@@ -65,11 +87,14 @@ services:
   db:
     image: mongo:7
     container_name: mongo_db
+    command: mongod --quiet --logpath /dev/null
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
     restart: unless-stopped
+    logging:
+      driver: "none"
 
 volumes:
   mongo_data:
