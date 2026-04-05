@@ -330,7 +330,7 @@ const updateUserProfilePicture = asyncHandler(async (req: any, res: any) => {
   }
   try {
     const result = await uploadToCloudinary(req.file.path, "profile_pictures");
-    user.profileImage = result.secure_url;
+    user.profileImage = result;
     await user.save();
     return apiResponse(
       res,
