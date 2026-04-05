@@ -79,7 +79,9 @@ const HotelSchema = new mongoose.Schema(
             type:String,
            default:"EPAYTEST" //in production it will be provided by the hotel when they register as merchant 
     },
-    
+    khalti_SecretKey: {
+       type: String } 
+    ,
     rooms: [
       {
         roomNumber: { type: String, required: true },
