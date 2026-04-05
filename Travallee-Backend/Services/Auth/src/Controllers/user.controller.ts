@@ -1,4 +1,3 @@
-// @ts-ignore
 import {
   apiError,
   asyncHandler,
@@ -6,17 +5,36 @@ import {
   UserModel,
   uploadToCloudinary,
   hotelModel,
-  roomModel, // @ts-ignore
+  roomModel, //@ts-ignore
 } from "@packages";
 import { loginSchema, registerSchema } from "../Schema/user.schema.js";
 import { z } from "zod";
-import { Queue, tryCatch } from "bullmq";
+import { Queue,  } from "bullmq";
+import { redisConnection } from "../config/redis.connection.js";
 
-const emailQueueRegister = new Queue("emailQueueRegister", {
-  connection: {
-    host: process.env.REDIS_HOST || "redis",
-    port: Number(process.env.REDIS_PORT) || 6379,
-  },
+
+const connection = redisConnection(
+  process.env.REDIS_HOST as string,
+  Number(process.env.REDIS_PORT),
+);
+
+const registerEmailQueue = new Queue<RegisterEmailJobData>("Register", {
+  connection,
+});
+
+interface OTPEmailJobData {
+  Name: string;
+  otp: number;
+}
+
+interface RegisterEmailJobData {
+  userName: string;
+  to: string;
+  userId: string;
+}
+
+const otpQueue = new Queue<OTPEmailJobData>("OTP", {
+  connection,
 });
 
 const registerUser = asyncHandler(async (req: any, res: any) => {
@@ -44,15 +62,16 @@ const registerUser = asyncHandler(async (req: any, res: any) => {
       Name: newUser.Name,
       role: newUser.role,
     };
+
     try {
-      await emailQueueRegister.add("sendWelcomeEmail", {
-        Name: newUser.Name,
+      const emailData: RegisterEmailJobData = {
+        userName: newUser.Name.toUpperCase(),
         to: newUser.email,
-        subject: "Welcome to Travallee!",
-      });
-    } catch (error: any) {
-      console.error("Failed to add email job to queue:", error);
-      console.log(" Proceeding without sending welcome email.");
+        userId: newUser._id.toString(),
+      };
+      await registerEmailQueue.add("Register", emailData);
+    } catch (error) {
+      console.log("error in processing email:", error);
     }
 
     return apiResponse(
@@ -91,7 +110,7 @@ const loginUser = asyncHandler(async (req: any, res: any) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 7000, // 7 day
+      maxAge: 24 * 60 * 60 * 1, // 1 day
     };
     const token = user.generateJWT();
     user.refreshToken = token;
@@ -171,9 +190,10 @@ const getUserProfile = asyncHandler(async (req: any, res: any) => {
 });
 
 const updateUserProfile = asyncHandler(async (req: any, res: any) => {
-  const userId = req.user.id;
+  const userId = req.user.id ;
+  const profileImage = req.file;
   const { Name, email, number } = req.body;
-  if (!Name && !email && !number) {
+  if (!Name && !email && !number && !profileImage) {
     return apiError(
       res,
       400,
@@ -181,10 +201,19 @@ const updateUserProfile = asyncHandler(async (req: any, res: any) => {
     );
   }
   const user = await UserModel.findById(userId).select(
-    "-password refreshToken",
+    "-password -refreshToken",
   );
   if (!user) {
     return apiError(res, 404, "User not found");
+  }
+  if (profileImage) {
+    try {
+      const response = await uploadToCloudinary(profileImage.path, "profile_pictures");
+      user.profileImage = response.secure_url;
+    } catch (error: any) {
+      console.error("Error uploading profile image to Cloudinary:", error);
+      return apiError(res, 500, "Failed to upload profile image", error);
+    }
   }
 
   if (Name) user.Name = Name;
@@ -233,14 +262,14 @@ const sendOTP = asyncHandler(async (req: any, res: any) => {
   user.otp = otp;
   await user.save();
 
-  // try {
-  //   await sendEmail(email, "Your OTP Code - Travallee", undefined, {
-  //     name: user.Name || user.Username,
-  //     otp: otp,
-  //   });
-  // } catch (error) {
-  //   return apiError(res, 500, "Failed to send OTP email");
-  // }
+  try {
+    await otpQueue.add("otp", {
+      Name: user.Name.toUpperCase(),
+      otp: user.otp,
+    });
+  } catch (error) {
+    console.log("error in sending email otp");
+  }
   return apiResponse(res, 200, true, "OTP sent successfully to email");
 });
 

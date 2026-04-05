@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 import * as crypto from "crypto";
 import axios from "axios"
 
-import { sendEmail } from "@packages"
+
+// use this for import 
+//@ts-ignore
+import {sendEmail} from "@packages"
+// definitation of packages is in tsconfig.json file
 
 const createBooking = asyncHandler(async (req: any, res: any) => {
 
