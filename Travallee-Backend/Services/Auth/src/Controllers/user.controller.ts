@@ -23,6 +23,7 @@ const registerEmailQueue = new Queue<RegisterEmailJobData>("Register", {
 });
 
 interface OTPEmailJobData {
+  email: string;
   Name: string;
   otp: number;
 }
@@ -62,17 +63,6 @@ const registerUser = asyncHandler(async (req: any, res: any) => {
       Name: newUser.Name,
       role: newUser.role,
     };
-
-    try {
-      const emailData: RegisterEmailJobData = {
-        userName: newUser.Name.toUpperCase(),
-        to: newUser.email,
-        userId: newUser._id.toString(),
-      };
-      await registerEmailQueue.add("Register", emailData);
-    } catch (error) {
-      console.log("error in processing email:", error);
-    }
 
     return apiResponse(
       res,
@@ -209,7 +199,7 @@ const updateUserProfile = asyncHandler(async (req: any, res: any) => {
   if (profileImage) {
     try {
       const response = await uploadToCloudinary(profileImage.path, "profile_pictures");
-      user.profileImage = response.secure_url;
+      user.profileimage = response;
     } catch (error: any) {
       console.error("Error uploading profile image to Cloudinary:", error);
       return apiError(res, 500, "Failed to upload profile image", error);
@@ -264,6 +254,7 @@ const sendOTP = asyncHandler(async (req: any, res: any) => {
 
   try {
     await otpQueue.add("otp", {
+      email: user.email,
       Name: user.Name.toUpperCase(),
       otp: user.otp,
     });
@@ -299,6 +290,16 @@ const verifyOTP = asyncHandler(async (req: any, res: any) => {
   user.otp = null;
   user.isVerified = true;
   await user.save();
+   try {
+      const emailData: RegisterEmailJobData = {
+        userName: user.Name.toUpperCase(),
+        to: user.email,
+        userId: user._id.toString(),
+      };
+      await registerEmailQueue.add("Register", emailData);
+    } catch (error) {
+      console.log("error in processing email:", error);
+    }
 
   return apiResponse(res, 200, true, "OTP verified successfully");
 });
@@ -314,7 +315,7 @@ const getUserProfilePicture = asyncHandler(async (req: any, res: any) => {
     200,
     true,
     "User profile picture retrieved successfully",
-    { profilePicture: user.profileImage },
+    { profilePicture: user.profileimage }
   );
 });
 
@@ -329,7 +330,7 @@ const updateUserProfilePicture = asyncHandler(async (req: any, res: any) => {
   }
   try {
     const result = await uploadToCloudinary(req.file.path, "profile_pictures");
-    user.profileImage = result.secure_url;
+    user.profileImage = result;
     await user.save();
     return apiResponse(
       res,
