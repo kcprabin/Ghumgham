@@ -2,7 +2,7 @@
 import { Worker, Job } from 'bullmq';
 import { sendEmail } from '../config/Resend.config.js';
 import { getWelcomeLoginTemplate } from "../templates/index.js";
-import type { WelcomeLoginParams } from "../templates/index.js";
+import { getTwoFactorAuthTemplate } from '../templates/index.js';
 
 const connection = {
   host: process.env.REDIS_HOST as string,
@@ -18,6 +18,7 @@ interface RegisterEmailJobData {
 interface OTPEmailJobData {
   Name: string;
   otp: number;
+  email: string;
 }
 
 interface BookingConfirmationJobData {
@@ -35,24 +36,20 @@ interface BookingCancellationJobData {
   userName: string;
   bookingId: string;
   hotelName: string;
-  cancellationReason?: string;
 }
 
 interface PaymentSuccessJobData {
   email: string;
   userName: string;
-  bookingId: string;
   amount: number;
   transactionId: string;
-  currency?: string;
 }
 
 interface PaymentFailedJobData {
   email: string;
   userName: string;
-  bookingId: string;
   amount: number;
-  failureReason?: string;
+  failureReason: string;
 }
 
 const registerEmailWorker = new Worker<RegisterEmailJobData>(
@@ -92,13 +89,78 @@ const registerEmailWorker = new Worker<RegisterEmailJobData>(
   }
 );
 
-registerEmailWorker.on('completed', (job) => {
-  console.log(`Job #${job.id} completed:`, job.returnvalue);
-});
+const otpEmailWorker = new Worker<OTPEmailJobData>(
+  "OTP",
+  async (job: Job<OTPEmailJobData>) => {
+    try {
+      const { Name, otp , email } = job.data;
+      const appLink = process.env.APP_LINK || "https://kcprabin9.com.np";
+      await sendEmail(email, "Your OTP Code for Travallee", getTwoFactorAuthTemplate({
+        user_name: Name,
+        otp_code: otp.toString(),
+        security_link: `${appLink}/security`,
+        unsubscribe_link: `${appLink}/unsubscribe`,
+        preferences_link: `${appLink}/preferences`,
+        view_online_link: `${appLink}/view-online`
+      }));
+    } catch (error: any) {
+      console.error(`Error sending OTP email:`, error);
+      throw error;
+    }
+  },
+  {
+    connection,
+  }
+);
 
-registerEmailWorker.on('failed', (job, err) => {
-  console.error(`Job #${job?.id} failed:`, err.message);
-});
+const bookingConfirmationWorker = new Worker<BookingConfirmationJobData>(
+  "BookingConfirmation",
+  async (job: Job<BookingConfirmationJobData>) => {
+    // Implement booking confirmation email sending logic here
+  },
+  {
+    connection,
+  }
+);
 
-export default registerEmailWorker;
+const bookingCancellationWorker = new Worker<BookingCancellationJobData>(
+  "BookingCancellation",
+  async (job: Job<BookingCancellationJobData>) => {
+    // Implement booking cancellation email sending logic here
+  },
+  {
+    connection,
+  }
+);
+
+const paymentSuccessWorker = new Worker<PaymentSuccessJobData>(
+  "PaymentSuccess",
+  async (job: Job<PaymentSuccessJobData>) => {
+    // Implement payment success email sending logic here
+  },
+  {
+    connection,
+  }
+);
+
+const paymentFailedWorker = new Worker<PaymentFailedJobData>(
+  "PaymentFailed",
+  async (job: Job<PaymentFailedJobData>) => {
+    // Implement payment failure email sending logic here
+  },
+  {
+    connection,
+  }
+);  
+
+
+
+export {
+  registerEmailWorker,
+  otpEmailWorker,
+  bookingConfirmationWorker,
+  bookingCancellationWorker,
+  paymentSuccessWorker,
+  paymentFailedWorker
+};
 

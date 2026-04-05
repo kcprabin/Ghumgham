@@ -23,6 +23,7 @@ const registerEmailQueue = new Queue<RegisterEmailJobData>("Register", {
 });
 
 interface OTPEmailJobData {
+  email: string;
   Name: string;
   otp: number;
 }
@@ -62,17 +63,6 @@ const registerUser = asyncHandler(async (req: any, res: any) => {
       Name: newUser.Name,
       role: newUser.role,
     };
-
-    try {
-      const emailData: RegisterEmailJobData = {
-        userName: newUser.Name.toUpperCase(),
-        to: newUser.email,
-        userId: newUser._id.toString(),
-      };
-      await registerEmailQueue.add("Register", emailData);
-    } catch (error) {
-      console.log("error in processing email:", error);
-    }
 
     return apiResponse(
       res,
@@ -264,6 +254,7 @@ const sendOTP = asyncHandler(async (req: any, res: any) => {
 
   try {
     await otpQueue.add("otp", {
+      email: user.email,
       Name: user.Name.toUpperCase(),
       otp: user.otp,
     });
@@ -299,6 +290,16 @@ const verifyOTP = asyncHandler(async (req: any, res: any) => {
   user.otp = null;
   user.isVerified = true;
   await user.save();
+   try {
+      const emailData: RegisterEmailJobData = {
+        userName: user.Name.toUpperCase(),
+        to: user.email,
+        userId: user._id.toString(),
+      };
+      await registerEmailQueue.add("Register", emailData);
+    } catch (error) {
+      console.log("error in processing email:", error);
+    }
 
   return apiResponse(res, 200, true, "OTP verified successfully");
 });
